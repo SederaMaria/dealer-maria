@@ -1,25 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
+import './components/layouts/styles/MainLayout.css'
+import { SignIn, 
+  DealerRenderer,  
+  HomeRenderer,
+  NewApplicationRender,
+  SavedCalculatorsRenderer,
+  NewApplicationSteps
+} from './components/pages';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <BrowserRouter>
+            <Switch>
+              <Route path="/login" exact component={SignIn} />
+              <Route path="/dealer" exact component={DealerRenderer} />
+              <Route path="/home" exact component={HomeRenderer} />
+              <Route path="/new-application" exact component={NewApplicationRender} />
+              <Route path="/new-application/steps" exact component={NewApplicationSteps} />
+              <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
+            </Switch>
+        </BrowserRouter>
+    </>
   );
 }
 

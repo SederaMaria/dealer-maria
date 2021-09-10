@@ -1,0 +1,63 @@
+#dealer-sider {
+  padding-top: 14px;
+  box-shadow: 1px 0px 20px rgb(0 0 0 / 8%);
+}
+
+#dealer-sider .ant-menu-item:active,
+#dealer-sider .ant-menu-item:hover a,
+#dealer-sider .ant-menu-item:active a,
+#dealer-sider .ant-menu-item-selected a,
+#dealer-sider .ant-menu-item-selected a:hover,
+#dealer-sider .ant-menu-item-selected {
+  background-color: inherit;
+  color: #ff8e00;
+}
+
+.ant-layout-has-sider #dealer-sider .ant-menu-item {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.ant-layout-has-sider #dealer-sider .ant-menu-item-selected:after,
+.ant-layout-has-sider #dealer-sider .ant-menu-item:after {
+  content: none !important;
+}
+
+span.anticon {
+  margin-right: 10px;
+}
+
+#dealer-sider .ant-menu-item {
+  overflow: unset;
+  line-height: 1.5rem;
+}
+
+#dealer-sider .ant-menu-item a {
+  display: flex;
+  align-items: baseline;
+  white-space: normal;
+}
+
+#dealer-sider .ant-menu-submenu-open .ant-menu-submenu-title,
+.ant-menu-light .ant-menu-item:hover {
+  color: #ff8e00;
+}
+
+#dealer-sider .ant-menu-submenu-open .ant-menu-submenu-arrow::before,
+#dealer-sider .ant-menu-submenu-open .ant-menu-submenu-arrow::after {
+  background-image: linear-gradient(to right, #ff8e00, #ff8e00);
+}
+
+.ant-menu-title-content {
+  transition: color 0.3s;
+}
+*,
+:after,
+:before {
+  box-sizing: inherit;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

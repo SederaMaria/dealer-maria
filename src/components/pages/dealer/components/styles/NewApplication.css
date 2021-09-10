@@ -1,0 +1,98 @@
+.elem-center {
+  text-align: center;
+}
+
+.start-sec {
+  display: block;
+}
+
+.start-sec-card {
+  display: inline-block;
+  margin: 10px 20px 10px 20px;
+  border-radius: 5px;
+  width: 450px;
+  min-height: 250px;
+  max-height: auto;
+  vertical-align: top;
+  padding: 25px 5px 5px 5px;
+  border: 2px solid #ffff;
+}
+
+.start-sec-card-icon {
+  transform: scale(3);
+  color: #24a0ed;
+}
+
+.start-sec-card:hover {
+  cursor: pointer;
+  border: 2px solid #24a0ed;
+}
+
+.ant-steps {
+  margin-top: 20px;
+}
+
+.application-steps-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  /* color: white; */
+  color: #1890ff;
+}
+
+.application-steps-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-icon
+  > .ant-steps-icon {
+  /* color: white; */
+  color: #1890ff;
+}
+
+.application-steps-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title,
+.application-steps-process
+  > .ant-steps-item-container
+  > .ant-steps-item-icon
+  > .ant-steps-icon {
+  color: white;
+}
+
+.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  /* background-color: white; */
+  color: #1890ff;
+}
+
+.application-steps-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  color: #1890ff;
+}
+
+.application-steps-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-icon
+  > .ant-steps-icon {
+  color: #1890ff;
+}
+
+.ant-steps-item-process
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after,
+.ant-steps-item-wait
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  background-color: #1890ff;
+}
+
+.steps-exit-btn {
+  direction: none;
+  color: white;
+}

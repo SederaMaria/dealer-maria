@@ -1,0 +1,9 @@
+.ant-breadcrumb {
+  color: #8a949e;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.ant-breadcrumb a:hover {
+  color: #ff8e00;
+}
