@@ -1,14 +1,14 @@
 version: 2.1
 
 aliases:
-    - restore_cache:
+    - &restore_yarn_cache
         name: Restore Yarn Package Cache
         keys:
           - yarn-packages-{{ checksum "yarn.lock" }}
-    - run:
+    - &run
         name: Install Dependencies
         command: yarn install --immutable
-    - save_cache:
+    - &save_cache
         name: Save Yarn Package Cache
         key: yarn-packages-{{ checksum "yarn.lock" }}
         paths:
