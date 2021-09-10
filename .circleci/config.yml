@@ -1,20 +1,5 @@
 version: 2.1
 
-aliases:
-    - &restore_cache:
-        name: Restore Yarn Package Cache
-        keys:
-          - yarn-packages-{{ checksum "yarn.lock" }}
-    - &run:
-        name: Install Dependencies
-        command: yarn install --immutable
-    - &save_cache:
-        name: Save Yarn Package Cache
-        key: yarn-packages-{{ checksum "yarn.lock" }}
-        paths:
-          - .yarn/cache
-          - .yarn/unplugged
-
 orbs:
   node: circleci/node@3.0.0
   slack: circleci/slack@4.0.1
@@ -28,21 +13,25 @@ executors:
 jobs:
   install-and-build:
     executor: default
-    steps:
-      - checkout
-      - restore_cache: *restore_cache
-      - run: yarn run test -o --watch ci --no-progress
-      - save_cache: *save_cache
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: .
-          # Must be relative path from root
-          paths:
-            - .
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+  steps:
+    - checkout
+    - restore_cache:
+      keys:
+        - v1-dependencies-{{ checksum "package.json" }}
+        - v1-dependencies-
+
+    - run: yarn install
+    - save_cache:
+      paths:
+        - node_modules
+        - ~/.npm
+        - ~/.cache
+      key: v1-dependencies-{{ checksum "package.json" }}
+
+    - run: yarn test
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
 
   linting:
     executor: default
