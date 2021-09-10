@@ -31,7 +31,7 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
-      - run: yarn ci --no-progress
+      - run: yarn run test -o --watch
       - save_cache: *save_yarn_cache
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
