@@ -1,0 +1,89 @@
+version: 2.1
+
+aliases:
+  - &restore_yarn_cache
+    name: Restoring yarn cache
+    keys:
+      - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies- # Fallback to using the latest cache if no exact match is found
+
+  - &save_yarn_cache
+    name: Saving yarn cache
+    key: v1-dependencies-{{ checksum "package.json" }}
+    paths:
+      - node_modules
+      - ~/.yarn
+      - ~/.cache
+
+orbs:
+  node: circleci/node@3.0.0
+  slack: circleci/slack@4.0.1
+
+executors:
+  default:
+    docker:
+      - image: circleci/node:14.0.0
+    working_directory: ~/slc_app
+
+jobs:
+  install-and-build:
+    executor: default
+    steps:
+      - checkout
+      - restore_cache: *restore_yarn_cache
+      - run: yarn ci --no-progress
+      - save_cache: *save_yarn_cache
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: .
+          # Must be relative path from root
+          paths:
+            - .
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+  linting:
+    executor: default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .
+      - run:
+          name: Code linting
+          command: yarn run lint
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+  unit-tests:
+    executor: default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .
+      - run:
+          name: Unit tests
+          command: node --expose-gc ./node_modules/.bin/jest --runInBand --logHeapUsage
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+workflows:
+  version: 2
+  push:
+    jobs:
+      - install-and-build:
+          context:
+            - SLC-Global
+      - linting:
+          context:
+            - SLC-Global
+          requires:
+            - install-and-build
+      - unit-tests:
+          context:
+            - SLC-Global
+          requires:
+            - install-and-build
