@@ -3,12 +3,15 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.0.1
 
-jobs:
-  install-and-build:
+executors:
+  default:
     docker:
       - image: node:16.0.0
-
     working_directory: ~/slc_app
+
+jobs:
+  install-and-build:
+    executor: default
 
     steps:
       - checkout
