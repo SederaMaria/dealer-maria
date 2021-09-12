@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  install-and-build:
     docker:
       - image: node:16.0.0
 
@@ -22,6 +22,42 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-      # run tests!
+  unit-tests:
+    executor: default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .
       - run: yarn test
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+  linting:
+    executor: default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .
+      - run:
+          name: Code linting
+          command: npm run lint
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+workflows:
+  version: 2
+  push:
+    jobs:
+      - install-and-build:
+          context:
+            - SLC-Global
+      - linting:
+          context:
+            - SLC-Global
+          requires:
+            - install-and-build
+      - unit-tests:
+          context:
+            - SLC-Global
+          requires:
+            - install-and-build
