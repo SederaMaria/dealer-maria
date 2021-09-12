@@ -39,18 +39,6 @@ jobs:
       - slack/notify:
           event: fail
           template: basic_fail_1
-  linting:
-    executor: default
-    steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: .
-      - run:
-          name: Code linting
-          command: yarn run lint
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 workflows:
   version: 2
   push:
@@ -58,11 +46,6 @@ workflows:
       - install-and-build:
           context:
             - SLC-Global
-      - linting:
-          context:
-            - SLC-Global
-          requires:
-            - install-and-build
       - unit-tests:
           context:
             - SLC-Global
