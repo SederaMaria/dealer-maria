@@ -1,6 +1,6 @@
 import React from 'react'
-import { Row, Col, Card, Button, Form, Input, Radio, DatePicker, InputNumber, Select, Typography, Layout, message, Alert, Checkbox } from "antd";
-const { Title, Paragraph } = Typography;
+import { Row, Col, Card, Form, Select, Typography, Layout } from "antd";
+const { Title } = Typography;
 const { Content } = Layout;
 
 function BikeInformation() {
