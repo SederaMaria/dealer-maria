@@ -1,14 +1,39 @@
 import React from 'react'
-import { Row, Col, Card, Form, Select, Typography, Layout } from "antd";
+import { Row, Col, Card, Form, Select, Typography, Layout, Button } from "antd";
 const { Title } = Typography;
 const { Content } = Layout;
 
-function BikeInformation() {
+const layout = {
+    labelCol: {
+      span: 24,
+    },
+    wrapperCol: {
+      span: 24,
+    },
+  };
+
+interface Props {
+    setStep: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
     return (
         <div>
             
+            <Form 
+                // form={lesseeForm} 
+                {...layout}  
+                // colon={false}
+                // onFinish={handleSubmit}
+                // scrollToFirstError={true}
+                // initialValues={{
+                //     applicationDisclosureAgreement: 'unchecked'
+                // }}
+            >
+
+
             <Row gutter={[16, 16]}>
-                    <Col span={24} className="cca-center-text">
+                    <Col span={24} className="cca-center-text" style={{ marginTop: 20 }}>
                         <Title level={2}> Bike Information </Title>
                     </Col>
                 </Row>
@@ -161,9 +186,17 @@ function BikeInformation() {
                                     </Col> 
                                 </Row>
                             </Card>
+
+                            <div style={{ marginTop: 20, textAlign: `right`}}>
+                                <Button style={{ marginRight: 10 }}>Save</Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('calculator') } } >Next</Button>
+                            </div>
+
                         </Col>
                     </Row>
                 </Content>
+            
+            </Form>
 
         </div>
     )
