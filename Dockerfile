@@ -1,4 +1,4 @@
-FROM node:14.0.0
+FROM node:16.0.0
 
 # Common dependencies
 RUN apt-get update -qq \
