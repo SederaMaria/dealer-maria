@@ -42,6 +42,9 @@ function App() {
                 <Route path="/new-application" exact component={NewApplicationRender} />
                 <Route path="/new-application/steps" exact component={NewApplicationSteps} />
                 <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
+                <Route exact path="/">
+                  <Redirect to="/home" />
+                </Route>
               </Switch>
           </fullName.Provider>
 
