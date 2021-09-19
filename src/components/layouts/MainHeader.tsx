@@ -1,13 +1,25 @@
-import React from 'react'
-import { Avatar, Col, Layout, Row } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import React, {useContext} from 'react'
+import { Avatar, Col, Layout, Row, Popover } from 'antd';
+import { UserOutlined, DownOutlined } from '@ant-design/icons';
+
+import { fullName } from "../../contexts/UserDataContext";
+
 import logo from '../../assets/speed-leasing.png';
 import './styles/MainHeader.css'
 
 const { Header } = Layout;
 
+const AvatarContent = (
+  <div>
+    <a href={`/logout`}> Logout </a>
+  </div>
+);
 
 function MainHeader() {
+
+  const fullNameContext = useContext(fullName);
+  console.log(fullNameContext)
+
     return (
         <Header className="main-header-layout" id='main-menu'>
         <Row>
@@ -16,9 +28,13 @@ function MainHeader() {
               <img className="logo-img" src={logo} alt="speedleasing"/>
             </ div>
           </Col>
-          <Col flex='0 1 100px'>
-            <span style={{float: 'right'}}>
-                <Avatar size="large" icon={<UserOutlined />} className="ant-avatar-icon"/>
+          <Col flex='0 1 300px'>
+            <span style={{float: 'right', color: `white`}}>
+              <Popover placement="bottomRight" content={AvatarContent} trigger="click">
+                  <Avatar size={35} icon={<UserOutlined /> } className="ant-avatar-icon"/> 
+                  <span style={{padding: `0 5px`}} > {` ${fullNameContext} `} </span> 
+                  <DownOutlined /> 
+              </Popover>
             </span>
           </Col>
         </Row>

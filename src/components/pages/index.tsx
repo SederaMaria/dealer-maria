@@ -1,4 +1,5 @@
 import SignIn from './signin/SignIn';
+import SignOut from './signin/SignOut';
 import {    
     HomeRenderer, 
     NewApplicationRender, 
@@ -12,6 +13,7 @@ export {
     NewApplicationRender, 
     SavedCalculatorsRenderer,  
     SignIn, 
+    SignOut,
     DealerRenderer,
     NewApplicationSteps
 };
