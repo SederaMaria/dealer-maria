@@ -4,7 +4,6 @@ import {
     HomeRenderer, 
     NewApplicationRender, 
     SavedCalculatorsRenderer,  
-    DealerRenderer,
     NewApplicationSteps
 } from './dealer'
 
@@ -14,6 +13,5 @@ export {
     SavedCalculatorsRenderer,  
     SignIn, 
     SignOut,
-    DealerRenderer,
     NewApplicationSteps
 };

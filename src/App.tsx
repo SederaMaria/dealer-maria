@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { 
   SignIn,
   SignOut, 
-  DealerRenderer,  
   HomeRenderer,
   NewApplicationRender,
   SavedCalculatorsRenderer,
@@ -37,7 +36,6 @@ function App() {
                     <Redirect to="/home" />
                   </Route>
                   <Route path="/logout" exact component={SignOut} />
-                  <Route path="/dealer" exact component={DealerRenderer} />
                   <Route path="/home" exact component={HomeRenderer} />
                   <Route path="/new-application" exact component={NewApplicationRender} />
                   <Route path="/new-application/steps" exact component={NewApplicationSteps} />
