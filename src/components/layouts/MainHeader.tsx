@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import { Avatar, Col, Layout, Row, Popover } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 
-import { fullName } from "../../contexts/UserDataContext";
+import { UserDataContext } from "../../contexts/UserDataContext";
 
 import logo from '../../assets/speed-leasing.png';
 import './styles/MainHeader.css'
@@ -17,8 +17,7 @@ const AvatarContent = (
 
 function MainHeader() {
 
-  const fullNameContext = useContext(fullName);
-  console.log(fullNameContext)
+  const {fullName} = useContext(UserDataContext);
 
     return (
         <Header className="main-header-layout" id='main-menu'>
@@ -32,7 +31,7 @@ function MainHeader() {
             <span style={{float: 'right', color: `white`}}>
               <Popover placement="bottomRight" content={AvatarContent} trigger="click">
                   <Avatar size={35} icon={<UserOutlined /> } className="ant-avatar-icon"/> 
-                  <span style={{padding: `0 5px`}} > {` ${fullNameContext} `} </span> 
+                  <span style={{padding: `0 5px`}} > {` ${fullName} `} </span> 
                   <DownOutlined /> 
               </Popover>
             </span>
