@@ -1,12 +1,12 @@
-import React from 'react'
-import { Table } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Table, Spin } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-
+import { logger, network } from '../../../../../utils';
 interface Applications {
     key: number;
     name: string;
   }
-  interface Datas {
+  interface Data {
     applicationIdentifier: string;
     applicant: string;
     coApplicant: string;
@@ -36,7 +36,7 @@ interface Applications {
     {
       key: 'coApplicant',
       title: 'Co-Applicant',
-      dataIndex: 'co-applicant',
+      dataIndex: 'coApplicant',
     },
     {
       key: 'modelAndYear',
@@ -65,46 +65,33 @@ interface Applications {
     },
   ];
 
-  const data: any = [
-    {
-      applicationIdentifier: "20009280003",
-      applicant: 'Alvin Testco',
-      coApplicant: '',
-      modelAndYear: '2013 FLHX Street Glide',
-      creditStatus: 'Awaiting Credit Decision',
-      documentStatus: 'No Documents',
-      daysSubmitted: '1',
-      lastUpdated: 'Sept 28, 2020 at 11:28 a.m EDT',
-    },
-    {
-      applicationIdentifier: "20009280003",
-      applicant: 'Debbie Delinquent',
-      coApplicant: '',
-      modelAndYear: '2018 XL883L',
-      creditStatus: 'Approved',
-      documentStatus: 'Funded',
-      daysSubmitted: '5',
-      lastUpdated: 'Sept 24, 2020 at 9:24 am EDT',
-    },
-    {
-      applicationIdentifier: "20009280003",
-      applicant: 'Mark S. Credco',
-      coApplicant: 'Deborah Credco',
-      modelAndYear: '2017 XG750A Street Rod',
-      creditStatus: 'Approved with Contingencies',
-      documentStatus: 'No Documents',
-      daysSubmitted: '15',
-      lastUpdated: 'Sep 22, 2020 at 12:45 p.m EDT',
-    },
-  ];
-
-
-
-
-
 function ApplicationList() {
+
+  const [loading, setLoading] = useState<boolean>(true)
+  const [data, setData] = useState<Data[] | any>([])
+
+  useEffect(() => {
+    getApplications();
+  },[]);
+  
+  const getApplications = async () => {
+    if (!loading) {
+      setLoading(true)
+    }
+    try {
+        let data = await network.GET('/api/v1/dealers/applications')
+        setData(data.data.leaseApplication)
+    } catch (e) {
+      logger.error("Error fetching Applicatins", e);
+    }
+    setLoading(false)
+  }
+
+  
     return (
+      <Spin spinning={loading}>
         <Table columns={columns} dataSource={data} />
+      </Spin>
     )
 }
 

@@ -13,6 +13,9 @@ export const getFullName = () => {
   return Cookies.get('fullName')
 }
 
+export const getToken = () => {
+  return Cookies.get('authToken')
+}
 
 export const setAuth = (token: string, fullName: string) => {
 
@@ -37,4 +40,4 @@ export const logout = () => {
   Cookies.remove('fullName')  
 }
 
-export default {isAuth, setAuth, getFullName, logout};
+export default {isAuth, setAuth, getFullName, logout, getToken};
