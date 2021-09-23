@@ -63,6 +63,7 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
                     setVinYear(res.data.vehicleInfo.year)
                     setVinModel(res.data.vehicleInfo.model[0])
                     setShowViaVIN(true)
+                    setShowBikeForm(true)
                 })
             } catch (e) {
                 logger.error("Error verifying vin", e);
@@ -93,7 +94,9 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
       const getModels = async (make: string, year: string | number) => {
         try {
           let result = await network.GET(`/api/v1/bike-information/models-options?make=${make}&year=${year}`);
+          console.log(result)
           setModelsOptions(formatOptions((result.data.models || []), 'collection'))
+          console.log(formatOptions((result.data.models || []), 'collection'))
         } catch (e) {
           logger.error("Request Error", e);
         }
@@ -115,6 +118,8 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
       const handleYear = (value: any) => {
         let year = value
         let make = lesseeForm.getFieldValue(['leaseCalculatorAttributes', 'assetMake'])
+        console.log(year)
+        console.log(make)
         getModels(make, year)
       }
 
@@ -253,10 +258,9 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
                                                 label="Make"
                                                 name={['leaseCalculatorAttributes', 'assetMake']} 
                                                 rules={[{ required: true, message: 'Make is required!' }]}
+                                                hidden={showViaVIN}
                                                 >  
-                                                    {
-                                                        !showViaVIN && 
-                                                        <Select 
+                                                    <Select 
                                                         showSearch 
                                                         placeholder="Make" 
                                                         {...showMakeState}
@@ -270,9 +274,18 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
                                                             })
                                                         }
                                                     </Select>
-                                                    }
-                                                    { showViaVIN && <Text>{vinMake}</Text>}
                                                 </Form.Item>
+                                                    {
+                                                        showViaVIN && 
+                                                        <Row style={{marginTop: 10, marginBottom: 0}}>
+                                                            <Col span={24}>
+                                                                Make
+                                                            </Col>
+                                                            <Col span={24}>
+                                                                { showViaVIN && <Text>{vinMake}</Text>}
+                                                            </Col>
+                                                        </Row>
+                                                    }
                                             </Col> 
                                         </Row>
                                         <Row>
@@ -281,26 +294,37 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
                                                 label="Year" 
                                                 name={['leaseCalculatorAttributes', 'assetYear']} 
                                                 rules={[{ required: true, message: 'Year is required!' }]}
+                                                hidden={showViaVIN}
                                                 >  
-                                                    {
-                                                        !showViaVIN && 
-                                                        <Select 
-                                                            showSearch 
-                                                            placeholder="Year" 
-                                                            {...showYearState}
-                                                            onChange={handleYear}
-                                                            onSelect={handleYearStateChange}
-                                                            onBlur={hideBikeSelectOptions}
-                                                            >
-                                                                {
-                                                                yearsOptions && yearsOptions.map(({value, label}, index) => {
-                                                                return <Option key={index} value={`${value}`}>{label}</Option>
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    }
-                                                    { showViaVIN && <Text>{vinYear}</Text> }
+
+                                                    <Select 
+                                                        showSearch 
+                                                        placeholder="Year" 
+                                                        {...showYearState}
+                                                        onChange={handleYear}
+                                                        onSelect={handleYearStateChange}
+                                                        onBlur={hideBikeSelectOptions}
+
+                                                        >
+                                                            {
+                                                            yearsOptions && yearsOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                            })
+                                                        }
+                                                    </Select>
                                                 </Form.Item>
+
+                                                {
+                                                        showViaVIN && 
+                                                        <Row style={{marginTop: 10, marginBottom: 0}}>
+                                                            <Col span={24}>
+                                                                Year
+                                                            </Col>
+                                                            <Col span={24}>
+                                                                { showViaVIN && <Text>{vinYear}</Text>}
+                                                            </Col>
+                                                        </Row>
+                                                }
                                             </Col> 
                                         </Row>
                                         <Row>
@@ -309,25 +333,36 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
                                                 label="Model" 
                                                 name={['leaseCalculatorAttributes', 'assetModel']} 
                                                 rules={[{ required: true, message: 'Model is required!' }]}
+                                                hidden={showViaVIN}
                                                 >  
+
+                                                <Select 
+                                                    showSearch 
+                                                    placeholder="Model" 
+                                                    {...showModelState}
+                                                    onSelect={handleModelStateChange}
+                                                    onBlur={hideBikeSelectOptions}
+                                                    >
                                                     {
-                                                        !showViaVIN && 
-                                                        <Select 
-                                                        showSearch 
-                                                        placeholder="Model" 
-                                                        {...showModelState}
-                                                        onSelect={handleModelStateChange}
-                                                        onBlur={hideBikeSelectOptions}
-                                                        >
-                                                        {
-                                                            modelsOptions && modelsOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${value}`}>{label}</Option>
-                                                            })
-                                                        }
-                                                    </Select>
+                                                        modelsOptions && modelsOptions.map(({value, label}, index) => {
+                                                        return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
                                                     }
-                                                    { showViaVIN && <Text>{vinModel}</Text> }
+                                                </Select>
+
                                                 </Form.Item>
+                                                    
+                                                {
+                                                        showViaVIN && 
+                                                        <Row style={{marginTop: 10, marginBottom: 10}}>
+                                                            <Col span={24}>
+                                                                Year
+                                                            </Col>
+                                                            <Col span={24}>
+                                                                { showViaVIN && <Text>{vinModel}</Text>}
+                                                            </Col>
+                                                        </Row>
+                                                }
                                             </Col> 
                                         </Row>
                                         <Row>
