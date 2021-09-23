@@ -1,5 +1,6 @@
 import React from 'react'
 import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout } from "antd";
+import '../../styles/Calculator.css'
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -22,7 +23,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
 
     return (
-        <div style={{ margin: `20px 100px` }}>
+        <div style={{ margin: `10px 50px` }}>
             <div style={{ textAlign: `center`}}>
                 <Title level={2}> Calculator </Title>
                 <p> Add your bike's purchase price and options to  calculate your payments. </p>
