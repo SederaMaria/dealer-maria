@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout } from "antd";
 import '../../styles/Calculator.css'
 
 const { Title } = Typography;
 const { Content } = Layout;
+const { Option } = Select;
 const layout = {
     labelCol: {
       span: 24,
@@ -19,8 +20,105 @@ interface Props {
 
 export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
+
+    interface CalculatorDataProps {
+        nadaRental?: string,
+        purchaseOption?: string,
+        totalBikePrice?: string,
+        upfrontTax?: string,
+        netTradeInAllowance?: string,
+        totalCapCostReduction?: string,
+        netDueOnMtorcycle?: string,
+        acquisitionFee?: string,
+        totalCapCost?: string,
+        totalGrossCapCost?: string,
+        baseMonthlyPayment?: string,
+        monthlySaleTax?: string,
+        totalMonthlyPayment?: string,
+        firstMonthlyPayment?: string,
+        refundableSecurityDeposit?: string,
+        additionalCashDown?: string,
+        totalCashAtSignIn?: string,
+        cashIn?: string,
+        bikeMinimum?: string,
+        totalDealerParticipation?: string,
+        totalTransactionPrice?: string,
+        minusTradeIn?: string,
+        minusDownPayment?: string,
+        minusFirstMonthlyPayment?: string,
+        minuseSecurityDeposit?: string,
+        cashOnDeliveryBike?: string,
+        plusDealerParticipation?: string,
+        remitToDealer?: string,
+        frontEndMaxAdvance?: string,
+        backEndMaxAdvance?: string,
+
+
+
+
+    }
+
+
     const [lesseeForm] = Form.useForm();
 
+      
+    const [calculatorData, setCalculatorData] = useState<CalculatorDataProps>({})
+
+
+    useEffect(() => {
+        setCalculatorRandom()
+      },[]);
+
+
+      const handleCalculation = () => {
+        setCalculatorRandom()
+    }
+
+    const generateRandomNDigits = (n: number) => {
+        let num: any = new Intl.NumberFormat().format( Math.floor(Math.random() * (9 * (Math.pow(10, n)))) + (Math.pow(10, n)) ) 
+        return `$${num}`
+      }
+
+
+    const setCalculatorRandom = () => {
+        let calData: Object = {
+            nadaRental: generateRandomNDigits(randomRange()),
+            purchaseOption: generateRandomNDigits(randomRange()),
+            upfrontTax: generateRandomNDigits(randomRange()),
+            totalBikePrice: generateRandomNDigits(randomRange()),
+            netTradeInAllowance: generateRandomNDigits(randomRange()),
+            totalCapCostReduction: generateRandomNDigits(randomRange()),
+            netDueOnMtorcycle: generateRandomNDigits(randomRange()),
+            acquisitionFee: generateRandomNDigits(randomRange()),
+            totalCapCost: generateRandomNDigits(randomRange()),
+            totalGrossCapCost: generateRandomNDigits(randomRange()),
+            baseMonthlyPayment: generateRandomNDigits(randomRange()),
+            monthlySaleTax: generateRandomNDigits(randomRange()),
+            totalMonthlyPayment: generateRandomNDigits(randomRange()),
+            firstMonthlyPayment: generateRandomNDigits(randomRange()),
+            refundableSecurityDeposit: generateRandomNDigits(randomRange()),
+            additionalCashDown: generateRandomNDigits(randomRange()),
+            totalCashAtSignIn: generateRandomNDigits(randomRange()),
+            cashIn: generateRandomNDigits(randomRange()),
+            bikeMinimum: generateRandomNDigits(randomRange()),
+            totalDealerParticipation: generateRandomNDigits(randomRange()),
+            totalTransactionPrice: generateRandomNDigits(randomRange()),
+            minusTradeIn: generateRandomNDigits(randomRange()),
+            minusDownPayment: generateRandomNDigits(randomRange()),
+            minusFirstMonthlyPayment: generateRandomNDigits(randomRange()),
+            minuseSecurityDeposit: generateRandomNDigits(randomRange()),
+            cashOnDeliveryBike: generateRandomNDigits(randomRange()),
+            plusDealerParticipation: generateRandomNDigits(randomRange()),
+            remitToDealer: generateRandomNDigits(randomRange()),
+            frontEndMaxAdvance: generateRandomNDigits(randomRange()),
+            backEndMaxAdvance: generateRandomNDigits(randomRange()),
+        }
+        setCalculatorData(calData)
+    }
+    const randomRange = () => {
+        var myArray = [2,3,5]; 
+        return myArray[(Math.random() * myArray.length) | 0]
+    }
 
     return (
         <div style={{ margin: `10px 50px` }}>
@@ -51,7 +149,13 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: `Dealership's State is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select 
+                                            showSearch 
+                                            onSelect={handleCalculation}
+                                            >
+                                                <Option value="1"> State1 </Option>
+                                                <Option value="2"> State2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -63,7 +167,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: `Dealership's County/Tax Jurisdiction is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch onSelect={handleCalculation} >
+                                                <Option value="1"> County 1 </Option>
+                                                <Option value="2"> County 2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -76,7 +183,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: ` is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch onSelect={handleCalculation} >
+                                                <Option value="1"> 2021 </Option>
+                                                <Option value="2">  2020 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -90,7 +200,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: ` is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch onSelect={handleCalculation} >
+                                                <Option value="1"> make 1 </Option>
+                                                <Option value="2">  make 2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -103,7 +216,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: ` is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch onSelect={handleCalculation} >
+                                                <Option value="1"> bike 1 </Option>
+                                                <Option value="2">  bike 2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -117,7 +233,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: ` is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch >
+                                                <Option value="1"> mil 1 </Option>
+                                                <Option value="2">  mil 2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -131,7 +250,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: ` is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch onSelect={handleCalculation} >
+                                                <Option value="1"> credit tier 1 </Option>
+                                                <Option value="2">  credit tier 2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -144,7 +266,10 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             hasFeedback
                                             rules={[{ required: true, message: ` is required` }]}
                                         >  
-                                            <Select showSearch ></Select>
+                                            <Select showSearch onSelect={handleCalculation} >
+                                                <Option value="1"> lessee term 1</Option>
+                                                <Option value="2">  lessee term 2 </Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -155,7 +280,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         NADA Rental
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.nadaRental}</span>
                                     </Col> 
                                 </Row>
 
@@ -166,7 +291,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Purchase Option (Residual)
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.purchaseOption}</span>
                                     </Col> 
                                 </Row>
 
@@ -210,7 +335,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                     <Col span={8} style={{textAlign: `right`}}> 
                                         <Form.Item hasFeedback>  
-                                            $123,123,120
+                                            <span>{calculatorData.totalBikePrice}</span>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -222,7 +347,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                     <Col span={8} style={{textAlign: `right`}}> 
                                         <Form.Item hasFeedback>  
-                                            $123,123,120
+                                        <span>{calculatorData.upfrontTax}</span>
                                         </Form.Item>
                                     </Col> 
                                 </Row>
@@ -307,7 +432,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Total Sales Price
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        {/* <span>{calculatorData.upfrontTax}</span> */}
                                     </Col> 
                                 </Row>
 
@@ -359,7 +484,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Net Trade-In Allowance
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.netTradeInAllowance}</span>
                                     </Col> 
                                 </Row>
 
@@ -382,7 +507,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Total Cap Cost Reduction
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.totalCapCostReduction}</span>
                                     </Col> 
                                 </Row>
                                 
@@ -392,7 +517,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Net Due on Motorcycle
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.netDueOnMtorcycle}</span>
                                     </Col> 
                                 </Row>
 
@@ -403,7 +528,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Acquisition Fee
                                     </Col> 
                                     <Col span={8} style={{textAlign: `right`, borderBottom: `2px solid grey`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.acquisitionFee}</span>
                                     </Col> 
                                 </Row>
 
@@ -413,7 +538,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Total Cap Cost
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.totalCapCost}</span>
                                     </Col> 
                                 </Row>
 
@@ -424,7 +549,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Total Gross Cap Cost
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.totalGrossCapCost}</span>
                                     </Col> 
                                 </Row>
 
@@ -439,7 +564,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Base Monthly Payment
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                            <span>{calculatorData.baseMonthlyPayment}</span>
                                         </Col> 
                                     </Row>
 
@@ -449,7 +574,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Monthly Sales Tax
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                        <span>{calculatorData.monthlySaleTax}</span>
                                         </Col> 
                                     </Row>
 
@@ -459,7 +584,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Total Monthly Payment
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                            <span>{calculatorData.totalMonthlyPayment}</span>
                                         </Col> 
                                     </Row>
 
@@ -469,7 +594,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         First Monthly Payment
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                            <span>{calculatorData.firstMonthlyPayment}</span>
                                         </Col> 
                                     </Row>
 
@@ -479,7 +604,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Refundable Security Deposit
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                            <span>{calculatorData.refundableSecurityDeposit}</span>
                                         </Col> 
                                     </Row>
 
@@ -489,7 +614,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Additional Cash Down
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                            <span>{calculatorData.additionalCashDown}</span>
                                         </Col> 
                                     </Row>
 
@@ -501,7 +626,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Total Cash at Signing
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                         <span>{calculatorData.totalCashAtSignIn}</span>
                                         </Col> 
                                     </Row>
                                 </div>
@@ -536,7 +661,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     First Monthly Payment
                                     </Col> 
                                     <Col span={8} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.firstMonthlyPayment}</span>
                                     </Col> 
                                 </Row>
 
@@ -547,7 +672,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Refundable Security Deposit
                                     </Col> 
                                     <Col span={8} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.refundableSecurityDeposit}</span>
                                     </Col> 
                                 </Row>
 
@@ -558,7 +683,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Put This Amount in Cash
                                     </Col> 
                                     <Col span={8} style={{textAlign: `right`, fontWeight: 700}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.cashIn}</span>
                                     </Col> 
                                 </Row>
 
@@ -578,7 +703,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Bike Minimum
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.bikeMinimum}</span>
                                     </Col> 
                                 </Row>
 
@@ -599,7 +724,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Total Dealer Participation
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.totalDealerParticipation}</span>
                                     </Col> 
                                 </Row>
 
@@ -611,7 +736,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Total Transaction Price
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                        <span>{calculatorData.totalTransactionPrice}</span>
                                     </Col> 
                                 </Row>
 
@@ -621,7 +746,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Minus Trade-in
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.minusTradeIn}</span>
                                     </Col> 
                                 </Row>
 
@@ -631,7 +756,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Minus Down Payment
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.minusDownPayment}</span>
                                     </Col> 
                                 </Row>
 
@@ -641,7 +766,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Minus Down Security Deposit
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.minuseSecurityDeposit}</span>
                                     </Col> 
                                 </Row>
 
@@ -651,7 +776,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Minus First Monthly Payment
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.minusFirstMonthlyPayment}</span>
                                     </Col> 
                                 </Row>
 
@@ -661,7 +786,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Minus Security Deposit
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.minuseSecurityDeposit}</span>
                                     </Col> 
                                 </Row>
 
@@ -672,7 +797,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Cash on Delivery on Bike
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.cashOnDeliveryBike}</span>
                                     </Col> 
                                 </Row>
 
@@ -682,7 +807,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Plus Dealer Participation
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.plusDealerParticipation}</span>
                                     </Col> 
                                 </Row>
 
@@ -693,7 +818,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         Remit to Dealer
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
-                                            <span>$14,000</span>
+                                        <span>{calculatorData.remitToDealer}</span>
                                         </Col> 
                                     </Row>
 
@@ -706,7 +831,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Front-End Max Advance
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.frontEndMaxAdvance}</span>
                                     </Col> 
                                 </Row>
 
@@ -716,7 +841,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     Back-End Max Advance
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>$14,000</span>
+                                    <span>{calculatorData.backEndMaxAdvance}</span>
                                     </Col> 
                                 </Row>
 
