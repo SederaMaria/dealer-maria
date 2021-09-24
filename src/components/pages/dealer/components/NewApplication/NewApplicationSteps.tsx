@@ -42,7 +42,7 @@ function NewApplicationSteps() {
                         <Step className={`application-steps application-steps-wait ${ step === 'bike' && 'application-steps-process'}`} status="process" title="Bike" icon={<Icon component={ MotorSvg } />} />
                         <Step className={`application-steps application-steps-wait ${ step === 'calculator' && 'application-steps-process'}`} status="wait" title="Calculator" icon={<Icon component={ CalculatorSvg } />} />
                         <Step className={`application-steps application-steps-wait ${ step === 'applicant' && 'application-steps-process'}`} status="wait" title="Applicant" icon={<UserOutlined />} />
-                        <Step className={`application-steps application-steps-wait ${ step === 'co-applicant' && 'application-steps-process'}`} status="wait" title="Applicant" icon={<TeamOutlined />} />
+                        <Step className={`application-steps application-steps-wait ${ step === 'co-applicant' && 'application-steps-process'}`} status="wait" title="Co-Applicant" icon={<TeamOutlined />} />
                         <Step className={`application-steps application-steps-wait ${ step === 'summary' && 'application-steps-process'}`} status="wait" title="Summary" icon={<SolutionOutlined />} />
                     </Steps>
                 </Col>
