@@ -16,7 +16,7 @@ export const Summary: React.FC<Props> = ({setStep}: Props) => {
             </div>
 
             <div style={{ marginTop: 20, textAlign: `center`}}>
-                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('applicant') } } >Prev</Button>
+                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('co-applicant') } } >Prev</Button>
             </div>
 
 

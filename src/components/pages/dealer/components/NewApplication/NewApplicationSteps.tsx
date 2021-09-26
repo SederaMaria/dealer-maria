@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { Col, Row, Steps, Layout } from 'antd';
 import Icon from '@ant-design/icons';
 import { SolutionOutlined, UserOutlined, TeamOutlined, PoweroffOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
     BikeInformation, 
     Calculator, 
     Applicant,
+    CoApplicant,
     Summary
 } from "./"
 
@@ -23,9 +24,10 @@ const { Header } = Layout;
 
 function NewApplicationSteps() {
 
-    const [ step, setStep ] = useState<string>(`bike`)
-
-
+    const search = useLocation().search;
+    const stepParams: string | null = new URLSearchParams(search).get("step");
+    const getStepParams = stepParams === null ? `bike` : stepParams
+    const [ step, setStep ] = useState<string>(getStepParams)
 
     return (
         <div>
@@ -62,7 +64,7 @@ function NewApplicationSteps() {
                 case "bike": return <BikeInformation setStep={setStep}/>;
                 case "calculator": return <Calculator setStep={setStep}/>;
                 case "applicant": return <Applicant setStep={setStep} />;
-                case "co-applicant": return <Applicant setStep={setStep} />;
+                case "co-applicant": return <CoApplicant setStep={setStep} />;
                 case "summary": return <Summary setStep={setStep} />;
             }
             })()}

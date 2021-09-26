@@ -30,7 +30,7 @@ interface Props {
     }
 }
 
-export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
+export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
 
 
     const { lessee } = data || {};
@@ -89,7 +89,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     return (
         <div style={{ margin: `20px 100px` }}>
             <div style={{ textAlign: `center`,  marginBottom: 20}}>
-                <Title level={2}> Applicant </Title>
+                <Title level={2}> Co Applicant </Title>
                 <p> Enter information about yourself to apply for a lease. </p>
             </div>
         <Form 
@@ -617,8 +617,8 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
                             <div style={{ marginTop: 20, textAlign: `right`}}>
                                 <Button style={{ marginRight: 10 }}>Save</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('calculator') } } >Prev</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('co-applicant') } } >Next</Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('applicant') } } >Prev</Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('summary') } } >Next</Button>
                             </div>
 
                         </Col>
@@ -658,4 +658,4 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     )
 }
 
-export default Applicant
+export default CoApplicant
