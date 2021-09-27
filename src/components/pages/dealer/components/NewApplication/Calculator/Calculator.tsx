@@ -275,7 +275,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <Row>
+                                <Row className={`bot-spacer-1 top-spacer-1 `}>
                                     <Col span={12}> 
                                         NADA Rental
                                     </Col> 
@@ -284,9 +284,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
 
-                                <Row>
+                                <Row className={`bot-spacer-2`}>
                                     <Col span={12}> 
                                         Purchase Option (Residual)
                                     </Col> 
@@ -296,16 +295,12 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                <br/>
-
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={24}> 
                                     <Title level={4}> Total Sale Price Calculation </Title>
                                     </Col> 
                                 </Row>
 
-                                <br/>
 
                                 <Row>
                                     <Col span={16}> 
@@ -413,7 +408,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={16}> 
                                         Tire and Wheel
                                     </Col> 
@@ -425,19 +420,16 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
 
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Total Sales Price
                                     </Col> 
                                     <Col span={12} style={{textAlign: `right`}}> 
-                                        {/* <span>{calculatorData.upfrontTax}</span> */}
+                                        <span>{calculatorData.upfrontTax}</span>
                                     </Col> 
                                 </Row>
 
-
-                                <br/>
 
                                 <Row>
                                     <Col span={12}> 
@@ -465,7 +457,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={16}> 
                                         Trade-in Payoff
                                     </Col> 
@@ -477,9 +469,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Net Trade-In Allowance
                                     </Col> 
@@ -488,7 +478,6 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
 
                                 <Row>
                                     <Col span={16}> 
@@ -502,7 +491,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Total Cap Cost Reduction
                                     </Col> 
@@ -511,8 +500,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
                                 
-                                <br/>
-                                <Row>
+
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Net Due on Motorcycle
                                     </Col> 
@@ -522,8 +511,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={16}> 
                                     Acquisition Fee
                                     </Col> 
@@ -532,8 +520,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Total Cap Cost
                                     </Col> 
@@ -543,8 +530,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Total Gross Cap Cost
                                     </Col> 
@@ -556,10 +542,9 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
 
 
-                                <br/>
                                 <div style={{padding: 20, backgroundColor: '#F5F6F8'}}>
                                     <Title level={4}> Customer Monthly Payment </Title>
-                                    <Row>
+                                    <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
                                         Base Monthly Payment
                                         </Col> 
@@ -568,8 +553,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         </Col> 
                                     </Row>
 
-                                    <br/>
-                                    <Row>
+
+                                    <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
                                         Monthly Sales Tax
                                         </Col> 
@@ -578,7 +563,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         </Col> 
                                     </Row>
 
-                                    <br/>
+                                    
                                     <Row style={{color: `#1890ff`}}>
                                         <Col span={12}> 
                                         Total Monthly Payment
@@ -589,7 +574,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Row>
 
                                     <Title level={4}> Cash Paid at Signing </Title>
-                                    <Row>
+                                    <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
                                         First Monthly Payment
                                         </Col> 
@@ -598,8 +583,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         </Col> 
                                     </Row>
 
-                                    <br/>
-                                    <Row>
+   
+                                    <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
                                         Refundable Security Deposit
                                         </Col> 
@@ -608,8 +593,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                         </Col> 
                                     </Row>
 
-                                    <br/>
-                                    <Row>
+                                    
+                                    <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
                                         Additional Cash Down
                                         </Col> 
@@ -620,7 +605,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
 
 
-                                    <br/>
+                                    
                                     <Row style={{color: `#1890ff`}}>
                                         <Col span={12}> 
                                         Total Cash at Signing
@@ -656,7 +641,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
                                 </Row>
 
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={16}> 
                                     First Monthly Payment
                                     </Col> 
@@ -666,8 +651,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={16}> 
                                     Refundable Security Deposit
                                     </Col> 
@@ -677,8 +661,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                <Row >
+                            
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={16} style={{ fontWeight: 700}}> 
                                     Put This Amount in Cash
                                     </Col> 
@@ -687,7 +671,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
+                                
                                 <Row >
                                     <Col span={16} style={{ fontWeight: 700}}> 
                                     
@@ -698,7 +682,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
                                 <Title level={4}> Dealer Participation (Reserve) </Title>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Bike Minimum
                                     </Col> 
@@ -707,7 +691,6 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
                                 <Row>
                                     <Col span={16}> 
                                         Dealer Participation Markup
@@ -731,7 +714,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
 
                                 <Title level={4}> Dealer Funding Breakdown </Title>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Total Transaction Price
                                     </Col> 
@@ -740,8 +723,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Minus Trade-in
                                     </Col> 
@@ -750,8 +732,8 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                               
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Minus Down Payment
                                     </Col> 
@@ -760,8 +742,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Minus Down Security Deposit
                                     </Col> 
@@ -770,8 +751,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Minus First Monthly Payment
                                     </Col> 
@@ -780,8 +760,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Minus Security Deposit
                                     </Col> 
@@ -791,8 +770,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Cash on Delivery on Bike
                                     </Col> 
@@ -801,8 +779,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Plus Dealer Participation
                                     </Col> 
@@ -812,21 +789,21 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 </Row>
 
 
-                                <br/>
-                                    <Row style={{color: `#1890ff`}}>
-                                        <Col span={12}> 
-                                        Remit to Dealer
-                                        </Col> 
-                                        <Col span={12} style={{textAlign: `right`}}> 
-                                        <span>{calculatorData.remitToDealer}</span>
-                                        </Col> 
-                                    </Row>
+
+                                <Row style={{color: `#1890ff`}}>
+                                    <Col span={12}> 
+                                    Remit to Dealer
+                                    </Col> 
+                                    <Col span={12} style={{textAlign: `right`}}> 
+                                    <span>{calculatorData.remitToDealer}</span>
+                                    </Col> 
+                                </Row>
 
 
 
 
                                 <Title level={4}> Maximum Advances </Title>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={12}> 
                                     Front-End Max Advance
                                     </Col> 
@@ -835,7 +812,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
+
                                 <Row>
                                     <Col span={12}> 
                                     Back-End Max Advance
@@ -847,7 +824,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
 
 
                                 <Title level={4}> Current Stipulations </Title>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={24}> 
                                         <a href="#"> 
                                             May be subject to payment limit (send POL and we'll determine the exact limit if any)
@@ -855,8 +832,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={24}> 
                                         <a href="#"> 
                                             Subject to Pre-Funding verification call(s)
@@ -864,8 +840,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
-                                <Row>
+                                <Row className={`bot-spacer-1`}>
                                     <Col span={24}> 
                                         <a href="#"> 
                                             Proof of Residence (Matching Application & Within 30 Days)
@@ -873,7 +848,7 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                     </Col> 
                                 </Row>
 
-                                <br/>
+
                                 <Row>
                                     <Col span={24}> 
                                         You may email documents satisfying these stipulations to:  
