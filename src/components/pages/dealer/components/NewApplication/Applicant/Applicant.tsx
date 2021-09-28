@@ -31,6 +31,11 @@ interface Props {
     }
 }
 
+interface Option {
+    value: string | number,
+    label: string
+}
+
 export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
 
@@ -38,19 +43,19 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
-    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<any>>([])
-    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<any>>([])
-    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<any>>([])
+    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<Option>>([])
+    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<Option>>([])
+    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<Option>>([])
 
-    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<any>>([])
-    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<any>>([])
-    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<any>>([])
+    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<Option>>([])
+    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<Option>>([])
+    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<Option>>([])
 
-    const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState<any>(undefined)
-    const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState<any>(undefined)
+    const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState<any | undefined>(undefined)
+    const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState<string | undefined>(undefined)
 
-    const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any>(undefined)
-    const [zipMailErrorMessage, setZipMailErrorMessage] = useState<any>(undefined)
+    const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any | undefined>(undefined)
+    const [zipMailErrorMessage, setZipMailErrorMessage] = useState<string | undefined>(undefined)
 
     const [employerStateOptions, setEmployerStateOptions] = useState([])
     const [employmentStatusOptions, setEmploymentStatusOptions] = useState([])
@@ -58,10 +63,10 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [phoneOption, setPhoneOption] = useState(1)
     const [requireEmploymentFields, setRequireEmploymentFields] = useState(false)
 
-    const [showHomeState, setShowHomeState] = useState<any>(null)
+    const [showHomeState, setShowHomeState] = useState<object | null>(null)
     const [showHomeCountyState, setShowHomeCountyState] = useState(null)
     const [showHomeCityState, setShowHomeCityState] = useState(null)
-    const [showMailingState, setShowMailingState] = useState<any>(null)
+    const [showMailingState, setShowMailingState] = useState<object | null>(null)
     const [showMailingCountyState, setShowMailingCountyState] = useState(null)
     const [showMailingCityState, setShowMailingCityState] = useState(null)
 
