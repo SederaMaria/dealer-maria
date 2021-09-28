@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout } from "antd";
+import { logger, network } from '../../../../../../utils';
 import MaskedInput from 'antd-mask-input'
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
@@ -37,19 +38,19 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
-    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState([])
-    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState([])
-    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState([])
+    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<any>>([])
+    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<any>>([])
+    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<any>>([])
 
-    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState([])
-    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState([])
-    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState([])
+    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<any>>([])
+    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<any>>([])
+    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<any>>([])
 
-    const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState(undefined)
-    const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState(undefined)
+    const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState<any>(undefined)
+    const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState<any>(undefined)
 
-    const [zipMailValidateStatus, setZipMailValidateStatus] = useState(undefined)
-    const [zipMailErrorMessage, setZipMailErrorMessage] = useState(undefined)
+    const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any>(undefined)
+    const [zipMailErrorMessage, setZipMailErrorMessage] = useState<any>(undefined)
 
     const [employerStateOptions, setEmployerStateOptions] = useState([])
     const [employmentStatusOptions, setEmploymentStatusOptions] = useState([])
@@ -57,10 +58,10 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [phoneOption, setPhoneOption] = useState(1)
     const [requireEmploymentFields, setRequireEmploymentFields] = useState(false)
 
-    const [showHomeState, setShowHomeState] = useState(null)
+    const [showHomeState, setShowHomeState] = useState<any>(null)
     const [showHomeCountyState, setShowHomeCountyState] = useState(null)
     const [showHomeCityState, setShowHomeCityState] = useState(null)
-    const [showMailingState, setShowMailingState] = useState(null)
+    const [showMailingState, setShowMailingState] = useState<any>(null)
     const [showMailingCountyState, setShowMailingCountyState] = useState(null)
     const [showMailingCityState, setShowMailingCityState] = useState(null)
 
@@ -84,7 +85,67 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [showMileageRangeState, setShowMileageRangeState] = useState(null)
     const [showCreditTierState, setShowCreditTierState] = useState(null)
 
+    const handleLesseeHomeZipcodeBlur = async () => {
+        let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
 
+        try {
+            await network.GET(`/api/v1/address/find_city?zipcode=${zipcode}`).then(response => {
+                if (response.data.is_state_active_on_calculator) {
+                    setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []) }))
+                    setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []) }))
+                    setLesseeHomeCityOptions(formatOptions({ options: (response.data.city || []), type: 'collection' }))
+                    // setShowHomeState({ "open": true })
+                }
+                if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
+                    setZipHomeValidateStatus("error")
+                    setZipHomeErrorMessage("Speed Leasing currently does not lease to residents of this state.")
+                    // setShowHomeState(null)
+                } else {
+                    setZipHomeValidateStatus(undefined)
+                    setZipHomeErrorMessage(undefined)
+                }
+            }).catch(error => {
+                logger.error("handleLesseeHomeZipcodeBlur.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("handleLesseeHomeZipcodeBlur Error", e);
+        }
+    }
+
+    const handleLesseeMailZipcodeBlur = async () => {
+        let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'mailingAddressAttributes','zipcode'])
+
+        try {
+            await network.GET(`/api/v1/address/find_city?zipcode=${zipcode}`).then(response => {
+                if (response.data.is_state_active_on_calculator) {
+                    setLesseeMailStateOptions(formatOptions({options: (response.data.state || [])}))
+                    setLesseeMailCountyOptions(formatOptions({options: (response.data.county || [])}))
+                    setLesseeMailCityOptions(formatOptions({options: (response.data.city || []), type: 'collection'}))
+                    // setShowMailingState({ "open": true })
+                }
+                if (!response.data.is_state_active_on_calculator || response.data.city .length < 1 || response.data.city === undefined) {
+                    setZipMailValidateStatus("error")
+                    setZipMailErrorMessage("Speed Leasing currently does not lease to residents of this state.")
+                    // setShowMailingState(null)
+                } else {
+                    setZipMailValidateStatus(undefined)
+                    setZipMailErrorMessage(undefined)
+                }
+            }).catch(error => {
+                logger.error("handleLesseeMailZipcodeBlur.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("handleLesseeMailZipcodeBlur Error", e);
+        }
+    }
+
+    const formatOptions = (params: { options: Array<any>, type?: string }) => {
+        if (params.type === 'collection') {
+            return params.options.map((value: [string, number]) => { return { value: value[1], label: value[0] } })
+        } else {
+            return params.options.map((value: string) => { return { value: value, label: value } })
+        }
+    }
 
     return (
         <div style={{ margin: `20px 100px` }}>
@@ -93,7 +154,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                 <p> Enter information about yourself to apply for a lease. </p>
             </div>
         <Form 
-                // form={lesseeForm} 
+                form={lesseeForm}
                 {...layout}  
                 // colon={false}
                 // onFinish={handleSubmit}
@@ -233,8 +294,8 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             help={zipHomeErrorMessage}
                                         >  
                                             <MaskedInput mask="11111" placeholder="ZIP Code" 
-                                            // onPressEnter={handleLesseeHomeZipcodeBlur} 
-                                            // onBlur={handleLesseeHomeZipcodeBlur} 
+                                            onPressEnter={handleLesseeHomeZipcodeBlur}
+                                            onBlur={handleLesseeHomeZipcodeBlur}
                                             className="ant-input-comp" />
                                         </Form.Item>
                                     </Col> 
@@ -389,8 +450,8 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             <MaskedInput 
                                             mask="11111" 
                                             placeholder="ZIP Code" 
-                                            // onPressEnter={handleLesseeMailZipcodeBlur} 
-                                            // onBlur={handleLesseeMailZipcodeBlur} 
+                                            onPressEnter={handleLesseeMailZipcodeBlur}
+                                            onBlur={handleLesseeMailZipcodeBlur}
                                             className="ant-input-comp" />
                                         </Form.Item>
                                     </Col> 
