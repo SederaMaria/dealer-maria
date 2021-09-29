@@ -31,9 +31,10 @@ interface Props {
     }
 }
 
-interface Option {
+interface OptionData {
     value: string | number,
-    label: string
+    label: string,
+    parentId?: number
 }
 
 export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
@@ -43,13 +44,13 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
-    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<Option>>([])
-    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<Option>>([])
-    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<Option>>([])
+    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<OptionData>>([])
+    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<OptionData>>([])
+    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<OptionData>>([])
 
-    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<Option>>([])
-    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<Option>>([])
-    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<Option>>([])
+    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<OptionData>>([])
+    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<OptionData>>([])
+    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<OptionData>>([])
 
     const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState<any | undefined>(undefined)
     const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState<string | undefined>(undefined)
@@ -94,11 +95,11 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
 
         try {
-            await network.GET(`/api/v1/address/find_city?zipcode=${zipcode}`).then(response => {
+            await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
-                    setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []) }))
-                    setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []) }))
-                    setLesseeHomeCityOptions(formatOptions({ options: (response.data.city || []), type: 'collection' }))
+                    setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
+                    setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
+                    setLesseeHomeCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowHomeState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
@@ -121,11 +122,11 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'mailingAddressAttributes','zipcode'])
 
         try {
-            await network.GET(`/api/v1/address/find_city?zipcode=${zipcode}`).then(response => {
+            await network.GET(`/api/v1/address/city-details?zipcode${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
-                    setLesseeMailStateOptions(formatOptions({options: (response.data.state || [])}))
-                    setLesseeMailCountyOptions(formatOptions({options: (response.data.county || [])}))
-                    setLesseeMailCityOptions(formatOptions({options: (response.data.city || []), type: 'collection'}))
+                    setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
+                    setLesseeMailCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
+                    setLesseeMailCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowMailingState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || response.data.city .length < 1 || response.data.city === undefined) {
@@ -145,10 +146,26 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
     }
 
     const formatOptions = (params: { options: Array<any>, type?: string }) => {
-        if (params.type === 'collection') {
-            return params.options.map((value: [string, number]) => { return { value: value[1], label: value[0] } })
-        } else {
-            return params.options.map((value: string) => { return { value: value, label: value } })
+        switch (params.type) {
+            case 'city': {
+                return params.options.map((value: any) => {
+                    return {
+                        value: value['id'],
+                        label: value['name'],
+                        parentId: value['countyId']
+                    }
+                })
+                break;
+            }
+            default: {
+                return params.options.map((value: any) => {
+                    return {
+                        value: value['id'],
+                        label: value['abbreviation'] ? value['abbreviation'] : value['name']
+                    }
+                })
+                break;
+            }
         }
     }
 
