@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout } from "antd";
+import { logger, network } from '../../../../../../utils';
 import MaskedInput from 'antd-mask-input'
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
@@ -30,6 +31,12 @@ interface Props {
     }
 }
 
+interface OptionData {
+    value: string | number,
+    label: string,
+    parentId?: number
+}
+
 export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
 
@@ -37,19 +44,19 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
-    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState([])
-    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState([])
-    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState([])
+    const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<OptionData>>([])
+    const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<OptionData>>([])
+    const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<OptionData>>([])
 
-    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState([])
-    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState([])
-    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState([])
+    const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<OptionData>>([])
+    const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<OptionData>>([])
+    const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<OptionData>>([])
 
-    const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState(undefined)
-    const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState(undefined)
+    const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState<any | undefined>(undefined)
+    const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState<string | undefined>(undefined)
 
-    const [zipMailValidateStatus, setZipMailValidateStatus] = useState(undefined)
-    const [zipMailErrorMessage, setZipMailErrorMessage] = useState(undefined)
+    const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any | undefined>(undefined)
+    const [zipMailErrorMessage, setZipMailErrorMessage] = useState<string | undefined>(undefined)
 
     const [employerStateOptions, setEmployerStateOptions] = useState([])
     const [employmentStatusOptions, setEmploymentStatusOptions] = useState([])
@@ -57,12 +64,12 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [phoneOption, setPhoneOption] = useState(1)
     const [requireEmploymentFields, setRequireEmploymentFields] = useState(false)
 
-    const [showHomeState, setShowHomeState] = useState(null)
-    const [showHomeCountyState, setShowHomeCountyState] = useState(null)
-    const [showHomeCityState, setShowHomeCityState] = useState(null)
-    const [showMailingState, setShowMailingState] = useState(null)
-    const [showMailingCountyState, setShowMailingCountyState] = useState(null)
-    const [showMailingCityState, setShowMailingCityState] = useState(null)
+    const [showHomeState, setShowHomeState] = useState<object | null>(null)
+    const [showHomeCountyState, setShowHomeCountyState] = useState<object | null>(null)
+    const [showHomeCityState, setShowHomeCityState] = useState<object | null>(null)
+    const [showMailingState, setShowMailingState] = useState<object | null>(null)
+    const [showMailingCountyState, setShowMailingCountyState] = useState<object | null>(null)
+    const [showMailingCityState, setShowMailingCityState] = useState<object | null>(null)
 
     const [submitError, setSubmitError] = useState(null)
     const [hasSubmitError, setHasSubmitError] = useState(false)
@@ -84,7 +91,119 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [showMileageRangeState, setShowMileageRangeState] = useState(null)
     const [showCreditTierState, setShowCreditTierState] = useState(null)
 
+    const handleLesseeHomeZipcodeBlur = async () => {
+        let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
 
+        try {
+            await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
+                if (response.data.is_state_active_on_calculator) {
+                    setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
+                    setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
+                    setLesseeHomeCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
+                    setShowHomeState({ "open": true })
+                }
+                if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
+                    setZipHomeValidateStatus("error")
+                    setZipHomeErrorMessage("Speed Leasing currently does not lease to residents of this state.")
+                    setShowHomeState(null)
+                } else {
+                    setZipHomeValidateStatus(undefined)
+                    setZipHomeErrorMessage(undefined)
+                }
+            }).catch(error => {
+                logger.error("handleLesseeHomeZipcodeBlur.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("handleLesseeHomeZipcodeBlur Error", e);
+        }
+    }
+
+    const handleLesseeMailZipcodeBlur = async () => {
+        let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'mailingAddressAttributes','zipcode'])
+
+        try {
+            await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
+                if (response.data.is_state_active_on_calculator) {
+                    setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
+                    setLesseeMailCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
+                    setLesseeMailCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
+                    setShowMailingState({ "open": true })
+                }
+                if (!response.data.is_state_active_on_calculator || response.data.city .length < 1 || response.data.city === undefined) {
+                    setZipMailValidateStatus("error")
+                    setZipMailErrorMessage("Speed Leasing currently does not lease to residents of this state.")
+                    setShowMailingState(null)
+                } else {
+                    setZipMailValidateStatus(undefined)
+                    setZipMailErrorMessage(undefined)
+                }
+            }).catch(error => {
+                logger.error("handleLesseeMailZipcodeBlur.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("handleLesseeMailZipcodeBlur Error", e);
+        }
+    }
+
+    const formatOptions = (params: { options: Array<any>, type?: string }) => {
+        switch (params.type) {
+            case 'city': {
+                return params.options.map((value: any) => {
+                    return {
+                        value: value['id'],
+                        label: value['name'],
+                        parentId: value['countyId']
+                    }
+                })
+                break;
+            }
+            default: {
+                return params.options.map((value: any) => {
+                    return {
+                        value: value['id'],
+                        label: value['abbreviation'] ? value['abbreviation'] : value['name']
+                    }
+                })
+                break;
+            }
+        }
+    }
+
+    const handleHomeStateChange = () => {
+        setShowHomeState(null)
+        setShowHomeCountyState({ "open": true })
+    }
+
+    const handleHomeCountyStateChange = (countyStateId: any) => {
+        if (countyStateId) {
+            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+        }
+
+        setShowHomeCountyState(null)
+        setShowHomeCityState({ "open": true })
+    }
+
+    const handleHomeCityStateChange = () => {
+        setShowHomeCityState(null)
+    }
+
+    const handleMailingStateChange = () => {
+        setShowMailingState(null)
+        setShowMailingCountyState({ "open": true })
+    }
+
+    const handleMailingCountyStateChange = (countyStateId: any) => {
+        if (countyStateId) {
+            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+        }
+
+        setShowMailingCountyState(null)
+        setShowMailingCityState({ "open": true })
+    }
+
+    const handleMailingCityStateChange = () => {
+        setShowMailingCityState(null)
+    }
 
     return (
         <div style={{ margin: `20px 100px` }}>
@@ -93,7 +212,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                 <p> Enter information about yourself to apply for a lease. </p>
             </div>
         <Form 
-                // form={lesseeForm} 
+                form={lesseeForm}
                 {...layout}  
                 // colon={false}
                 // onFinish={handleSubmit}
@@ -233,8 +352,8 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             help={zipHomeErrorMessage}
                                         >  
                                             <MaskedInput mask="11111" placeholder="ZIP Code" 
-                                            // onPressEnter={handleLesseeHomeZipcodeBlur} 
-                                            // onBlur={handleLesseeHomeZipcodeBlur} 
+                                            onPressEnter={handleLesseeHomeZipcodeBlur}
+                                            onBlur={handleLesseeHomeZipcodeBlur}
                                             className="ant-input-comp" />
                                         </Form.Item>
                                     </Col> 
@@ -251,7 +370,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="State" 
                                                 {...showHomeState} 
-                                                // onSelect={handleHomeStateChange}
+                                                onSelect={handleHomeStateChange}
                                                 >
                                             {
                                                 lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
@@ -274,7 +393,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="County/Parish" 
                                                 {...showHomeCountyState} 
-                                                // onSelect={handleHomeCountyStateChange} 
+                                                onSelect={handleHomeCountyStateChange}
                                                 >
                                             {
                                                 lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
@@ -297,7 +416,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="City" 
                                                 {...showHomeCityState} 
-                                                // onSelect={handleHomeCityStateChange}
+                                                onSelect={handleHomeCityStateChange}
                                             >
                                             {
                                                 lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
@@ -389,8 +508,8 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             <MaskedInput 
                                             mask="11111" 
                                             placeholder="ZIP Code" 
-                                            // onPressEnter={handleLesseeMailZipcodeBlur} 
-                                            // onBlur={handleLesseeMailZipcodeBlur} 
+                                            onPressEnter={handleLesseeMailZipcodeBlur}
+                                            onBlur={handleLesseeMailZipcodeBlur}
                                             className="ant-input-comp" />
                                         </Form.Item>
                                     </Col> 
@@ -403,7 +522,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             hasFeedback
                                         >  
                                             <Select showSearch placeholder="State" {...showMailingState} 
-                                            // onSelect={handleMailingStateChange} 
+                                            onSelect={handleMailingStateChange}
                                             >
                                             {
                                                 lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
@@ -425,7 +544,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="County/Parish" 
                                                 {...showMailingCountyState} 
-                                                // onSelect={handleMailingCountyStateChange} 
+                                                onSelect={handleMailingCountyStateChange}
                                             >
                                             {
                                                 lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
@@ -447,7 +566,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             showSearch 
                                             placeholder="City" 
                                             {...showMailingCityState} 
-                                            // onSelect={handleMailingCityStateChange}
+                                            onSelect={handleMailingCityStateChange}
                                             >
                                         {
                                             lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
