@@ -64,11 +64,11 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [requireEmploymentFields, setRequireEmploymentFields] = useState(false)
 
     const [showHomeState, setShowHomeState] = useState<object | null>(null)
-    const [showHomeCountyState, setShowHomeCountyState] = useState(null)
-    const [showHomeCityState, setShowHomeCityState] = useState(null)
+    const [showHomeCountyState, setShowHomeCountyState] = useState<object | null>(null)
+    const [showHomeCityState, setShowHomeCityState] = useState<object | null>(null)
     const [showMailingState, setShowMailingState] = useState<object | null>(null)
-    const [showMailingCountyState, setShowMailingCountyState] = useState(null)
-    const [showMailingCityState, setShowMailingCityState] = useState(null)
+    const [showMailingCountyState, setShowMailingCountyState] = useState<object | null>(null)
+    const [showMailingCityState, setShowMailingCityState] = useState<object | null>(null)
 
     const [submitError, setSubmitError] = useState(null)
     const [hasSubmitError, setHasSubmitError] = useState(false)
@@ -99,12 +99,12 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                     setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []) }))
                     setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []) }))
                     setLesseeHomeCityOptions(formatOptions({ options: (response.data.city || []), type: 'collection' }))
-                    // setShowHomeState({ "open": true })
+                    setShowHomeState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
                     setZipHomeValidateStatus("error")
                     setZipHomeErrorMessage("Speed Leasing currently does not lease to residents of this state.")
-                    // setShowHomeState(null)
+                    setShowHomeState(null)
                 } else {
                     setZipHomeValidateStatus(undefined)
                     setZipHomeErrorMessage(undefined)
@@ -126,12 +126,12 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                     setLesseeMailStateOptions(formatOptions({options: (response.data.state || [])}))
                     setLesseeMailCountyOptions(formatOptions({options: (response.data.county || [])}))
                     setLesseeMailCityOptions(formatOptions({options: (response.data.city || []), type: 'collection'}))
-                    // setShowMailingState({ "open": true })
+                    setShowMailingState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || response.data.city .length < 1 || response.data.city === undefined) {
                     setZipMailValidateStatus("error")
                     setZipMailErrorMessage("Speed Leasing currently does not lease to residents of this state.")
-                    // setShowMailingState(null)
+                    setShowMailingState(null)
                 } else {
                     setZipMailValidateStatus(undefined)
                     setZipMailErrorMessage(undefined)
@@ -150,6 +150,34 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
         } else {
             return params.options.map((value: string) => { return { value: value, label: value } })
         }
+    }
+
+    const handleHomeStateChange = () => {
+        setShowHomeState(null)
+        setShowHomeCountyState({ "open": true })
+    }
+
+    const handleHomeCountyStateChange = () => {
+        setShowHomeCountyState(null)
+        setShowHomeCityState({ "open": true })
+    }
+
+    const handleHomeCityStateChange = () => {
+        setShowHomeCityState(null)
+    }
+
+    const handleMailingStateChange = () => {
+        setShowMailingState(null)
+        setShowMailingCountyState({ "open": true })
+    }
+
+    const handleMailingCountyStateChange = () => {
+        setShowMailingCountyState(null)
+        setShowMailingCityState({ "open": true })
+    }
+
+    const handleMailingCityStateChange = () => {
+        setShowMailingCityState(null)
     }
 
     return (
@@ -317,7 +345,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="State" 
                                                 {...showHomeState} 
-                                                // onSelect={handleHomeStateChange}
+                                                onSelect={handleHomeStateChange}
                                                 >
                                             {
                                                 lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
@@ -340,7 +368,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="County/Parish" 
                                                 {...showHomeCountyState} 
-                                                // onSelect={handleHomeCountyStateChange} 
+                                                onSelect={handleHomeCountyStateChange}
                                                 >
                                             {
                                                 lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
@@ -363,7 +391,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="City" 
                                                 {...showHomeCityState} 
-                                                // onSelect={handleHomeCityStateChange}
+                                                onSelect={handleHomeCityStateChange}
                                             >
                                             {
                                                 lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
@@ -469,7 +497,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             hasFeedback
                                         >  
                                             <Select showSearch placeholder="State" {...showMailingState} 
-                                            // onSelect={handleMailingStateChange} 
+                                            onSelect={handleMailingStateChange}
                                             >
                                             {
                                                 lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
@@ -491,7 +519,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                                 showSearch 
                                                 placeholder="County/Parish" 
                                                 {...showMailingCountyState} 
-                                                // onSelect={handleMailingCountyStateChange} 
+                                                onSelect={handleMailingCountyStateChange}
                                             >
                                             {
                                                 lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
@@ -513,7 +541,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             showSearch 
                                             placeholder="City" 
                                             {...showMailingCityState} 
-                                            // onSelect={handleMailingCityStateChange}
+                                            onSelect={handleMailingCityStateChange}
                                             >
                                         {
                                             lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
