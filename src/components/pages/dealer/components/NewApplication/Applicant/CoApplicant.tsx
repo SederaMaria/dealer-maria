@@ -122,7 +122,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'mailingAddressAttributes','zipcode'])
 
         try {
-            await network.GET(`/api/v1/address/city-details?zipcode${zipcode}`).then(response => {
+            await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeMailCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
@@ -174,7 +174,11 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
         setShowHomeCountyState({ "open": true })
     }
 
-    const handleHomeCountyStateChange = () => {
+    const handleHomeCountyStateChange = (countyStateId: any) => {
+        if (countyStateId) {
+            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+        }
+
         setShowHomeCountyState(null)
         setShowHomeCityState({ "open": true })
     }
@@ -188,7 +192,11 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
         setShowMailingCountyState({ "open": true })
     }
 
-    const handleMailingCountyStateChange = () => {
+    const handleMailingCountyStateChange = (countyStateId: any) => {
+        if (countyStateId) {
+            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+        }
+
         setShowMailingCountyState(null)
         setShowMailingCityState({ "open": true })
     }
