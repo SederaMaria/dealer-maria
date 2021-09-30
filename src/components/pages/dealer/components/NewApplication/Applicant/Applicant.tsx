@@ -149,7 +149,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                     setLesseeMailCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowMailingState({ "open": true })
                 }
-                if (!response.data.is_state_active_on_calculator || response.data.city .length < 1 || response.data.city === undefined) {
+                if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
                     setZipMailValidateStatus("error")
                     setZipMailErrorMessage("Speed Leasing currently does not lease to residents of this state.")
                     setShowMailingState(null)
@@ -175,7 +175,6 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                         parentId: value['countyId']
                     }
                 })
-                break;
             }
             default: {
                 return params.options.map((value: any) => {
@@ -184,7 +183,6 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                         label: value['abbreviation'] ? value['abbreviation'] : value['name']
                     }
                 })
-                break;
             }
         }
     }
@@ -196,7 +194,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleHomeCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
-            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId === countyStateId))
         }
 
         setShowHomeCountyState(null)
@@ -214,7 +212,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleMailingCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
-            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId === countyStateId))
         }
 
         setShowMailingCountyState(null)
