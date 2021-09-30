@@ -95,6 +95,16 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
 
         try {
+            lesseeForm.setFieldsValue({
+                lesseeAttributes: {
+                    homeAddressAttributes: {
+                        state: null,
+                        county: null,
+                        cityId: null
+                    }
+                }
+            })
+
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
@@ -122,6 +132,16 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'mailingAddressAttributes','zipcode'])
 
         try {
+            lesseeForm.setFieldsValue({
+                lesseeAttributes: {
+                    mailingAddressAttributes: {
+                        state: null,
+                        county: null,
+                        cityId: null
+                    }
+                }
+            })
+
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
