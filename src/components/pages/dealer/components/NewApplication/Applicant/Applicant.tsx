@@ -47,10 +47,12 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<OptionData>>([])
     const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<OptionData>>([])
     const [lesseeHomeCityOptions, setLesseeHomeCityOptions] = useState<Array<OptionData>>([])
+    const [lesseeHomeCityOptionsData, setLesseeHomeCityOptionsData] = useState<Array<OptionData>>([])
 
     const [lesseeMailStateOptions, setLesseeMailStateOptions] = useState<Array<OptionData>>([])
     const [lesseeMailCountyOptions, setLesseeMailCountyOptions] = useState<Array<OptionData>>([])
     const [lesseeMailCityOptions, setLesseeMailCityOptions] = useState<Array<OptionData>>([])
+    const [lesseeMailCityOptionsData, setLesseeMailCityOptionsData] = useState<Array<OptionData>>([])
 
     const [zipHomeValidateStatus, setZipHomeValidateStatus] = useState<any | undefined>(undefined)
     const [zipHomeErrorMessage, setZipHomeErrorMessage] = useState<string | undefined>(undefined)
@@ -109,7 +111,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
-                    setLesseeHomeCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
+                    setLesseeHomeCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowHomeState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
@@ -146,7 +148,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeMailCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
-                    setLesseeMailCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
+                    setLesseeMailCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowMailingState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
@@ -194,7 +196,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleHomeCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
-            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId === countyStateId))
+            setLesseeHomeCityOptions(lesseeHomeCityOptionsData.filter((obj: OptionData) => obj.parentId === parseInt(countyStateId)))
         }
 
         setShowHomeCountyState(null)
@@ -212,7 +214,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleMailingCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
-            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId === countyStateId))
+            setLesseeMailCityOptions(lesseeMailCityOptionsData.filter((obj: OptionData) => obj.parentId === parseInt(countyStateId)))
         }
 
         setShowMailingCountyState(null)
