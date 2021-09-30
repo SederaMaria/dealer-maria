@@ -18,8 +18,7 @@ function Home() {
                     <MainSider activeKey="home" />
                 <Layout id='content-area-layout'>
                     <MainBreadcrumb items={[
-                        { text: "Home", link_type: "linkto", link: "/home" },
-                        { text: "Home2", link_type: "linkto", link: "/home2" },
+                        { text: "Home", link_type: "linkto", link: "/home" }
                     ]}
                     />
 

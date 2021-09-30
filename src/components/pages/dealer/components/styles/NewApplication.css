@@ -56,7 +56,7 @@
   > .ant-steps-item-container
   > .ant-steps-item-icon
   > .ant-steps-icon {
-  color: white;
+  color: white !important;
 }
 
 .ant-steps-item-finish

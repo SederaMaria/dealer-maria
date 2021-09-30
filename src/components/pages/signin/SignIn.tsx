@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Button, Form, Grid, Header, Segment, Checkbox } from 'semantic-ui-react';
-import { logger, network } from '../../../utils';
+import { logger, network, auth } from '../../../utils';
 import './SignIn.css'
 const SITE_KEY : string | undefined = process.env.REACT_APP_RECAPTCHA_SITE_KEY 
 
@@ -14,7 +13,13 @@ function SignIn() {
   const [showCaptchaMessage, setShowCaptchaMessage] = useState<boolean>(false)
   const [captcha, setCaptcha] = useState<string | null>(null)
   const recaptchaRef = useRef(null);
-  const history = useHistory();
+
+
+  useEffect(() => {
+    if (auth.isAuth()) {
+      window.location.href = '/home'
+    } 
+  });
 
   // const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
   const handleSubmit = async () => {
@@ -31,9 +36,9 @@ function SignIn() {
           password
         }
       }).then(response => {
-        window.localStorage.setItem('auth_token', response.data.data.auth_token)
-        window.localStorage.setItem('user_data', JSON.stringify(response.data))
-        history.push('/dealer')
+        auth.setAuth(response.data.data.auth_token, response.data.data.full_name)
+      }).then( () =>  {
+        window.location.href = '/home'
       })
     } catch (e) {
       setError(true)

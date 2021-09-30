@@ -36,18 +36,20 @@ function NewApplication() {
                                     <Title level={3}>New Lease Application</Title>
                                     <p> Let's get you on the road! Select an option below to get started </p>
                                     <div className="elem-center start-sec">
-                                        <Link to={`/new-application/steps`}>
+                                        <Link to={`/new-application/steps?step=bike`}>
                                             <Card className="start-sec-card">
                                                 <Icon component={ MotorSvg } className="start-sec-card-icon"/>
                                                 <Title level={4}>Start Application</Title>
                                                 <p>Create a lease Application for a specific motorcycle.</p>
                                             </Card>
                                         </Link>
-                                        <Card className="start-sec-card">
-                                            <Icon component={ CalculatorSvg } className="start-sec-card-icon"/>
-                                            <Title level={4}>Start Calculator</Title>
-                                            <p>Select a bike and we'll show you the monthly payment amount.</p>
-                                        </Card>
+                                        <Link to={`/new-application/steps?step=calculator`}>
+                                            <Card className="start-sec-card">
+                                                <Icon component={ CalculatorSvg } className="start-sec-card-icon"/>
+                                                <Title level={4}>Start Calculator</Title>
+                                                <p>Select a bike and we'll show you the monthly payment amount.</p>
+                                            </Card>
+                                        </Link>
                                     </div>
                                 </div>
                             </Col>

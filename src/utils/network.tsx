@@ -1,7 +1,8 @@
 import Axios from 'axios';
+import Cookies from 'js-cookie'
 
 const LOS_API : string | undefined = process.env.REACT_APP_LOS_API 
-const auth_token = window.localStorage.getItem('auth_token');
+const auth_token = Cookies.get('authToken')
 
 export const GET = (url: string) => {
     return Axios.get(`${LOS_API}${url}`, {

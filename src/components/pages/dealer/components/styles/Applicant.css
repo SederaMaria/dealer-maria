@@ -1,0 +1,36 @@
+.ant-picker,
+.ant-input-number {
+  width: 100%;
+}
+
+.credit-app-phone-no {
+  border: 1px solid #d9d9d9 !important;
+}
+
+.ant-input-comp {
+  border: 1px solid #d9d9d9 !important;
+}
+
+.cca-center-text {
+  text-align: center;
+}
+
+.cca-center-justify {
+  text-align: justify;
+}
+
+.disclosure-paragraph {
+  color: #707070;
+}
+
+.content-1 {
+  padding: 24px;
+  margin: 0;
+  min-height: 280;
+}
+
+.content-2 {
+  padding: 10px 24px 24px 24px;
+  margin: 0;
+  min-height: 280;
+}
