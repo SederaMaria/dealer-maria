@@ -95,6 +95,16 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
 
         try {
+            lesseeForm.setFieldsValue({
+                lesseeAttributes: {
+                    homeAddressAttributes: {
+                        state: null,
+                        county: null,
+                        cityId: null
+                    }
+                }
+            })
+
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
@@ -122,6 +132,16 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'mailingAddressAttributes','zipcode'])
 
         try {
+            lesseeForm.setFieldsValue({
+                lesseeAttributes: {
+                    mailingAddressAttributes: {
+                        state: null,
+                        county: null,
+                        cityId: null
+                    }
+                }
+            })
+
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
                     setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
@@ -129,7 +149,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                     setLesseeMailCityOptions(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowMailingState({ "open": true })
                 }
-                if (!response.data.is_state_active_on_calculator || response.data.city .length < 1 || response.data.city === undefined) {
+                if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
                     setZipMailValidateStatus("error")
                     setZipMailErrorMessage("Speed Leasing currently does not lease to residents of this state.")
                     setShowMailingState(null)
@@ -155,7 +175,6 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                         parentId: value['countyId']
                     }
                 })
-                break;
             }
             default: {
                 return params.options.map((value: any) => {
@@ -164,7 +183,6 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                         label: value['abbreviation'] ? value['abbreviation'] : value['name']
                     }
                 })
-                break;
             }
         }
     }
@@ -176,7 +194,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleHomeCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
-            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+            setLesseeHomeCityOptions(lesseeHomeCityOptions.filter((obj: OptionData) => obj.parentId === countyStateId))
         }
 
         setShowHomeCountyState(null)
@@ -194,7 +212,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleMailingCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
-            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId == countyStateId))
+            setLesseeMailCityOptions(lesseeMailCityOptions.filter((obj: OptionData) => obj.parentId === countyStateId))
         }
 
         setShowMailingCountyState(null)
