@@ -196,6 +196,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleHomeCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
+            lesseeForm.setFieldsValue({ lesseeAttributes: { homeAddressAttributes: { cityId: null } } })
             setLesseeHomeCityOptions(lesseeHomeCityOptionsData.filter((obj: OptionData) => obj.parentId === parseInt(countyStateId)))
         }
 
@@ -214,6 +215,7 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
 
     const handleMailingCountyStateChange = (countyStateId: any) => {
         if (countyStateId) {
+            lesseeForm.setFieldsValue({ lesseeAttributes: { mailingAddressAttributes: { cityId: null } } })
             setLesseeMailCityOptions(lesseeMailCityOptionsData.filter((obj: OptionData) => obj.parentId === parseInt(countyStateId)))
         }
 
