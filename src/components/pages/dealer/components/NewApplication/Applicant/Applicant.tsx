@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout } from "antd";
 import { logger, network } from '../../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -226,6 +226,37 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
     const handleMailingCityStateChange = () => {
         setShowMailingCityState(null)
     }
+
+    const getEmployerStatus = async () => {
+        try {
+            await network.GET(`/api/v1/employment-status`).then(response => {
+                if (response.data.employment_status) {
+                    setEmploymentStatusOptions(response.data.employment_status.map((item: [string, string | number]) => {
+                        return {
+                            value: item[1],
+                            label: item[0]
+                        }
+                    }))
+                } else {
+                    setEmploymentStatusOptions([])
+                }
+            })
+        } catch (e) {
+            logger.error("Request Error", e);
+        }
+    }
+
+    const handleEmploymentStatus = (value: string) => {
+        if (value === '0' || value === '1') {
+            setRequireEmploymentFields(true)
+        } else {
+            setRequireEmploymentFields(false)
+        }
+    }
+
+    useEffect(() => {
+        getEmployerStatus()
+    }, []);
 
     return (
         <div style={{ margin: `20px 100px` }}>
@@ -695,7 +726,7 @@ export const Applicant: React.FC<Props> = ({setStep, data}: Props) => {
                                             <Select 
                                                 showSearch 
                                                 placeholder="Employment Status" 
-                                                // onChange={handleEmploymentStatus} 
+                                                onChange={handleEmploymentStatus}
                                                 optionFilterProp="children"
                                                 >
                                                 {
