@@ -14,7 +14,7 @@ import {
 } from '../../../../layouts'
 import { 
     MotorSvg, 
-    CalculatorSvg 
+    DollarBillSvg
 } from '../../../../../utils/Svg';
 import '../styles/NewApplication.css'
 
@@ -45,7 +45,7 @@ function NewApplication() {
                                         </Link>
                                         <Link to={`/new-application/steps?step=calculator`}>
                                             <Card className="start-sec-card">
-                                                <Icon component={ CalculatorSvg } className="start-sec-card-icon"/>
+                                                <Icon component={ DollarBillSvg } className="start-sec-card-icon"/>
                                                 <Title level={4}>Start Calculator</Title>
                                                 <p>Select a bike and we'll show you the monthly payment amount.</p>
                                             </Card>
