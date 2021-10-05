@@ -16,7 +16,7 @@ Axios.interceptors.response.use((response) => {
         Modal.error({
             centered: true,
             title: (error.statusText || 'Oops! Error'),
-            content: 'Access denied. Invalid or Expired Token.',
+            content: 'Access denied. Invalid or expired session.',
             onOk: () => {
                 logout()
                 window.location.href = '/login'
