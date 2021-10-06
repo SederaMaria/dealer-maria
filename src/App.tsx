@@ -37,8 +37,8 @@ function App() {
                   </Route>
                   <Route path="/logout" exact component={SignOut} />
                   <Route path="/home" exact component={HomeRenderer} />
-                  <Route path="/new-application" exact component={NewApplicationRender} />
-                  <Route path="/new-application/steps" exact component={NewApplicationSteps} />
+                  <Route path="/application" exact component={NewApplicationRender} />
+                  <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId" exact component={NewApplicationSteps} />
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />

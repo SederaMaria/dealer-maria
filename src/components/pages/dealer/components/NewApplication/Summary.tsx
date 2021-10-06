@@ -1,17 +1,19 @@
 import React from 'react'
 import { Row, Col, Button, Typography, Layout, Avatar } from "antd";
 import { UserOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 const { Title, Text } = Typography;
 const { Content } = Layout;
 interface Props {
     setStep: React.Dispatch<React.SetStateAction<string>>,
+    urlHistory: string
 }
 
 const SummaryDescription = ({ label, children }: any) => {
     return <Row style={{marginBottom: 10}}><Col span={24}> <Text style={{color: "rgba(0, 0, 0, 0.65)", fontWeight: 700, fontSize: "1.1em" }}> {label} </Text> </Col> <Col span={24}> {children} </Col></Row> 
   }
 
-export const Summary: React.FC<Props> = ({setStep}: Props) => {
+export const Summary: React.FC<Props> = ({setStep, urlHistory}: Props) => {
     return (
         <div style={{ margin: `20px 100px` }}>
             <div style={{ textAlign: `center`,  marginBottom: 20}}>
@@ -73,7 +75,9 @@ export const Summary: React.FC<Props> = ({setStep}: Props) => {
             </div>
 
             <div style={{ marginTop: 20, textAlign: `center`}}>
-                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('co-applicant') } } >Prev</Button>
+                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('co-applicant') } } >
+                <Link to={`${urlHistory}?step=co-applicant`}> prev </Link>
+                </Button>
             </div>
 
 
