@@ -87,7 +87,7 @@ function NewApplicationSteps(props: any) {
                 </Col>
                 <Col span={6}>
                     <span style={{float: 'right'}}>
-                        <Link to={`/new-application`} className="steps-exit-btn">
+                        <Link to={`/application`} className="steps-exit-btn">
                             <PoweroffOutlined />EXIT
                         </Link>
                     </span>

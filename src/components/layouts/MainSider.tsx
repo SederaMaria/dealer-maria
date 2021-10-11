@@ -22,8 +22,8 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
             <Link to={`/home`}><HomeOutlined /> Home</Link>
             </Menu.Item>
 
-            <Menu.Item key="new-application">
-                <Link to={`/new-application`}><ProfileOutlined /> New Application</Link>
+            <Menu.Item key="application">
+                <Link to={`/application`}><ProfileOutlined /> New Application</Link>
             </Menu.Item>
 
             <Menu.Item key="saved-calculators">
