@@ -153,7 +153,7 @@ export const Summary: React.FC<Props> = ({setStep, urlHistory}: Props) => {
                                     <div className="personal">
                                         <Title level={2} style={{textAlign: `left`}}>Personal</Title>
                                         <Row>
-                                            <Col span={3}><b>First Name</b></Col>
+                                            <Col span={3}><b className="expand-test">First Name</b></Col>
                                             <Col span={3}><b>Middle Name</b></Col>
                                             <Col span={3}><b>Last Name</b></Col>
                                             <Col span={3}><b>Date of Birth</b></Col>
