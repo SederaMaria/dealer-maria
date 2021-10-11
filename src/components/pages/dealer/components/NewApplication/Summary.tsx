@@ -62,9 +62,58 @@ export const Summary: React.FC<Props> = ({setStep, urlHistory}: Props) => {
                                 <Panel header key="1">
                                     <div className="personal">
                                         <Title level={2} style={{textAlign: `left`}}>Personal</Title>
+                                        <Row>
+                                            <Col span={3}><b>First Name</b></Col>
+                                            <Col span={3}><b>Middle Name</b></Col>
+                                            <Col span={3}><b>Last Name</b></Col>
+                                            <Col span={3}><b>Date of Birth</b></Col>
+                                            <Col span={3}><b>Phone Phone</b></Col>
+                                            <Col span={3}><b>Mobile Phone</b></Col>
+                                            <Col span={3}><b>Driver's License Number</b></Col>
+                                            <Col span={3}><b>Last Four of SSN</b></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={3}><p>ELLEN</p></Col>
+                                            <Col span={3}><p>EL</p></Col>
+                                            <Col span={3}><p>Credco</p></Col>
+                                            <Col span={3}><p>August 30, 1980</p></Col>
+                                            <Col span={3}><p>(804)222-1111</p></Col>
+                                            <Col span={3}><p>N/A</p></Col>
+                                            <Col span={3}><p>1234</p></Col>
+                                            <Col span={3}><p>1234</p></Col>
+                                        </Row>
                                     </div>
                                     <div className="address">
                                         <Title level={2} style={{textAlign: `left`}}>Home Address</Title>
+                                        <Row>
+                                            <Col span={6}><b>Street Address(No.P.O.boxes)</b></Col>
+                                            <Col span={3}><b>Appartment / Unit</b></Col>
+                                            <Col span={3}><b>Zip Code</b></Col>
+                                            <Col span={3}><b>State</b></Col>
+                                            <Col span={3}><b>Country/Parish</b></Col>
+                                            <Col span={3}><b>City</b></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={6}><p>5468 MONTEZUMA RD</p></Col>
+                                            <Col span={3}><p>Credco</p></Col>
+                                            <Col span={3}><p>38610</p></Col>
+                                            <Col span={3}><p>MS</p></Col>
+                                            <Col span={3}><p>MONTEZUMA</p></Col>
+                                            <Col span={3}><p>BLUE MAUNTAIN</p></Col>
+                                        </Row>
+
+                                        <Row  className="address-down">
+                                            <Col span={5}><b>Years at Current Address</b></Col>
+                                            <Col span={5}><b>Months at Current Address</b></Col>
+                                            <Col span={5}><b>Monthly Mortgage or Rent</b></Col>
+                                            <Col span={5}><b>Own or Rent</b></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={5}><p>10</p></Col>
+                                            <Col span={5}><p>120</p></Col>
+                                            <Col span={5}><p>1000</p></Col>
+                                            <Col span={5}><p>Own</p></Col>
+                                        </Row>
                                     </div>  
                                 </Panel>
                             </Collapse>
@@ -103,11 +152,58 @@ export const Summary: React.FC<Props> = ({setStep, urlHistory}: Props) => {
                                 <Panel header key="2">
                                     <div className="personal">
                                         <Title level={2} style={{textAlign: `left`}}>Personal</Title>
-                                        
+                                        <Row>
+                                            <Col span={3}><b>First Name</b></Col>
+                                            <Col span={3}><b>Middle Name</b></Col>
+                                            <Col span={3}><b>Last Name</b></Col>
+                                            <Col span={3}><b>Date of Birth</b></Col>
+                                            <Col span={3}><b>Phone Phone</b></Col>
+                                            <Col span={3}><b>Mobile Phone</b></Col>
+                                            <Col span={3}><b>Driver's License Number</b></Col>
+                                            <Col span={3}><b>Last Four of SSN</b></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={3}><p>ELLEN</p></Col>
+                                            <Col span={3}><p>EL</p></Col>
+                                            <Col span={3}><p>Credco</p></Col>
+                                            <Col span={3}><p>August 30, 1980</p></Col>
+                                            <Col span={3}><p>(804)222-1111</p></Col>
+                                            <Col span={3}><p>N/A</p></Col>
+                                            <Col span={3}><p>1234</p></Col>
+                                            <Col span={3}><p>1234</p></Col>
+                                        </Row>
                                     </div>
                                     <div className="address">
                                         <Title level={2} style={{textAlign: `left`}}>Home Address</Title>
-                                        
+                                        <Row>
+                                            <Col span={6}><b>Street Address(No.P.O.boxes)</b></Col>
+                                            <Col span={3}><b>Appartment / Unit</b></Col>
+                                            <Col span={3}><b>Zip Code</b></Col>
+                                            <Col span={3}><b>State</b></Col>
+                                            <Col span={3}><b>Country/Parish</b></Col>
+                                            <Col span={3}><b>City</b></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={6}><p>5468 MONTEZUMA RD</p></Col>
+                                            <Col span={3}><p>Credco</p></Col>
+                                            <Col span={3}><p>38610</p></Col>
+                                            <Col span={3}><p>MS</p></Col>
+                                            <Col span={3}><p>MONTEZUMA</p></Col>
+                                            <Col span={3}><p>BLUE MAUNTAIN</p></Col>
+                                        </Row>
+
+                                        <Row  className="address-down">
+                                            <Col span={5}><b>Years at Current Address</b></Col>
+                                            <Col span={5}><b>Months at Current Address</b></Col>
+                                            <Col span={5}><b>Monthly Mortgage or Rent</b></Col>
+                                            <Col span={5}><b>Own or Rent</b></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={5}><p>10</p></Col>
+                                            <Col span={5}><p>120</p></Col>
+                                            <Col span={5}><p>1000</p></Col>
+                                            <Col span={5}><p>Own</p></Col>
+                                        </Row>
                                     </div>  
                                 </Panel>
                             </Collapse>
