@@ -1,0 +1,25 @@
+.edit-expand-buttons {
+    width: 31%;
+    margin-top: 1.5%;
+   }
+    .ant-collapse-header {
+     display: none;
+   }
+   
+   .ant-collapse, .ant-collapse-content, .ant-collapse-content-box {
+     border: none;
+   }
+   
+   .ant-collapse > .ant-collapse-item {
+     border-bottom: none;
+   }
+   
+   .personal, .address {
+     border: 2px solid black;
+     border-radius: 2px;
+     padding: 7px;
+   }
+   
+   .address {
+     margin-top: 2%;
+   }
