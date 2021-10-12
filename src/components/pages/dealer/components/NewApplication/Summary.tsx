@@ -50,7 +50,9 @@ export const Summary: React.FC<Props> = ({setStep, urlHistory}: Props) => {
                     </Row>
                     <Row className="edit-expand-buttons" justify="center">
                         <Col span={6}>
-                            <Button id="editApplicant" type="primary" onClick={()=>{ setStep('applicant') } }>Edit</Button>
+                            <Button id="editApplicant" type="primary" onClick={()=>{ setStep('applicant') } }>
+                            <Link to={`${urlHistory}?step=applicant`}> Edit </Link>
+                            </Button>
                         </Col>
                         <Col span={6}>
                             <Button type="primary" style={{background: `#CCCCCC`, border: `#000`}} onClick={()=> switchActiveKey(1)}>Expand</Button>
@@ -140,7 +142,9 @@ export const Summary: React.FC<Props> = ({setStep, urlHistory}: Props) => {
                     </Row>
                     <Row className="edit-expand-buttons" justify="center">
                         <Col span={6}>
-                            <Button id="edit" type="primary" onClick={() => { setStep('co-applicant') } }>Edit</Button>
+                            <Button id="edit" type="primary" onClick={() => { setStep('co-applicant') } }>
+                                <Link to={`${urlHistory}?step=co-applicant`}> Edit </Link>
+                            </Button>
                         </Col>
                         <Col span={6}>
                             <Button id="expand" type="primary" style={{background: `#CCCCCC`, border: `#000`}} onClick={()=>switchActiveKey(2)}>Expand</Button>
