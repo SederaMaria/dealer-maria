@@ -8,6 +8,7 @@ interface Applications {
     key: number;
     name: string;
     id: number;
+    actionPermission: ActionPermission;
   }
   interface Data {
     applicationIdentifier: string;
@@ -19,7 +20,20 @@ interface Applications {
     daysSubmitted: string;
     lastUpdated: string;
   }
-  
+
+interface ActionPermission {
+  canAddCoapplicant: boolean;
+  canChangeBikes: boolean;
+  canOpenCreditApplication: boolean;
+  canOpenPaymentCalculator: boolean;
+  canRemoveCoapplicant: boolean;
+  canRequestLeaseDocuments: boolean;
+  canSubmitBankInfo: boolean;
+  canSwapApplicants: boolean;
+  expired: boolean;
+  submitted: boolean;
+}
+
   const columns: ColumnsType<Applications> = [
     {
       key: 'applicationIdentifier',
@@ -70,9 +84,9 @@ interface Applications {
       title: '',
       dataIndex: '',
       key: 'x',
-      render() {
+      render(text, record, index) {
           return (
-          <Dropdown overlay={menu} trigger={['click']}>
+          <Dropdown overlay={menu(record.actionPermission)} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}}/> </Button>
             </a>
@@ -83,24 +97,92 @@ interface Applications {
     },
   ];
 
-  const menu = (
+const menu = (actionPermission: ActionPermission) => {
+  let paymentCalcNode;
+
+  if (actionPermission.canOpenPaymentCalculator) {
+    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
+  } else if (actionPermission.canChangeBikes) {
+    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
+  } else {
+    paymentCalcNode = <a href="#">View Payment Calculator</a>;
+  }
+
+  return (
     <Menu>
       <Menu.Item>
-        <a href="#">View Payment Calculator</a>
+        {paymentCalcNode}
       </Menu.Item>
       <Menu.Item>
-        <a href="#">View Credit Application</a>
+        {
+          actionPermission.canOpenCreditApplication ?
+            <a href="#">Open Credit Application</a>
+            :
+            <a href="#">View Credit Application</a>
+        }
       </Menu.Item>
+      {
+        !actionPermission.submitted &&
+          <Menu.Item>
+            <a href="#">Submit to Speed Leasing</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canSwapApplicants &&
+          <Menu.Item>
+            <a href="#">Swap Applicants</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canAddCoapplicant &&
+          <Menu.Item>
+            <a href="#">Add Co-applicant</a>
+          </Menu.Item>
+      }
       <Menu.Item>
         <a href="#">View / Add References</a>
       </Menu.Item>
-      <Menu.Item>
-        <a href="#">Submit Bank Information</a>
-      </Menu.Item>
+      {
+        !actionPermission.expired &&
+          <Menu.Item>
+            <a href="#">Add Attachment</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canChangeBikes &&
+          <>
+            <Menu.Item>
+              <a href="#">Bike Change</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a href="#">Change Tax Jurisdiction</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a href="#">Change Mileage</a>
+            </Menu.Item>
+          </>
+      }
+      {
+        actionPermission.canRequestLeaseDocuments &&
+          <Menu.Item>
+            <a href="#">Request Lease Documents</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canRemoveCoapplicant &&
+          <Menu.Item>
+            <a href="#">Remove Co-applicant</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canSubmitBankInfo &&
+          <Menu.Item>
+            <a href="#">Submit Bank Information</a>
+          </Menu.Item>
+      }
     </Menu>
-  );
-
-
+  )
+}
 
 function ApplicationList() {
 
