@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { 
   SignIn,
@@ -9,13 +9,21 @@ import {
   NewApplicationSteps
 } from './components/pages';
 import { UserDataContext } from "./contexts/UserDataContext";
-import { auth } from './utils';
+import { auth, network } from './utils';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
 function App() {
 
   const [authenticated] = useState<boolean>(auth.isAuth());
+
+  const validateToken = async () => {
+    network.POST(`/api/v1/validate-token`, {})
+  }
+
+  useEffect(() => {
+    if (authenticated) { validateToken() }
+  }, []);
 
   return (
     <>
@@ -37,8 +45,8 @@ function App() {
                   </Route>
                   <Route path="/logout" exact component={SignOut} />
                   <Route path="/home" exact component={HomeRenderer} />
-                  <Route path="/new-application" exact component={NewApplicationRender} />
-                  <Route path="/new-application/steps" exact component={NewApplicationSteps} />
+                  <Route path="/application" exact component={NewApplicationRender} />
+                  <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId" exact component={NewApplicationSteps} />
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />

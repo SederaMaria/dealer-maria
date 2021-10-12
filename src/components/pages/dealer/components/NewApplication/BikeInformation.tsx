@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent } from 'react'
 import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input } from "antd";
+import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -15,7 +16,8 @@ const layout = {
   };
 
 interface Props {
-    setStep: React.Dispatch<React.SetStateAction<string>>;
+    setStep: React.Dispatch<React.SetStateAction<string>>,
+    urlHistory: string
 }
 
 interface OptionProps {
@@ -23,7 +25,7 @@ interface OptionProps {
     label?: string,
 }
 
-export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
+export const BikeInformation: React.FC<Props> = ({setStep, urlHistory}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
@@ -416,8 +418,10 @@ export const BikeInformation: React.FC<Props> = ({setStep}: Props) => {
                             </Card>
 
                             <div style={{ marginTop: 20, textAlign: `right`}}>
-                                <Button style={{ marginRight: 10 }}>Save</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('calculator') } } >Next</Button>
+                                <Button style={{ marginRight: 10 }}> Save </Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('calculator') } } >
+                                    <Link to={`${urlHistory}?step=calculator`}> Next </Link>
+                                </Button>
                             </div>
 
                         </Col>

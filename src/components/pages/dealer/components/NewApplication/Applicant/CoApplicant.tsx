@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout } from "antd";
+import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../../utils';
 import MaskedInput from 'antd-mask-input'
 import SsnInput from './SsnInput'
@@ -26,6 +27,7 @@ interface Lessee {
 
 interface Props {
     setStep: React.Dispatch<React.SetStateAction<string>>,
+    urlHistory: string,
     data?: {
         lessee: Lessee
     }
@@ -37,7 +39,7 @@ interface OptionData {
     parentId?: number
 }
 
-export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
+export const CoApplicant: React.FC<Props> = ({setStep, data, urlHistory}: Props) => {
 
 
     const { lessee } = data || {};
@@ -789,8 +791,12 @@ export const CoApplicant: React.FC<Props> = ({setStep, data}: Props) => {
 
                             <div style={{ marginTop: 20, textAlign: `right`}}>
                                 <Button style={{ marginRight: 10 }}>Save</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('applicant') } } >Prev</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('summary') } } >Next</Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('applicant') } } >
+                                    <Link to={`${urlHistory}?step=applicant`}> prev </Link>
+                                </Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('summary') } } >
+                                    <Link to={`${urlHistory}?step=summary`}> Next </Link>
+                                </Button>
                             </div>
 
                         </Col>

@@ -1,7 +1,9 @@
 import React from 'react'
 import { Layout, Menu } from "antd";
 import { Link } from 'react-router-dom';
-import { SiderProps } from './props'
+import { SiderProps } from './props';
+import { HomeOutlined, ProfileOutlined, CalculatorOutlined  } from '@ant-design/icons';
+
 import './styles/MainSider.css';
 
 const { Sider } = Layout;
@@ -17,15 +19,15 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
             defaultSelectedKeys={[`${activeKey}`]}
           >
             <Menu.Item key="home">
-            <Link to={`/home`}>Home</Link>
+            <Link to={`/home`}><HomeOutlined /> Home</Link>
             </Menu.Item>
 
-            <Menu.Item key="new-application">
-                <Link to={`/new-application`}>New Application</Link>
+            <Menu.Item key="application">
+                <Link to={`/application`}><ProfileOutlined /> New Application</Link>
             </Menu.Item>
 
             <Menu.Item key="saved-calculators">
-                <Link to={`/saved-calculators`}>Saved Calculators</Link>
+                <Link to={`/saved-calculators`}><CalculatorOutlined /> Saved Calculators</Link>
             </Menu.Item>
 
           </Menu>

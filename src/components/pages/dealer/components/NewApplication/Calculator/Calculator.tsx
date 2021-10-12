@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout } from "antd";
+import { Link } from 'react-router-dom';
+import { logger, network } from '../../../../../../utils';
 import '../../styles/Calculator.css'
+
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -15,10 +18,11 @@ const layout = {
   };
 
 interface Props {
-    setStep: React.Dispatch<React.SetStateAction<string>>;
+    setStep: React.Dispatch<React.SetStateAction<string>>,
+    urlHistory: string
 }
 
-export const Calculator: React.FC<Props> = ({setStep}: Props) => {
+export const Calculator: React.FC<Props> = ({setStep, urlHistory}: Props) => {
 
 
     interface CalculatorDataProps {
@@ -53,9 +57,12 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
         frontEndMaxAdvance?: string,
         backEndMaxAdvance?: string,
 
+    }
 
-
-
+    interface ActiveStatesOption {
+        label: string,
+        value: string,
+        tax_label: string
     }
 
 
@@ -64,9 +71,36 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
       
     const [calculatorData, setCalculatorData] = useState<CalculatorDataProps>({})
 
+    const [activeStatesOptions, setActiveStatesOptions] = useState<Array<ActiveStatesOption>>([])
+    const [taxJurisdictionLabel, setTaxJurisdictionLabel] = useState<string>("Dealership's County/Tax Jurisdiction")
+    const [taxJurisdictionOptions, setTaxJurisdictionOptions] = useState<string[]>([])
+
+
+
+    const handleDealershipStateChange =  (value: any, option: any) => {
+        getTaxJurisdiction(value)
+        setTaxJurisdictionLabel(option.taxLabel)
+    }
+
+
+    const getTaxJurisdiction = async (usState: string) => {
+        try {
+            await network.GET(`/api/v1/calculators/tax-jurisdiction-select-option?us_state=${usState}`).then(response => {
+                setTaxJurisdictionOptions(response.data.tax_jurisdiction_select_option)
+            }).catch(error => {
+                logger.error("getTaxJurisdiction.Request Error", error);
+            });
+
+        } catch (e) {
+          logger.error("Request Error", e);
+        }
+      }
+
+
 
     useEffect(() => {
         setCalculatorRandom()
+        setDealershipState()
       },[]);
 
 
@@ -78,6 +112,27 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
         let num: any = new Intl.NumberFormat().format( Math.floor(Math.random() * (9 * (Math.pow(10, n)))) + (Math.pow(10, n)) ) 
         return `$${num}`
       }
+
+
+
+
+
+
+    const setDealershipState = async () => {
+
+        try {
+            await network.GET(`/api/v1/calculators/active-state-select-option`).then(response => {
+                setActiveStatesOptions(response.data.active_state_select_option)
+            }).catch(error => {
+                logger.error("handleLesseeMailZipcodeBlur.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("handleLesseeMailZipcodeBlur Error", e);
+        }
+    }
+
+
+
 
 
     const setCalculatorRandom = () => {
@@ -152,9 +207,15 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                             <Select 
                                             showSearch 
                                             onSelect={handleCalculation}
+                                            onChange={handleDealershipStateChange}
+                                            
                                             >
-                                                <Option value="1"> State1 </Option>
-                                                <Option value="2"> State2 </Option>
+                                                {
+                                                    activeStatesOptions && activeStatesOptions.map(({value, label, tax_label}, index) => {
+                                                    return <Option key={index} value={`${value}`} taxLabel={`${tax_label}`}>{label}</Option>
+                                                    })
+                                                }
+
                                             </Select>
                                         </Form.Item>
                                     </Col> 
@@ -163,13 +224,17 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                                 <Row>
                                     <Col span={24}> 
                                         <Form.Item 
-                                            label="Dealership's County/Tax Jurisdiction" 
+                                            label={`${taxJurisdictionLabel}`}
                                             hasFeedback
-                                            rules={[{ required: true, message: `Dealership's County/Tax Jurisdiction is required` }]}
+                                            rules={[{ required: true, message: `${taxJurisdictionLabel} is required` }]}
                                         >  
                                             <Select showSearch onSelect={handleCalculation} >
-                                                <Option value="1"> County 1 </Option>
-                                                <Option value="2"> County 2 </Option>
+                                            taxJurisdictionOptions
+                                            {
+                                                    taxJurisdictionOptions && taxJurisdictionOptions.map((value, index) => {
+                                                    return <Option key={index} value={`${value}`}>{value}</Option>
+                                                    })
+                                                }
                                             </Select>
                                         </Form.Item>
                                     </Col> 
@@ -861,8 +926,12 @@ export const Calculator: React.FC<Props> = ({setStep}: Props) => {
                             </Card>
                             <div style={{ marginTop: 20, textAlign: `right`}}>
                                 <Button style={{ marginRight: 10 }}>Save</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('bike') } } >Prev</Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('applicant') } } >Next</Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('bike') } } >
+                                    <Link to={`${urlHistory}?step=bike`}> prev </Link>
+                                </Button>
+                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('applicant') } } >
+                                    <Link to={`${urlHistory}?step=applicant`}> Next </Link>
+                                </Button>
                             </div>
                         </Col>
                     </Row>
