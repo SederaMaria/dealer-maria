@@ -4,6 +4,7 @@
 
 #content-area-layout {
   padding: 20px;
+ 
 }
 
 #content-area-layout.no-sidebar {
@@ -48,4 +49,4 @@
 
 .mt-30 {
   margin-top: 30px;
-}
+} 
