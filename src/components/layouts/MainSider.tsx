@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout, Menu } from "antd";
 import { Link } from 'react-router-dom';
 import { SiderProps } from './props';
-import { HomeOutlined, ProfileOutlined, CalculatorOutlined  } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined, CalculatorOutlined, BankOutlined } from '@ant-design/icons';
 
 import './styles/MainSider.css';
 
@@ -28,6 +28,10 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
 
             <Menu.Item key="saved-calculators">
                 <Link to={`/saved-calculators`}><CalculatorOutlined /> Saved Calculators</Link>
+            </Menu.Item>
+
+            <Menu.Item key="applications/12345/banking-information">
+                <Link to={`/applications/12345/banking-information`}><BankOutlined /> Banking</Link>
             </Menu.Item>
 
           </Menu>

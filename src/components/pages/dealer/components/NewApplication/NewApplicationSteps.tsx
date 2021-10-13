@@ -29,6 +29,7 @@ function NewApplicationSteps(props: any) {
     const getStepParams = stepParams === null ? `bike` : stepParams
     const [ step, setStep ] = useState<string>(getStepParams)
     const urlHistory: string = `/applications/${props.match.params.leaseApplicationId}/calculators/${props.match.params.LeaseCalculatorId}`
+    
    
     const handleBikeStep = () => {
         let stepType: string = `bike`

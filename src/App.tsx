@@ -8,6 +8,7 @@ import {
   SavedCalculatorsRenderer,
   NewApplicationSteps
 } from './components/pages';
+import BankInfoRenderer from './components/pages/dealer/components/BankInfoRenderer';
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
 import './App.css';
@@ -48,12 +49,12 @@ function App() {
                   <Route path="/application" exact component={NewApplicationRender} />
                   <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId" exact component={NewApplicationSteps} />
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
+                  <Route path="/applications/12345/banking-information" exact component={BankInfoRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>
                 </Switch>
             </UserDataContext.Provider>
-
           }
 
         </BrowserRouter>
