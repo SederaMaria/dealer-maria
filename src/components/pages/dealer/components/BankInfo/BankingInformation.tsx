@@ -43,7 +43,7 @@ const BankingInformation = () => {
                             </Row>
                             <Row className="submit-bank-info">
                                 <Col>
-                                    <Button type="primary">Submit Bank Information</Button>
+                                    <Button id="submit-bank-info" type="primary">Submit Bank Information</Button>
                                 </Col>
                             </Row>
                         </Card>

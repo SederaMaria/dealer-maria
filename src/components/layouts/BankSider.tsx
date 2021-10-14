@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout, Menu } from "antd";
 import { Link } from 'react-router-dom';
 import { SiderProps } from './props';
-import { BankOutlined, IdcardOutlined } from '@ant-design/icons';
+import { BankOutlined } from '@ant-design/icons';
 
 import './styles/MainSider.css';
 
@@ -20,7 +20,7 @@ export const BankSider: React.FC<Props> = ({activeKey}: Props) => {
             defaultSelectedKeys={[`${activeKey}`]}
           >
             <Menu.Item key="banking-information">
-                <Link to={`/applications/${id}/banking-information`}><BankOutlined /> Banking</Link>
+                <Link id="banking-icon" to={`/applications/${id}/banking-information`}><BankOutlined /> Banking</Link>
             </Menu.Item>
 
           </Menu>
