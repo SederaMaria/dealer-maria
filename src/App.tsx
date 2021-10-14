@@ -21,7 +21,7 @@ import {
 
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
-import BankInfoRenderer from './components/pages/dealer/components/BankInfoRenderer';
+import BankInfoRenderer from './components/pages/dealer/BankInfoRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
@@ -64,10 +64,8 @@ function App() {
                   <Route path="/applications/:leaseApplicationId/co-applicant" exact component={CoApplicantRenderer} />
                   <Route path="/applications/:leaseApplicationId/summary" exact component={SummaryRenderer} />
                   
-                  
-                  
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
-                  <Route path="/applications/:id/banking-information" exact component ={BankInfoRenderer} />
+                  <Route path="/applications/:leaseApplicationId/banking-information" exact component ={BankInfoRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>

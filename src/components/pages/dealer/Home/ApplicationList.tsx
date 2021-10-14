@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Table, Spin, Menu, Dropdown, Button } from 'antd';
 import {DownOutlined} from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
+import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 
 interface Applications {
@@ -39,9 +40,9 @@ interface ActionPermission {
       key: 'applicationIdentifier',
       title: 'Application Identifier',
       dataIndex: 'applicationIdentifier',
-      render(val) {
+      render(val, row) {
         return (
-            <a href="#"> { val} </a>
+          <Link to={`/applications/${row.id}/summary`}> { val} </Link>
         )
     }
     },

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Card, Row, Col, Form, Input, Button, Layout } from 'antd';
-import { MainHeader} from '../../../../layouts'
-import {BankSider} from '../../../../layouts/BankSider';
-import '../../../../layouts/styles/BankInfo.css'
+import { MainHeader, BankSider } from '../../../layouts'
+import '../../../layouts/styles/BankInfo.css'
 
 const { Content } = Layout;
 const BankingInformation = () => {
