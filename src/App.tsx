@@ -8,9 +8,9 @@ import {
   SavedCalculatorsRenderer,
   NewApplicationSteps
 } from './components/pages';
-import BankInfoRenderer from './components/pages/dealer/components/BankInfoRenderer';
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
+import BankInfoRenderer from './components/pages/dealer/components/BankInfoRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
