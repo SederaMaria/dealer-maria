@@ -12,15 +12,15 @@ import { useHistory } from 'react-router-dom';
 import { 
     MainHeader, 
     MainSider 
-} from '../../../../layouts'
+} from '../../../layouts'
 import { 
     logger, 
     network 
-} from '../../../../../utils';
+} from '../../../../utils';
 import { 
     MotorSvg, 
     DollarBillSvg
-} from '../../../../../utils/Svg';
+} from '../../../../utils/Svg';
 import '../styles/NewApplication.css'
 
 const { Content } = Layout;

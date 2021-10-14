@@ -5,7 +5,7 @@ import {
     MainHeader,
     MainSider,
     MainBreadcrumb
-} from '../../../../layouts';
+} from '../../../layouts';
 
 const { Content } = Layout;
 

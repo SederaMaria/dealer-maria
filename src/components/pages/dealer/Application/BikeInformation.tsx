@@ -1,7 +1,8 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent } from 'react'
 import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input } from "antd";
 import { Link } from 'react-router-dom';
-import { logger, network } from '../../../../../utils';
+import { logger, network } from '../../../../utils';
+import ApplicationSteps from './ApplicationSteps';
 const { Title, Text } = Typography;
 const { Content } = Layout;
 const { Option } = Select;
@@ -15,19 +16,36 @@ const layout = {
     },
   };
 
-interface Props {
-    setStep: React.Dispatch<React.SetStateAction<string>>,
-    urlHistory: string
+interface Lessee {
+    ssn?: string | undefined
 }
 
+interface LeaseCalculator {
+    id?: string | number | undefined
+}
+
+interface RootLeaseCalculator {
+    leaseCalculator?: LeaseCalculator
+}
+
+interface Props {
+    data?: {
+        id: string | number,
+        lessee: Lessee,
+        leaseCalculator: RootLeaseCalculator
+    }
+}
 interface OptionProps {
     value?: string | number,
     label?: string,
 }
 
-export const BikeInformation: React.FC<Props> = ({setStep, urlHistory}: Props) => {
+export const BikeInformation: React.FC<Props> = ({data}) => {
 
     const [lesseeForm] = Form.useForm();
+
+    let leaseApplicationId: string | number | undefined = data?.id
+    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.leaseCalculator?.id
 
     const [makesOptions, setMakesOptions] = useState<OptionProps[]>([])
     const [yearsOptions, setYearsOptions] = useState<OptionProps[]>([])
@@ -192,7 +210,12 @@ export const BikeInformation: React.FC<Props> = ({setStep, urlHistory}: Props) =
 
     return (
         <div>
-            
+             <ApplicationSteps 
+                stepType={`bike`} 
+                leaseApplicationId={`${leaseApplicationId}`} 
+                leaseCalculatorId={`${leaseCalculatorId}`}  
+                save={null} 
+            />
             <Form 
                 form={lesseeForm} 
                 {...layout}  
@@ -419,8 +442,8 @@ export const BikeInformation: React.FC<Props> = ({setStep, urlHistory}: Props) =
 
                             <div style={{ marginTop: 20, textAlign: `right`}}>
                                 <Button style={{ marginRight: 10 }}> Save </Button>
-                                <Button style={{ marginRight: 10 }} type="primary" onClick={() => { setStep('calculator') } } >
-                                    <Link to={`${urlHistory}?step=calculator`}> Next </Link>
+                                <Button style={{ marginRight: 10 }} type="primary" >
+                                    <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> Next </Link>
                                 </Button>
                             </div>
 
