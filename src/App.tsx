@@ -49,6 +49,7 @@ function App() {
                   <Route path="/application" exact component={NewApplicationRender} />
                   <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId" exact component={NewApplicationSteps} />
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
+                  <Route path="/applications/:id/banking-information" exact component ={BankInfoRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>

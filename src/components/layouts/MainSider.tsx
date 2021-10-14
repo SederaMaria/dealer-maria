@@ -30,10 +30,6 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
                 <Link to={`/saved-calculators`}><CalculatorOutlined /> Saved Calculators</Link>
             </Menu.Item>
 
-            <Menu.Item key="applications/12345/banking-information">
-                <Link to={`/applications/12345/banking-information`}><BankOutlined /> Banking</Link>
-            </Menu.Item>
-
           </Menu>
         </Sider>
     )
