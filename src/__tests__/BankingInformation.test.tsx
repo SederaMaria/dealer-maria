@@ -1,6 +1,6 @@
 import Enzyme, {shallow} from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import BankingInformation from '../components/pages/dealer/components/BankInfo/BankingInformation';
+import BankingInformation from '../components/pages/dealer/BankInfo/BankingInformation';
 
 Enzyme.configure({ adapter: new Adapter() });
 
