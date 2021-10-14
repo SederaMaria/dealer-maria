@@ -21,6 +21,7 @@ import {
 
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
+import BankInfoRenderer from './components/pages/dealer/components/BankInfoRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
@@ -66,12 +67,12 @@ function App() {
                   
                   
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
+                  <Route path="/applications/:id/banking-information" exact component ={BankInfoRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>
                 </Switch>
             </UserDataContext.Provider>
-
           }
 
         </BrowserRouter>
