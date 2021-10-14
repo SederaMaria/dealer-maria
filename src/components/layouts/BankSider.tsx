@@ -19,7 +19,7 @@ export const BankSider: React.FC<Props> = ({activeKey}: Props) => {
           <Menu
             defaultSelectedKeys={[`${activeKey}`]}
           >
-            <Menu.Item key="applications/id/banking-information">
+            <Menu.Item key="banking-information">
                 <Link to={`/applications/${id}/banking-information`}><BankOutlined /> Banking</Link>
             </Menu.Item>
 

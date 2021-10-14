@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout, Menu } from "antd";
 import { Link } from 'react-router-dom';
 import { SiderProps } from './props';
-import { HomeOutlined, ProfileOutlined, CalculatorOutlined, BankOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined, CalculatorOutlined } from '@ant-design/icons';
 
 import './styles/MainSider.css';
 
