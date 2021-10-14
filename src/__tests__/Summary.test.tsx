@@ -1,6 +1,6 @@
-import Enzyme, {shallow } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import Summary from '../components/pages/dealer/components/NewApplication/Summary';
+import Summary from '../components/pages/dealer/Application/Summary';
 
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -25,14 +25,5 @@ describe('test the edit and expand button', ()=>{
         expect(theader).toEqual('First Name');
     })
 
-    it('should renders the applicant component', ()=>{
-        const mockSetState = jest.fn();
-
-        const wrapper = shallow(<Summary setStep={mockSetState} />);
-        const editApplicantButton = wrapper.find('#editApplicant');
-        editApplicantButton.simulate('click');
-
-        expect(mockSetState).toHaveBeenCalledWith("applicant");
-    })
 
 })

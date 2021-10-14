@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewApplication } from './NewApplication'
+import { NewApplication } from './Application'
 
 function NewApplicationRender() {
     return (
