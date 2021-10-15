@@ -7,12 +7,17 @@ import {
   Button,
   Drawer,
   Row,
-  Col
+  Col,
+  Form,
+  Input,
+  Select
 } from 'antd';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
+
+const { Option } = Select;
 
 interface Applications {
   key: number;
@@ -44,6 +49,8 @@ interface ActionPermission {
   expired: boolean;
   submitted: boolean;
 }
+
+type StatesForSelect = [string, string]
 
 const columns: ColumnsType<Applications> = [
   {
@@ -194,12 +201,23 @@ const menu = (actionPermission: ActionPermission) => {
   )
 }
 
+const filterFormLayout = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 },
+}
+
 function ApplicationList() {
 
   const [loading, setLoading] = useState<boolean>(true)
   const [data, setData] = useState<Data[] | any>([])
 
-  const [visibleDrawer, setDrawerVisible] = useState(false)
+  const [visibleDrawer, setDrawerVisible] = useState<boolean>(false)
+
+  const [filterForm] = Form.useForm()
+  const [filterOptionsLoading, setFilterOptionsLoading] = useState<boolean>(true)
+
+  const [creditStatusOptions, setCreditStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
+  const [documentStatusOptions, setDocumentStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -207,6 +225,25 @@ function ApplicationList() {
 
   const onDrawerClose = () => {
     setDrawerVisible(false);
+  }
+
+  const onDrawerVisibleChange = (visible: boolean) => {
+    if (visible) {
+      if (creditStatusOptions.length === 0
+        && documentStatusOptions.length === 0) {
+        getFilterOptions()
+      }
+    }
+  }
+
+  const onFilterReset = () => {
+    filterForm.resetFields()
+    setDrawerVisible(false)
+  }
+
+  const onFilterSubmit = (values: any) => {
+    console.log("onFilterSubmit", values)
+    setDrawerVisible(false)
   }
 
   const getApplications = async () => {
@@ -220,6 +257,23 @@ function ApplicationList() {
       logger.error("Error fetching Applicatins", e);
     }
     setLoading(false)
+  }
+
+  const getFilterOptions = async () => {
+    if (!filterOptionsLoading) { setFilterOptionsLoading(true) }
+
+    try {
+      await network.GET('/api/v1/dealers/applications/filter-options').then(response => {
+        setCreditStatusOptions(response.data.credit_status)
+        setDocumentStatusOptions(response.data.document_status)
+      }).catch(error => {
+        logger.error("Error fetching filter options", error)
+      })
+    } catch (e) {
+      logger.error("Error fetching filter options", e)
+    }
+
+    setFilterOptionsLoading(false)
   }
 
   useEffect(() => {
@@ -246,10 +300,57 @@ function ApplicationList() {
       <Drawer
         title="Filters"
         placement="right"
+        afterVisibleChange={onDrawerVisibleChange}
         onClose={onDrawerClose}
         visible={visibleDrawer}
+        width={400}
       >
+        <Form
+          form={filterForm}
+          colon={false}
+          onFinish={onFilterSubmit}
+          {...filterFormLayout}
+        >
+          <Form.Item label="Name" name="name">
+            <Input />
+          </Form.Item>
 
+          <Form.Item label="Credit Status" name="creditStatus">
+            <Select allowClear loading={filterOptionsLoading}>
+              {
+                creditStatusOptions && creditStatusOptions.map((item, index) => {
+                  return <Option key={index} value={item[1]}>{item[0]}</Option>
+                })
+              }
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Document Status" name="documentStatus">
+            <Select allowClear loading={filterOptionsLoading}>
+              {
+                documentStatusOptions && documentStatusOptions.map((item, index) => {
+                  return <Option key={index} value={item[1]}>{item[0]}</Option>
+                })
+              }
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Can Change Bikes?" name="canChangeBikes">
+            <Select allowClear>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item style={{marginTop: "15px"}}>
+            <Button type="primary" htmlType="submit" style={{marginRight: "5px"}}>
+              Filter
+            </Button>
+            <Button htmlType="button" onClick={onFilterReset}>
+              Clear Filters
+            </Button>
+          </Form.Item>
+        </Form>
       </Drawer>
     </Spin>
   )
