@@ -239,23 +239,46 @@ function ApplicationList() {
   const onFilterReset = () => {
     filterForm.resetFields()
     setDrawerVisible(false)
+    getApplications()
   }
 
   const onFilterSubmit = (values: any) => {
-    console.log("onFilterSubmit", values)
     setDrawerVisible(false)
+    getApplications(values)
   }
 
-  const getApplications = async () => {
-    if (!loading) {
-      setLoading(true)
+  const objectToQueryString = (obj: object | undefined) => {
+    if (obj) {
+      let str = []
+      for (const [key, value] of Object.entries(obj)) {
+        if (value) {
+          str.push(`filter[${encodeURIComponent(key)}]` + "=" + encodeURIComponent(value))
+        }
+      }
+
+      if (str.length > 0) {
+        return `?${str.join("&")}`
+      } else {
+        return ''
+      }
+    } else {
+      return ''
     }
+  }
+
+  const getApplications = async (filter?: object | undefined) => {
+    if (!loading) { setLoading(true) }
+
     try {
-        let data = await network.GET('/api/v1/dealers/applications')
-        setData(data.data.leaseApplication)
+      await network.GET(`/api/v1/dealers/applications${objectToQueryString(filter)}`).then(response => {
+        setData(response.data.leaseApplication)
+      }).catch(error => {
+        logger.error("Error fetching Applications", error)
+      })
     } catch (e) {
-      logger.error("Error fetching Applicatins", e);
+      logger.error("Error fetching Applications", e)
     }
+
     setLoading(false)
   }
 
@@ -277,7 +300,7 @@ function ApplicationList() {
   }
 
   useEffect(() => {
-    getApplications();
+    getApplications()
   },[]);
 
   return (
