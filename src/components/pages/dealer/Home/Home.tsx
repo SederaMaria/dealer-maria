@@ -1,31 +1,31 @@
-import React from 'react';
+import React from 'react'
 import { Row, Col, Layout } from 'antd';
-import SavedApplicationList from './SavedApplicationList';
-import {
-    MainHeader,
+import ApplicationList from './ApplicationList';
+import { 
+    MainHeader, 
     MainSider,
-    MainBreadcrumb
-} from '../../../../layouts';
+    MainBreadcrumb 
+} from '../../../layouts';
 
 const { Content } = Layout;
 
-function SavedCalculators() {
+function Home() {
     return (
         <div>
             <Layout>
                 <MainHeader />
                 <Layout id="#dealership-edit">
-                    <MainSider activeKey="saved-calculators" />
+                    <MainSider activeKey="home" />
                     <Layout id="content-area-layout">
                         <MainBreadcrumb
                             items={[
-                                { text: "Saved Calculators", link_type: "linkto", link: "/saved-calculators" }
+                                { text: "Home", link_type: "linkto", link: "/home" }
                             ]}
                         />
                         <Content id="main-content">
-                            <Row gutter={[0, 24]} >
-                                <Col span={24} >
-                                    <SavedApplicationList />
+                            <Row gutter={[0, 24]}>
+                                <Col span={24}>
+                                    <ApplicationList />
                                 </Col>
                             </Row>
                         </Content>
@@ -36,4 +36,4 @@ function SavedCalculators() {
     )
 }
 
-export default SavedCalculators
+export default Home

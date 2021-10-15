@@ -3,13 +3,25 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { 
   SignIn,
   SignOut, 
+} from './components/pages';
+
+import {
   HomeRenderer,
   NewApplicationRender,
   SavedCalculatorsRenderer,
-  NewApplicationSteps
-} from './components/pages';
+} from './components/pages/dealer';
+
+import { 
+  BikeInformationRenderer,
+  CalculatorRenderer,
+  ApplicantRenderer,
+  CoApplicantRenderer,
+  SummaryRenderer
+} from './components/pages/dealer/Application';
+
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
+import BankInfoRenderer from './components/pages/dealer/BankInfoRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
@@ -22,7 +34,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (authenticated) { validateToken() }
+    // if (authenticated) { validateToken() }
   }, []);
 
   return (
@@ -46,14 +58,19 @@ function App() {
                   <Route path="/logout" exact component={SignOut} />
                   <Route path="/home" exact component={HomeRenderer} />
                   <Route path="/application" exact component={NewApplicationRender} />
-                  <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId" exact component={NewApplicationSteps} />
+                  <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId/bike" exact component={BikeInformationRenderer} />
+                  <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId/calculator" exact component={CalculatorRenderer} />
+                  <Route path="/applications/:leaseApplicationId/applicant" exact component={ApplicantRenderer} />
+                  <Route path="/applications/:leaseApplicationId/co-applicant" exact component={CoApplicantRenderer} />
+                  <Route path="/applications/:leaseApplicationId/summary" exact component={SummaryRenderer} />
+                  
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
+                  <Route path="/applications/:leaseApplicationId/banking-information" exact component ={BankInfoRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>
                 </Switch>
             </UserDataContext.Provider>
-
           }
 
         </BrowserRouter>

@@ -12,15 +12,15 @@ import { useHistory } from 'react-router-dom';
 import { 
     MainHeader, 
     MainSider 
-} from '../../../../layouts'
+} from '../../../layouts'
 import { 
     logger, 
     network 
-} from '../../../../../utils';
+} from '../../../../utils';
 import { 
     MotorSvg, 
     DollarBillSvg
-} from '../../../../../utils/Svg';
+} from '../../../../utils/Svg';
 import '../styles/NewApplication.css'
 
 const { Content } = Layout;
@@ -37,7 +37,7 @@ function NewApplication() {
         setLoading(true)
         try {
             await network.GET(`/api/v1/calculators/new`).then(response => {
-                history.push(`/applications/${response.data.leaseApplicationId}/calculators/${response.data.leaseCalculatorId}?step=bike`)
+                history.push(`/applications/${response.data.leaseApplicationId}/calculators/${response.data.leaseCalculatorId}/bike`)
             }).catch(error => {
                 logger.error("handleNewCalculator Request Error", error);
             });
@@ -52,7 +52,7 @@ function NewApplication() {
         setLoading(true)
         try {
             await network.GET(`/api/v1/calculators/new`).then(response => {
-                history.push(`/applications/${response.data.leaseApplicationId}/calculators/${response.data.leaseCalculatorId}?step=calculator`)
+                history.push(`/applications/${response.data.leaseApplicationId}/calculators/${response.data.leaseCalculatorId}/calculator`)
             }).catch(error => {
                 logger.error("handleNewCalculator Request Error", error);
             });
