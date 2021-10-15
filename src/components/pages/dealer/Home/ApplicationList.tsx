@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Spin, Menu, Dropdown, Button } from 'antd';
-import {DownOutlined} from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 
 interface Applications {
-    key: number;
-    name: string;
-    id: number;
-    actionPermission: ActionPermission;
-  }
-  interface Data {
-    applicationIdentifier: string;
-    applicant: string;
-    coApplicant: string;
-    modelAndYear: string;
-    creditStatus: string;
-    documentStatus: string;
-    daysSubmitted: string;
-    lastUpdated: string;
-  }
+  key: number;
+  name: string;
+  id: number;
+  actionPermission: ActionPermission;
+}
+
+interface Data {
+  applicationIdentifier: string;
+  applicant: string;
+  coApplicant: string;
+  modelAndYear: string;
+  creditStatus: string;
+  documentStatus: string;
+  daysSubmitted: string;
+  lastUpdated: string;
+}
 
 interface ActionPermission {
   canAddCoapplicant: boolean;
@@ -35,68 +36,67 @@ interface ActionPermission {
   submitted: boolean;
 }
 
-  const columns: ColumnsType<Applications> = [
-    {
-      key: 'applicationIdentifier',
-      title: 'Application Identifier',
-      dataIndex: 'applicationIdentifier',
-      render(val, row) {
-        return (
-          <Link to={`/applications/${row.id}/summary`}> { val} </Link>
-        )
+const columns: ColumnsType<Applications> = [
+  {
+    key: 'applicationIdentifier',
+    title: 'Application Identifier',
+    dataIndex: 'applicationIdentifier',
+    render(val, row) {
+      return (
+        <Link to={`/applications/${row.id}/summary`}>{val}</Link>
+      )
     }
-    },
-    {
-      key: 'applicant',
-      title: 'Applicant',
-      dataIndex: 'applicant',
-    },
-    {
-      key: 'coApplicant',
-      title: 'Co-Applicant',
-      dataIndex: 'coApplicant',
-    },
-    {
-      key: 'modelAndYear',
-      title: 'Model and Year',
-      dataIndex: 'modelAndYear',
-    },
-    {
-      key: 'creditStatus',
-      title: 'Credit Status',
-      dataIndex: 'creditStatus',
-    },
-    {
-      key: 'documentStatus',
-      title: 'Document Status',
-      dataIndex: 'documentStatus',
-    },
-    {
-      key: 'daysSubmitted',
-      title: 'Days Submitted',
-      dataIndex: 'daysSubmitted',
-    },
-    {
-      key: 'lastUpdated',
-      title: 'Last Updated',
-      dataIndex: 'lastUpdated',
-    },
-    {
-      title: '',
-      dataIndex: '',
-      key: 'x',
-      render(text, record, index) {
-          return (
-          <Dropdown overlay={menu(record.actionPermission)} trigger={['click']}>
-            <a className="ant-dropdown-link" href="#">
-              <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}}/> </Button>
-            </a>
-          </Dropdown>
-          )
-      }
-
-    },
-  ];
+  },
+  {
+    key: 'applicant',
+    title: 'Applicant',
+    dataIndex: 'applicant',
+  },
+  {
+    key: 'coApplicant',
+    title: 'Co-Applicant',
+    dataIndex: 'coApplicant',
+  },
+  {
+    key: 'modelAndYear',
+    title: 'Model and Year',
+    dataIndex: 'modelAndYear',
+  },
+  {
+    key: 'creditStatus',
+    title: 'Credit Status',
+    dataIndex: 'creditStatus',
+  },
+  {
+    key: 'documentStatus',
+    title: 'Document Status',
+    dataIndex: 'documentStatus',
+  },
+  {
+    key: 'daysSubmitted',
+    title: 'Days Submitted',
+    dataIndex: 'daysSubmitted',
+  },
+  {
+    key: 'lastUpdated',
+    title: 'Last Updated',
+    dataIndex: 'lastUpdated',
+  },
+  {
+    title: '',
+    dataIndex: '',
+    key: 'x',
+    render(text, record, index) {
+      return (
+        <Dropdown overlay={menu(record.actionPermission)} trigger={['click']}>
+          <a className="ant-dropdown-link" href="#">
+            <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
+          </a>
+        </Dropdown>
+      )
+    }
+  },
+]
 
 const menu = (actionPermission: ActionPermission) => {
   let paymentCalcNode;
@@ -207,12 +207,11 @@ function ApplicationList() {
     setLoading(false)
   }
 
-  
-    return (
-      <Spin spinning={loading}>
-        <Table columns={columns} dataSource={data} rowKey={(val) => val.id} />
-      </Spin>
-    )
+  return (
+    <Spin spinning={loading}>
+      <Table columns={columns} dataSource={data} rowKey={(val) => val.id} />
+    </Spin>
+  )
 }
 
 export default ApplicationList
