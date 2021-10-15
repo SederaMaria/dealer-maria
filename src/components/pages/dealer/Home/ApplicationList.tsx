@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Spin, Menu, Dropdown, Button } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import {
+  Table,
+  Spin,
+  Menu,
+  Dropdown,
+  Button,
+  Drawer,
+  Row,
+  Col
+} from 'antd';
+import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
@@ -190,10 +199,16 @@ function ApplicationList() {
   const [loading, setLoading] = useState<boolean>(true)
   const [data, setData] = useState<Data[] | any>([])
 
-  useEffect(() => {
-    getApplications();
-  },[]);
-  
+  const [visibleDrawer, setDrawerVisible] = useState(false)
+
+  const showDrawer = () => {
+    setDrawerVisible(true);
+  }
+
+  const onDrawerClose = () => {
+    setDrawerVisible(false);
+  }
+
   const getApplications = async () => {
     if (!loading) {
       setLoading(true)
@@ -207,9 +222,35 @@ function ApplicationList() {
     setLoading(false)
   }
 
+  useEffect(() => {
+    getApplications();
+  },[]);
+
   return (
     <Spin spinning={loading}>
+      <Row>
+        <Col flex="auto"></Col>
+        <Col flex="none">
+          <Button
+            onClick={showDrawer}
+            icon={<FilterOutlined style={{margin: 0}} />}
+            style={{marginBottom: "0.5em"}}
+          >
+            Filter
+          </Button>
+        </Col>
+      </Row>
+
       <Table columns={columns} dataSource={data} rowKey={(val) => val.id} />
+
+      <Drawer
+        title="Filters"
+        placement="right"
+        onClose={onDrawerClose}
+        visible={visibleDrawer}
+      >
+
+      </Drawer>
     </Spin>
   )
 }
