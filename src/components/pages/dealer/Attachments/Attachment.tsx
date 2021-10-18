@@ -52,7 +52,7 @@ const Attachments = () => {
                         <div className="attachment-container">
                             <Card type="inner" title="Add Attachments">
                                 <Col span={11}>
-                                  <Dragger {...props}>
+                                  <Dragger {...props} id="upload-zone">
                                       <p className="ant-upload-drag-icon">
                                         <InboxOutlined />
                                       </p>
