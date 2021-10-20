@@ -25,6 +25,7 @@ import BankInfoRenderer from './components/pages/dealer/BankInfoRenderer';
 import AttachmentRenderer from './components/pages/dealer/AttachmentRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
+import ReferenceRenderer from './components/pages/dealer/ReferenceRenderer';
 
 function App() {
 
@@ -68,6 +69,7 @@ function App() {
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
                   <Route path="/applications/:leaseApplicationId/banking-information" exact component ={BankInfoRenderer} />
                   <Route path="/applications/:leaseApplicationId/attachments" exact component ={AttachmentRenderer} />
+                  <Route path="/applications/:leaseApplicationId/references" exact component ={ReferenceRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>
