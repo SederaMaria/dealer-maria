@@ -215,9 +215,13 @@ function ApplicationList() {
 
   const [filterForm] = Form.useForm()
   const [filterOptionsLoading, setFilterOptionsLoading] = useState<boolean>(true)
+  const [filterData, setFilterData] = useState<object>({})
 
   const [creditStatusOptions, setCreditStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
   const [documentStatusOptions, setDocumentStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
+
+  const [paginationProps, setPaginationProps] = useState<object>({ total: 0 })
+  const [paginationData, setPaginationData] = useState<object>({})
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -239,39 +243,50 @@ function ApplicationList() {
   const onFilterReset = () => {
     filterForm.resetFields()
     setDrawerVisible(false)
-    getApplications()
+    setFilterData({})
   }
 
   const onFilterSubmit = (values: any) => {
     setDrawerVisible(false)
-    getApplications(values)
+    setFilterData(values)
   }
 
-  const objectToQueryString = (obj: object | undefined) => {
-    if (obj) {
-      let str = []
-      for (const [key, value] of Object.entries(obj)) {
-        if (value) {
-          str.push(`filter[${encodeURIComponent(key)}]` + "=" + encodeURIComponent(value))
-        }
-      }
+  const onPaginationChange = (page: any, pageSize: any) => {
+    setPaginationData({
+      page: page,
+      pageSize: pageSize,
+    })
+  }
 
-      if (str.length > 0) {
-        return `?${str.join("&")}`
-      } else {
-        return ''
-      }
+  const filterParams = () => {
+    if (filterData && Object.keys(filterData).length > 0) {
+      return { filter: { ...filterData } }
     } else {
-      return ''
+      return {}
     }
   }
 
-  const getApplications = async (filter?: object | undefined) => {
+  const paginationParams = () => {
+    if (paginationData && Object.keys(paginationData).length > 0) {
+      return { pagination: { ...paginationData } }
+    } else {
+      return {}
+    }
+  }
+
+  const getApplications = async () => {
     if (!loading) { setLoading(true) }
 
     try {
-      await network.GET(`/api/v1/dealers/applications${objectToQueryString(filter)}`).then(response => {
-        setData(response.data.leaseApplication)
+      await network.POST(`/api/v1/dealers/applications`, {
+        ...filterParams(),
+        ...paginationParams(),
+      }).then(response => {
+        setData(response.data.data.leaseApplications)
+        setPaginationProps({
+          ...paginationProps,
+          total: response.data.pagination.total
+        })
       }).catch(error => {
         logger.error("Error fetching Applications", error)
       })
@@ -301,7 +316,7 @@ function ApplicationList() {
 
   useEffect(() => {
     getApplications()
-  },[]);
+  },[filterData, paginationData]);
 
   return (
     <Spin spinning={loading}>
@@ -318,7 +333,16 @@ function ApplicationList() {
         </Col>
       </Row>
 
-      <Table columns={columns} dataSource={data} rowKey={(val) => val.id} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey={(val) => val.id}
+        pagination={{
+          onChange: onPaginationChange,
+          pageSizeOptions: ["10", "20", "50"],
+          ...paginationProps,
+        }}
+      />
 
       <Drawer
         title="Filters"
@@ -337,7 +361,6 @@ function ApplicationList() {
           <Form.Item label="Name" name="name">
             <Input />
           </Form.Item>
-
           <Form.Item label="Credit Status" name="creditStatus">
             <Select allowClear loading={filterOptionsLoading}>
               {
@@ -347,7 +370,6 @@ function ApplicationList() {
               }
             </Select>
           </Form.Item>
-
           <Form.Item label="Document Status" name="documentStatus">
             <Select allowClear loading={filterOptionsLoading}>
               {
@@ -357,14 +379,12 @@ function ApplicationList() {
               }
             </Select>
           </Form.Item>
-
           <Form.Item label="Can Change Bikes?" name="canChangeBikes">
             <Select allowClear>
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>
             </Select>
           </Form.Item>
-
           <Form.Item style={{marginTop: "15px"}}>
             <Button type="primary" htmlType="submit" style={{marginRight: "5px"}}>
               Filter
