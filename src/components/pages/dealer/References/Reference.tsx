@@ -7,8 +7,9 @@ import {
     Card,
     Spin 
 } from 'antd';
-import { MainHeader} from '../../../layouts';
+import { MainHeader,} from '../../../layouts';
 import { ReferenceSider } from '../../../layouts/ReferenceSider';
+const { Content } = Layout;
 
 const Reference = () => {
     return (
@@ -17,6 +18,9 @@ const Reference = () => {
             <Layout>
                 <ReferenceSider activeKey="references"/>
                 <Layout>
+                    <Content id='main-content'>
+                        
+                    </Content>
                     
                 </Layout>
             </Layout>
