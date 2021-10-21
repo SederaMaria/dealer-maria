@@ -8,14 +8,17 @@ import {
     Spin 
 } from 'antd';
 import { MainHeader} from '../../../layouts';
-// import { ReferenceSider } from '../../../layouts/ReferenceSider';
+import { ReferenceSider } from '../../../layouts/ReferenceSider';
 
-function Reference () {
+const Reference = () => {
     return (
         <>
             <MainHeader />
             <Layout>
-                {/* <ReferenceSider activeKey="attachments"/> */}
+                <ReferenceSider activeKey="references"/>
+                <Layout>
+                    
+                </Layout>
             </Layout>
         </>
 
