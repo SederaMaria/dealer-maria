@@ -3,9 +3,7 @@ import {
     Row,
     Col,
     Layout,
-    Typography,
     Card,
-    Spin,
     Form,
     Input,
     Button
@@ -13,6 +11,7 @@ import {
 
 import { MainHeader, } from '../../../layouts';
 import { ReferenceSider } from '../../../layouts/ReferenceSider';
+import '../../../layouts/styles/Reference.css'
 
 const { Content } = Layout;
 
@@ -27,33 +26,33 @@ const Reference = () => {
                         <div className="reference-container">
                             <Card type="inner" title="Add Reference">
                                 <Row className="largeInput">
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <Form.Item label="First Name">
                                             <Input placeholder="Large Input" />
                                         </Form.Item>
                                     </Col>
 
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <Form.Item label="Last Name">
                                             <Input placeholder="Large Input" />
                                         </Form.Item>
 
                                     </Col>
 
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <Form.Item label="Phone Number">
                                             <Input placeholder="Large Input" />
                                         </Form.Item>
 
                                     </Col>
 
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <Form.Item label="City">
                                             <Input placeholder="Large Input" />
                                         </Form.Item>
                                     </Col>
 
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <Form.Item label="State">
                                             <Input placeholder="Large Input" />
                                         </Form.Item>
@@ -67,6 +66,10 @@ const Reference = () => {
                                 </Row>
 
                             </Card>
+
+                        </div>
+
+                        <div className="reference-container">
 
                         </div>
                     </Content>
