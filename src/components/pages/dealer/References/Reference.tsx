@@ -6,14 +6,70 @@ import {
     Card,
     Form,
     Input,
-    Button
+    Button,
+    Table
 } from 'antd';
 
-import { MainHeader, } from '../../../layouts';
+import { MainHeader, MainBreadcrumb } from '../../../layouts';
 import { ReferenceSider } from '../../../layouts/ReferenceSider';
 import '../../../layouts/styles/Reference.css'
 
 const { Content } = Layout;
+
+interface Applications {
+    first_name: string;
+    last_name: string;
+    phone_number: number;
+    city: string;
+    state: string
+
+}
+
+const dataSource = [
+    {
+        first_name: 'Alvin',
+        last_name: 'Testco',
+        phone_number: 8042221111,
+        city: '2013 FLHX Street Glide',
+        state: 'State'
+    },
+    {
+        first_name: 'Debbie',
+        last_name: 'Delinquent',
+        phone_number: 8042221111,
+        city: '2018 XL883L',
+        state: 'State'
+    }
+
+]
+
+const columns = [
+    {
+        title: 'First Name',
+        dataIndex: 'first_name',
+        key: 'first_name'
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'last_name',
+        key: 'last_name'
+    },
+    {
+        title: 'Phone Number',
+        dataIndex: 'phone_number',
+        key: 'phone_number'
+    },
+    {
+        title: 'City',
+        dataIndex: 'city',
+        key: 'city'
+    },
+    {
+        title: 'State',
+        dataIndex: 'state',
+        key: 'state'
+    }
+]
 
 const Reference = () => {
     return (
@@ -70,9 +126,14 @@ const Reference = () => {
                         </div>
 
                         <div className="reference-container">
+                            <Card type="inner" title="References">
+                                <Table dataSource={dataSource} columns={columns} />;
+                            </Card>
 
                         </div>
                     </Content>
+
+
 
                 </Layout>
             </Layout>
