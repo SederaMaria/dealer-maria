@@ -71,8 +71,14 @@ const columns = [
     }
 ]
 
-const Reference = (props: any) => {
-    const leaseApplicationId: string = `${props.match.params.leaseApplicationId}`
+interface Props {
+    data?: {
+        id: string | number,
+    }
+}
+
+export const Reference: React.FC<Props> = ({data}) => {
+    let leaseApplicationId: string | number | undefined = data?.id
     return (
         <>
             <MainHeader />
