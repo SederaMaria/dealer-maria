@@ -72,13 +72,10 @@ const columns = [
 ]
 
 interface Props {
-    data?: {
-        id: string | number,
-    }
+    leaseApplicationId?: string | undefined
 }
 
-export const Reference: React.FC<Props> = ({data}) => {
-    let leaseApplicationId: string | number | undefined = data?.id
+export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
     return (
         <>
             <MainHeader />

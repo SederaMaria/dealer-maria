@@ -1,13 +1,15 @@
 import React from 'react'
 import Reference from './Reference';
 
-function ReferenceRenderer(props: any) {
+const ReferenceRenderer = (props: any) => {
     const leaseApplicationId: string = `${props.match.params.leaseApplicationId}`
     return (
         <div>
-            <Reference />
+            <Reference leaseApplicationId={leaseApplicationId} />
         </div>
     )
 }
 
 export default ReferenceRenderer
+
+
