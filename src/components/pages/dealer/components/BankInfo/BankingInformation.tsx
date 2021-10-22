@@ -27,7 +27,7 @@ const BankingInformation = () => {
                     <div className="indication">
                         <MainBreadcrumb 
                                 items={[
-                                    { text: "Bank Information", link_type: "linkto", link: "/applications/:id/banking-information" }
+                                    { text: " Dealers / Lease Application / 1234 / Banking Information", link_type: "linkto", link: "/applications/:id/banking-information" }
                                 ]}
                                 />
                     </div>
