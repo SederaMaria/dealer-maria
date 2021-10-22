@@ -1,5 +1,5 @@
 import React from 'react';
-import Attachments from './Attachments/Attachment';
+import Attachments from './Attachment';
 
 const AttachmentRenderer = () => {
     return (

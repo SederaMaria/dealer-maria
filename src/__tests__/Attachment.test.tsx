@@ -1,6 +1,6 @@
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import Attachments from '../components/pages/dealer/Attachments/Attachment';
+import Attachments from '../components/pages/dealer/Application/Attachment';
 
 Enzyme.configure({ adapter: new Adapter() });
 
