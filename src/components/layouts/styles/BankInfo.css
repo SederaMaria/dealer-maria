@@ -2,7 +2,12 @@
 .bank-info-container {
   border: 1px solid rgb(212, 208, 208);
   width: 95%;
-  margin: 0.5% auto;
+  margin: 0 auto;
+}
+
+.indication {
+  margin-left: 2.5%;
+  margin-top: 1.4%;
 }
 
 .submit-bank-info {
