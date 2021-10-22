@@ -15,7 +15,11 @@ const layout = {
     },
   };
 
-const BankingInformation = () => {
+  interface Props {
+    leaseApplicationId?: string | undefined
+}
+
+const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
 
     return (
         <> 
@@ -26,7 +30,10 @@ const BankingInformation = () => {
                     <div className="indication">
                         <MainBreadcrumb 
                                 items={[
-                                    { text: " Dealers / Lease Application / 1234 / Banking Information", link_type: "linkto", link: "/applications/:id/banking-information" }
+                                    { text: " Dealers", link_type: "linkto", link: "#" },
+                                    { text: " Lease Application", link_type: "linkto", link: "#" },
+                                    { text:  `${leaseApplicationId}`, link_type: "linkto", link: "#" },
+                                    { text: " Bank Information", link_type: "linkto", link: "#" },
                                 ]}
                                 />
                     </div>

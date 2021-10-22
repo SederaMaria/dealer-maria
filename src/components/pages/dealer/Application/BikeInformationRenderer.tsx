@@ -28,7 +28,6 @@ function BikeInformationRenderer(props: any)  {
         setLoading(false)
       }
 
-
     return (
         <Spin 
         spinning={loading}
