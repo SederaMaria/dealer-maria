@@ -21,7 +21,7 @@ import {
 
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
-import BankInfoRenderer from './components/pages/dealer/BankInfoRenderer';
+import BankInfoRenderer from './components/pages/dealer/Application/BankingInformationRenderer';
 import AttachmentRenderer from './components/pages/dealer/AttachmentRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'

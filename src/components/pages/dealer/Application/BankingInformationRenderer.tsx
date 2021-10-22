@@ -1,8 +1,7 @@
-import { AnyTxtRecord } from 'dns';
 import React from 'react';
-import BankingInformation from './BankInfo/BankingInformation';
+import BankingInformation from './BankingInformation';
 
-const BankInfoRenderer = (props:any) => {
+const BankingInformationRenderer = (props:any) => {
     const leaseApplicationId: string = `${props.match.params.leaseApplicationId}`
     return (
         <div>
@@ -10,4 +9,4 @@ const BankInfoRenderer = (props:any) => {
         </div>
     )
 }
-export default BankInfoRenderer
+export default BankingInformationRenderer
