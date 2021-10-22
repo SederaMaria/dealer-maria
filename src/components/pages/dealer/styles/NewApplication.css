@@ -92,6 +92,12 @@
   background-color: #1890ff;
 }
 
+.ant-steps-item-container:hover,
+.ant-steps-item-content:hover, 
+.ant-steps-item-icon:hover {
+    cursor: pointer
+}
+  
 .steps-exit-btn {
   direction: none;
   color: white;

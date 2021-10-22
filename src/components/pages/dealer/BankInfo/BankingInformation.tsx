@@ -1,9 +1,8 @@
 import React from 'react';
-import { Card, Row, Col, Input, Button, Layout, Form } from 'antd';
-import { MainHeader} from '../../../../layouts';
-import { MainBreadcrumb } from '../../../../layouts';
-import {BankSider} from '../../../../layouts/BankSider';
-import '../../../../layouts/styles/BankInfo.css';
+import { Card, Row, Col, Form, Input, Button, Layout } from 'antd';
+import { MainHeader, BankSider } from '../../../layouts'
+import '../../../layouts/styles/BankInfo.css'
+import { MainBreadcrumb } from '../../../layouts';
 
 const { Content } = Layout;
 
