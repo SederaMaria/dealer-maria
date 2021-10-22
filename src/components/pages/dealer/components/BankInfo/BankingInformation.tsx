@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, Row, Col, Input, Button, Layout, Typography, Breadcrumb } from 'antd';
-import { MainHeader} from '../../../../layouts'
+import { Card, Row, Col, Input, Button, Layout, Typography } from 'antd';
+import { MainHeader} from '../../../../layouts';
+import { MainBreadcrumb } from '../../../../layouts';
 import {BankSider} from '../../../../layouts/BankSider';
-import '../../../../layouts/styles/BankInfo.css'
+import '../../../../layouts/styles/BankInfo.css';
 
 const { Content } = Layout;
 const {Title} = Typography;
@@ -14,12 +15,13 @@ const BankingInformation = () => {
             <Layout>
                 <BankSider activeKey="banking-information"/>
                 <Layout>
-                    <Breadcrumb className="indication">
-                        <Breadcrumb.Item>Dealers</Breadcrumb.Item>
-                        <Breadcrumb.Item>Lease Application</Breadcrumb.Item>
-                        <Breadcrumb.Item>1234</Breadcrumb.Item>
-                        <Breadcrumb.Item>Bank Information</Breadcrumb.Item>
-                    </Breadcrumb>
+                    <div className="indication">
+                        <MainBreadcrumb 
+                                items={[
+                                    { text: "Bank Information", link_type: "linkto", link: "/applications/:id/banking-information" }
+                                ]}
+                                />
+                    </div>
                     <Content id='main-content'>
                     <div className="bank-info-container">
                         <Card type="inner" title="Lessee Banking Information">
