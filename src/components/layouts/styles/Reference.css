@@ -1,0 +1,16 @@
+.reference-container {
+    border: 1px solid rgb(212, 208, 208);
+    width: 92%;
+    margin: 2% auto;
+    position: relative;
+  }
+  
+.largeInput {
+    display:flex;
+    justify-content: space-between;
+}
+  
+.create-reference {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}

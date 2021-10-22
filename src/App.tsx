@@ -9,6 +9,7 @@ import {
   HomeRenderer,
   NewApplicationRender,
   SavedCalculatorsRenderer,
+  ReferenceRenderer
 } from './components/pages/dealer';
 
 import { 
@@ -68,6 +69,7 @@ function App() {
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
                   <Route path="/applications/:leaseApplicationId/banking-information" exact component ={BankInfoRenderer} />
                   <Route path="/applications/:leaseApplicationId/attachments" exact component ={AttachmentRenderer} />
+                  <Route path="/applications/:leaseApplicationId/references" exact component ={ReferenceRenderer} />
                   <Route exact path="/">
                     <Redirect to="/home" />
                   </Route>
