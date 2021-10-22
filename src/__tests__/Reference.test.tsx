@@ -1,7 +1,7 @@
 
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import Reference from '../components/pages/dealer/References/Reference';
+import Reference from '../components/pages/dealer/Application/Reference';
 import { Input, Table } from 'antd';
 
 Enzyme.configure({ adapter: new Adapter() });

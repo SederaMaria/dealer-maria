@@ -71,7 +71,11 @@ const columns = [
     }
 ]
 
-const Reference = () => {
+interface Props {
+    leaseApplicationId?: string | undefined
+}
+
+export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
     return (
         <>
             <MainHeader />
@@ -83,9 +87,9 @@ const Reference = () => {
                         { text: "Dealers", link_type: "linkto", link: "/" },
                         { text: "Lease Application", link_type: "linkto", link: "/" },
                         // { text: `${appNumber || 'N/A'}`, link_type: "ahref", link: void(0) },
-                        { text: "undefined", link_type: "ahref", link: "/" },
+                        { text: `${leaseApplicationId}`, link_type: "ahref", link: `/applications/${leaseApplicationId}` },
                         // { text: "References", link_type: "linkto", link: `/applications/${appNumber }/references` }
-                        { text: "References", link_type: "linkto", link: "/applications/undefined/references" }
+                        { text: "References", link_type: "linkto", link: `/applications/${leaseApplicationId}/references` }
                         ]
                     } />
                     <Content id='main-content'>
@@ -141,12 +145,6 @@ const Reference = () => {
                                 dataSource={dataSource} 
                                 columns={columns} 
                                 pagination={false}
-                                // rowKey={(val) => val.id}
-                                // pagination={{
-                                // //   onChange: onPaginationChange,
-                                // //   pageSizeOptions: ["10", "20", "50"],
-                                // //   ...paginationProps,
-                                // }}
                                 />;
                             </Card>
 
