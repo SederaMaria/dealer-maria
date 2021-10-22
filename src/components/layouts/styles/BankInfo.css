@@ -5,6 +5,10 @@
   margin: 0 auto;
 }
 
+.largeInput {
+  font-weight: bold;
+}
+
 .indication {
   margin-left: 2.5%;
   margin-top: 1.4%;
