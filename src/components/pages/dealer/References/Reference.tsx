@@ -77,7 +77,17 @@ const Reference = () => {
             <MainHeader />
             <Layout>
                 <ReferenceSider activeKey="references" />
-                <Layout>
+                <Layout id='content-area-layout'>
+                    <MainBreadcrumb items={
+                        [
+                        { text: "Dealers", link_type: "linkto", link: "/" },
+                        { text: "Lease Application", link_type: "linkto", link: "/" },
+                        // { text: `${appNumber || 'N/A'}`, link_type: "ahref", link: void(0) },
+                        { text: "undefined", link_type: "ahref", link: "/" },
+                        // { text: "References", link_type: "linkto", link: `/applications/${appNumber }/references` }
+                        { text: "References", link_type: "linkto", link: "/applications/undefined/references" }
+                        ]
+                    } />
                     <Content id='main-content'>
                         <div className="reference-container">
                             <Card type="inner" title="Add Reference">
@@ -127,7 +137,17 @@ const Reference = () => {
 
                         <div className="reference-container">
                             <Card type="inner" title="References">
-                                <Table dataSource={dataSource} columns={columns} />;
+                                <Table 
+                                dataSource={dataSource} 
+                                columns={columns} 
+                                pagination={false}
+                                // rowKey={(val) => val.id}
+                                // pagination={{
+                                // //   onChange: onPaginationChange,
+                                // //   pageSizeOptions: ["10", "20", "50"],
+                                // //   ...paginationProps,
+                                // }}
+                                />;
                             </Card>
 
                         </div>
