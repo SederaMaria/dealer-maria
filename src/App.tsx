@@ -17,13 +17,13 @@ import {
   CalculatorRenderer,
   ApplicantRenderer,
   CoApplicantRenderer,
-  SummaryRenderer
+  SummaryRenderer,
+  BankingInformationRenderer,
+  AttachmentRenderer
 } from './components/pages/dealer/Application';
 
 import { UserDataContext } from "./contexts/UserDataContext";
 import { auth, network } from './utils';
-import BankInfoRenderer from './components/pages/dealer/BankInfoRenderer';
-import AttachmentRenderer from './components/pages/dealer/AttachmentRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
@@ -67,7 +67,7 @@ function App() {
                   <Route path="/applications/:leaseApplicationId/summary" exact component={SummaryRenderer} />
                   
                   <Route path="/saved-calculators" exact component={SavedCalculatorsRenderer} />
-                  <Route path="/applications/:leaseApplicationId/banking-information" exact component ={BankInfoRenderer} />
+                  <Route path="/applications/:leaseApplicationId/banking-information" exact component ={BankingInformationRenderer} />
                   <Route path="/applications/:leaseApplicationId/attachments" exact component ={AttachmentRenderer} />
                   <Route path="/applications/:leaseApplicationId/references" exact component ={ReferenceRenderer} />
                   <Route exact path="/">
