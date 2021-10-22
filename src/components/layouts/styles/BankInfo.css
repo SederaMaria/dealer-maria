@@ -1,15 +1,28 @@
 
 .bank-info-container {
   border: 1px solid rgb(212, 208, 208);
-  width: 90%;
+  width: 95%;
   margin: 2% auto;
 }
 
-.largeInput {
-  display:flex;
-  justify-content: space-between;
+.submit-bank-info {
+  margin-top: 15px;
 }
 
-.submit-bank-info {
-  margin-top: 1%;
+@media only screen and (min-width:768px) and (max-width:804px) {
+  .largeInput {
+     font-size:xx-small !important;
+  }
+}
+
+@media only screen and (min-width:805px) and (max-width:1024px) {
+  .largeInput {
+     font-size:x-small !important;
+  }
+}
+
+@media only screen and (min-width:1025px) and (max-width:1121px) {
+  .largeInput {
+     font-size:small !important;
+  }
 }
