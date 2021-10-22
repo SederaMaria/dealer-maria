@@ -9,6 +9,7 @@ import {
   HomeRenderer,
   NewApplicationRender,
   SavedCalculatorsRenderer,
+  ReferenceRenderer
 } from './components/pages/dealer';
 
 import { 
@@ -25,7 +26,6 @@ import BankInfoRenderer from './components/pages/dealer/BankInfoRenderer';
 import AttachmentRenderer from './components/pages/dealer/AttachmentRenderer';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
-import ReferenceRenderer from './components/pages/dealer/ReferenceRenderer';
 
 function App() {
 
