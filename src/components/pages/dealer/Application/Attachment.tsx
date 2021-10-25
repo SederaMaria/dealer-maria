@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
 import { Card, Table, Layout, Form, Input } from 'antd';
-import { MainHeader} from '../../../layouts'
+import { MainHeader} from '../../../layouts';
+import { MainBreadcrumb } from '../../../layouts';
 import { AttachmentSider } from '../../../layouts/AttachmentSider';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import '../../../layouts/styles/Attachment.css'
 
 
+interface Props {
+  leaseApplicationId?: string | undefined
+}
 
-const Attachments = () => {
+const Attachments: React.FC<Props> = ({leaseApplicationId}) => {
     const {TextArea} = Input;
     const { Content} = Layout;
     const { Dragger } = Upload;
@@ -78,6 +82,16 @@ const Attachments = () => {
           <Layout>
              <AttachmentSider activeKey="attachments"/>
              <Layout>
+              <div className="attachment-breadcrumb">
+                    <MainBreadcrumb
+                                items={[
+                                    { text: " Dealers", link_type: "linkto", link: "#" },
+                                    { text: " Lease Application", link_type: "linkto", link: "#" },
+                                    { text:  `${leaseApplicationId}`, link_type: "linkto", link: "#" },
+                                    { text: " Attachments", link_type: "linkto", link: "#" },
+                                ]}
+                                />
+              </div>
                 <Content id='main-content'>
                   <Card type="inner" title="Add Attachments">
                     <Dragger {...props} id="upload-zone">
