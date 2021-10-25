@@ -118,9 +118,9 @@ const menu = (actionPermission: ActionPermission) => {
   let paymentCalcNode;
 
   if (actionPermission.canOpenPaymentCalculator) {
-    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
+    paymentCalcNode = <Link to="/applications/:leaseApplicationID/calculators/:calculatorID/calculator">Open Payment Calculator</Link>;
   } else if (actionPermission.canChangeBikes) {
-    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
+    paymentCalcNode = <Link to="/applications/:leaseApplicationID/calculators/:calculatorID/calculator">Open Payment Calculator</Link>;
   } else {
     paymentCalcNode = <a href="#">View Payment Calculator</a>;
   }
@@ -135,7 +135,7 @@ const menu = (actionPermission: ActionPermission) => {
           actionPermission.canOpenCreditApplication ?
             <a href="#">Open Credit Application</a>
             :
-            <a href="#">View Credit Application</a>
+            <Link to="/applications/:leaseApplicationId/applicant`">View Credit Application</Link>
         }
       </Menu.Item>
       {
@@ -153,16 +153,16 @@ const menu = (actionPermission: ActionPermission) => {
       {
         actionPermission.canAddCoapplicant &&
           <Menu.Item>
-            <a href="#">Add Co-applicant</a>
+            <Link to="/applications/:leaseApplicationID/co-applicant">Add Co-applicant</Link>
           </Menu.Item>
       }
       <Menu.Item>
-        <a href="#">View / Add References</a>
+        <Link to="/applications/:leaseApplicationID/references">View / Add References</Link>
       </Menu.Item>
       {
         !actionPermission.expired &&
           <Menu.Item>
-            <a href="#">Add Attachment</a>
+            <Link to="/applications/:leaseApplicationID/attachments">Add Attachment</Link>
           </Menu.Item>
       }
       {
@@ -194,7 +194,7 @@ const menu = (actionPermission: ActionPermission) => {
       {
         actionPermission.canSubmitBankInfo &&
           <Menu.Item>
-            <a href="#">Submit Bank Information</a>
+            <Link to="/applications/:leaseApplicationID/banking-information">Submit Bank Information</Link>
           </Menu.Item>
       }
     </Menu>
