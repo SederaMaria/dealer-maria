@@ -59,7 +59,7 @@ const columns: ColumnsType<Applications> = [
     dataIndex: 'applicationIdentifier',
     render(val, row) {
       return (
-        <Link to={`/applications/${row.id}/summary`}>{val}</Link>
+        <Link to={`/applications/${row.id}/summary`}> { val == null ? 'N/A' : val } </Link>
       )
     }
   },
