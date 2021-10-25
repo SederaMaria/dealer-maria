@@ -1,21 +1,38 @@
-.attachment-container {
-    border: 1px solid rgb(212, 208, 208);
-    width: 100%;
-    margin: 0 auto;
-    position: relative;
-  }
-
-.additional-info {
-  position: absolute;
-  left: 550px;
-  top: 50px;
+#main-content {
+  padding: 50px;
 }
 
 .container-below {
   margin-top: 5%;
 }
 
+.ant-card-type-inner .ant-card-head {
+ background: none;
+}
+
 .file-detail-info {
   display: flex;
   justify-content: space-between;
 }
+
+.card-elements {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.dragger {
+  flex: 0 1 450px;
+}
+
+.input {
+  flex: 0 1 250px;
+}
+
+
+
+
+
+
+

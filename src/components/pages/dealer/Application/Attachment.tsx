@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import { Typography } from 'antd';
-import { Card, Row, Col, Layout, Form, Input } from 'antd';
+import { Card, Table, Layout, Form, Input } from 'antd';
 import { MainHeader} from '../../../layouts'
 import { AttachmentSider } from '../../../layouts/AttachmentSider';
 import { Upload, message } from 'antd';
@@ -10,13 +9,26 @@ import '../../../layouts/styles/Attachment.css'
 
 
 const Attachments = () => {
-  const {Title}  = Typography
     const {TextArea} = Input;
-    const { Content } = Layout;
+    const { Content} = Layout;
     const { Dragger } = Upload;
-    const [fileName, setFileName] = useState<Array<string>>([]);
-    const [notes, setNotes] = useState<string>();
-    const [download, setDownload] = useState<string>();
+    const [dataSource, setDataSource] = useState<Array<Object>>([
+      {
+        key: 0,
+        filename: '',
+        notes: '',
+        download: ''
+      }
+    ])
+
+    const layout = {
+      labelCol: {
+        span: 24,
+      },
+      wrapperCol: {
+        span: 24,
+      },
+    };
     
     
     const props = {
@@ -27,73 +39,75 @@ const Attachments = () => {
         onChange(info:any) {
           const { status } = info.file;
           if (status === 'done') {
-            setFileName([...fileName, info.file.name]);
-            setNotes('sample notes');
-            setDownload('sample download link');
+            const key = 0;
+            setDataSource([...dataSource, {
+              key: key+1,
+              filename: info.file.name,
+              notes: "sample notes",
+              download: 'sample download link'
+            }])
             message.success(`${info.file.name} file uploaded successfully.`);
           } else if (status === 'error') {
             message.error(`${info.file.name} file upload failed.`);
           }
         }
-      };
+    };
 
-    const handleNotes = () =>{
+    const columns = [
+      {
+        title: 'Filename',
+        dataIndex: 'filename',
+        key: 'filename',
+      },
+      {
+        title: 'Notes',
+        dataIndex: 'notes',
+        key: 'notes',
+      },
+      {
+        title: 'Download Link',
+        dataIndex: 'download',
+        key: 'download',
+      },
+    ]
     
-    }
-    
+
     return (
         <> 
-            <MainHeader />
-            <Layout>
-                <AttachmentSider activeKey="attachments"/>
-                <Layout>
-                    <Content id='main-content'>
-                      <Row>
-                        <div className="attachment-container">
-                            <Card type="inner" title="Add Attachments">
-                                <Col span={11}>
-                                  <Dragger {...props} id="upload-zone">
-                                      <p className="ant-upload-drag-icon">
-                                        <InboxOutlined />
-                                      </p>
-                                      <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                                      <p className="ant-upload-hint">
-                                        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                                        band files
-                                      </p>
-                                  </Dragger>
-                                </Col>
-                                <Col span={7} className="additional-info">
-                                  <Form.Item label="Description" />
-                                  <Input placeholder="Large Input" />
-                                  <Form.Item label="Notes" />
-                                  <TextArea onChange={handleNotes} placeholder="text Area Placeholder" rows={1} />
-                                </Col>
-                            </Card>
+          <MainHeader />
+          <Layout>
+             <AttachmentSider activeKey="attachments"/>
+             <Layout>
+                <Content id='main-content'>
+                  <Card type="inner" title="Add Attachments">
+                    <Dragger {...props} id="upload-zone">
+                      <div className="card-elements">
+                        <div className="dragger">
+                            <p className="ant-upload-drag-icon">
+                              <InboxOutlined />
+                            </p>
+                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                            <p className="ant-upload-hint">
+                              Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                              band files
+                            </p>
                         </div>
-
-                        <div className="attachment-container container-below">
-                            <Card type="inner" title="Add Attachments">
-                              <Row className="file-detail-info">
-                                <Col>
-                                 <Title level={5}>Filename</Title>
-                                 {fileName.map(filename=> <p>{filename}</p>)}
-                                </Col>
-                                <Col>
-                                  <Title level={5}>Notes</Title>
-                                    <p>{notes}</p>
-                                </Col>
-                                <Col>
-                                  <Title level={5}>Download Link</Title>
-                                    <p>{download}</p>
-                                </Col>
-                              </Row>
-                            </Card>
-                        </div>
-                      </Row>
-                    </Content>
-                </Layout>  
-            </Layout> 
+                        <Form className="input" {...layout}>
+                            <Form.Item label="Description" />
+                            <Input placeholder="Large Input" />
+                            <Form.Item label="Notes" />
+                            <TextArea placeholder="text Area Placeholder" rows={1} />
+                        </Form>
+                      </div>
+                    </Dragger>
+                  </Card>
+                  
+                  <Card type="inner" title="Add Attachments" className="container-below">
+                      <Table dataSource={dataSource} columns={columns} />
+                  </Card>
+                </Content>
+             </Layout>
+          </Layout>
         </>
     )
    
