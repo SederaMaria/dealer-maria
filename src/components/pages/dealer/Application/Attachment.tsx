@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { Card, Table, Layout, Form, Input } from 'antd';
-import { MainHeader} from '../../../layouts';
-import { MainBreadcrumb } from '../../../layouts';
+import { MainHeader, MainBreadcrumb} from '../../../layouts';
 import { AttachmentSider } from '../../../layouts/AttachmentSider';
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
