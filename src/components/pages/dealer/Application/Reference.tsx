@@ -117,7 +117,6 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                                             <MaskedInput
                                                 mask="(111) 111-1111"
                                                 placeholder="Phone Number"
-                                                className="credit-app-phone-no"
                                             />
                                         </Form.Item>
 
@@ -131,12 +130,10 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
 
                                     <Col span={4}>
                                         <Form.Item label="State">
-                                            <Input 
-                                            placeholder="State" 
-                                            maxLength={2} 
-                                            value={inputState[0].state}
-                                            onChange={event => inputState[1]({state: event.target.value.toUpperCase()})} 
-                                            pattern={'[A-Z]'}/>
+                                            <MaskedInput 
+                                                mask ="AA"
+                                                placeholder="State"                             
+                                            />
                                         </Form.Item>
                                     </Col>
                                 </Row>
