@@ -1,10 +1,11 @@
 import React from 'react';
 import Attachments from './Attachment';
 
-const AttachmentRenderer = () => {
+const AttachmentRenderer = (props:any) => {
+    const leaseApplicationId: string = `${props.match.params.leaseApplicationId}`
     return (
         <div>
-            <Attachments />
+            <Attachments leaseApplicationId={leaseApplicationId} />
         </div>
     )
 }
