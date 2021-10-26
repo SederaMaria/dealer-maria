@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
-import { Card, Table, Layout, Form, Input } from 'antd';
-import { MainHeader, MainBreadcrumb} from '../../../layouts';
-import { AttachmentSider } from '../../../layouts/AttachmentSider';
-import { Upload, message } from 'antd';
+import { Card, Table, Layout, Form, Input, Upload, message } from 'antd';
+import { MainHeader, MainBreadcrumb, AttachmentSider} from '../../../layouts';
 import { InboxOutlined } from '@ant-design/icons';
 import '../../../layouts/styles/Attachment.css'
 
