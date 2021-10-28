@@ -13,6 +13,7 @@ import {
 import { MainHeader, MainBreadcrumb } from '../../../layouts';
 import { ReferenceSider } from '../../../layouts/ReferenceSider';
 import '../../../layouts/styles/Reference.css'
+import MaskedInput from 'antd-mask-input'
 
 const { Content } = Layout;
 
@@ -72,14 +73,11 @@ const columns = [
 ]
 
 interface Props {
-    data?: {
-        id: string | number
-    }
+    leaseApplicationId?: string | undefined
 }
 
-export const Reference: React.FC<Props> = ({data}) => {
-
-    let leaseApplicationId: string | number | undefined = data?.id
+export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
+    const inputState = useState({state:''})
 
     return (
         <>
@@ -89,12 +87,12 @@ export const Reference: React.FC<Props> = ({data}) => {
                 <Layout id='content-area-layout'>
                     <MainBreadcrumb items={
                         [
-                        { text: "Dealers", link_type: "linkto", link: "/" },
-                        { text: "Lease Application", link_type: "linkto", link: "/" },
-                        // { text: `${appNumber || 'N/A'}`, link_type: "ahref", link: void(0) },
-                        { text: `${leaseApplicationId}`, link_type: "ahref", link: `/applications/${leaseApplicationId}` },
-                        // { text: "References", link_type: "linkto", link: `/applications/${appNumber }/references` }
-                        { text: "References", link_type: "linkto", link: `/applications/${leaseApplicationId}/references` }
+                            { text: "Dealers", link_type: "linkto", link: "/" },
+                            { text: "Lease Application", link_type: "linkto", link: "/" },
+                            // { text: `${appNumber || 'N/A'}`, link_type: "ahref", link: void(0) },
+                            { text: `${leaseApplicationId}`, link_type: "ahref", link: `/applications/${leaseApplicationId}` },
+                            // { text: "References", link_type: "linkto", link: `/applications/${appNumber }/references` }
+                            { text: "References", link_type: "linkto", link: `/applications/${leaseApplicationId}/references` }
                         ]
                     } />
                     <Content id='main-content'>
@@ -103,33 +101,39 @@ export const Reference: React.FC<Props> = ({data}) => {
                                 <Row className="largeInput">
                                     <Col span={4}>
                                         <Form.Item label="First Name">
-                                            <Input placeholder="Large Input" />
+                                            <Input placeholder="First Name" />
                                         </Form.Item>
                                     </Col>
 
                                     <Col span={4}>
                                         <Form.Item label="Last Name">
-                                            <Input placeholder="Large Input" />
+                                            <Input placeholder="Last Name" />
                                         </Form.Item>
 
                                     </Col>
 
                                     <Col span={4}>
                                         <Form.Item label="Phone Number">
-                                            <Input placeholder="Large Input" />
+                                            <MaskedInput
+                                                mask="(111) 111-1111"
+                                                placeholder="Phone Number"
+                                            />
                                         </Form.Item>
 
                                     </Col>
 
                                     <Col span={4}>
                                         <Form.Item label="City">
-                                            <Input placeholder="Large Input" />
+                                            <Input placeholder="City" />
                                         </Form.Item>
                                     </Col>
 
                                     <Col span={4}>
                                         <Form.Item label="State">
-                                            <Input placeholder="Large Input" />
+                                            <MaskedInput 
+                                                mask ="AA"
+                                                placeholder="State"                             
+                                            />
                                         </Form.Item>
                                     </Col>
                                 </Row>
@@ -146,10 +150,10 @@ export const Reference: React.FC<Props> = ({data}) => {
 
                         <div className="reference-container">
                             <Card type="inner" title="References">
-                                <Table 
-                                dataSource={dataSource} 
-                                columns={columns} 
-                                pagination={false}
+                                <Table
+                                    dataSource={dataSource}
+                                    columns={columns}
+                                    pagination={false}
                                 />;
                             </Card>
 
