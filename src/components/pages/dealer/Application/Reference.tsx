@@ -44,39 +44,47 @@ const dataSource = [
 
 ]
 
-const columns = [
-    {
-        title: 'First Name',
-        dataIndex: 'first_name',
-        key: 'first_name'
-    },
-    {
-        title: 'Last Name',
-        dataIndex: 'last_name',
-        key: 'last_name'
-    },
-    {
-        title: 'Phone Number',
-        dataIndex: 'phone_number',
-        key: 'phone_number'
-    },
-    {
-        title: 'City',
-        dataIndex: 'city',
-        key: 'city'
-    },
-    {
-        title: 'State',
-        dataIndex: 'state',
-        key: 'state'
-    }
-]
 
 interface Props {
     leaseApplicationId?: string | undefined
 }
 
 export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
+
+    const columns = [
+        {
+            title: 'First Name',
+            dataIndex: 'first_name',
+            key: 'first_name'
+        },
+        {
+            title: 'Last Name',
+            dataIndex: 'last_name',
+            key: 'last_name'
+        },
+        {
+            title: 'Phone Number',
+            dataIndex: 'phone_number',
+            key: 'phone_number'
+        },
+        {
+            title: 'City',
+            dataIndex: 'city',
+            key: 'city'
+        },
+        {
+            title: 'State',
+            dataIndex: 'state',
+            key: 'state'
+        }
+    ]
+    
+
+    const layout = {
+        labelCol: { span: 24 },
+        wrapperCol: { span: 24 },
+    }
+    
     const inputState = useState({state:''})
 
     return (
@@ -98,37 +106,33 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                     <Content id='main-content'>
                         <div className="reference-container">
                             <Card type="inner" title="Add Reference">
-                                <Row className="largeInput">
-                                    <Col span={3.5}>
+                            <Form className="input" {...layout}>
+                                <Row gutter={14}>
+                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
                                         <Form.Item label="First Name">
                                             <Input placeholder="First Name" />
                                         </Form.Item>
                                     </Col>
-
-                                    <Col span={3.5}>
+                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
                                         <Form.Item label="Last Name">
                                             <Input placeholder="Last Name" />
                                         </Form.Item>
-
                                     </Col>
-
-                                    <Col span={3.5}>
+                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
                                         <Form.Item label="Phone Number">
                                             <MaskedInput
                                                 mask="(111) 111-1111"
                                                 placeholder="Phone Number"
                                             />
                                         </Form.Item>
-
                                     </Col>
-
-                                    <Col span={3.5}>
+                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
                                         <Form.Item label="City">
                                             <Input placeholder="City" />
                                         </Form.Item>
                                     </Col>
 
-                                    <Col span={3.5}>
+                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
                                         <Form.Item label="State">
                                             <MaskedInput 
                                                 mask ="AA"
@@ -136,7 +140,9 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                                             />
                                         </Form.Item>
                                     </Col>
+                                    
                                 </Row>
+                            </Form>
 
                                 <Row className="create-reference">
                                     <Col>
