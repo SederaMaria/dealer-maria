@@ -99,20 +99,20 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                         <div className="reference-container">
                             <Card type="inner" title="Add Reference">
                                 <Row className="largeInput">
-                                    <Col span={4}>
+                                    <Col span={3.5}>
                                         <Form.Item label="First Name">
                                             <Input placeholder="First Name" />
                                         </Form.Item>
                                     </Col>
 
-                                    <Col span={4}>
+                                    <Col span={3.5}>
                                         <Form.Item label="Last Name">
                                             <Input placeholder="Last Name" />
                                         </Form.Item>
 
                                     </Col>
 
-                                    <Col span={4}>
+                                    <Col span={3.5}>
                                         <Form.Item label="Phone Number">
                                             <MaskedInput
                                                 mask="(111) 111-1111"
@@ -122,13 +122,13 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
 
                                     </Col>
 
-                                    <Col span={4}>
+                                    <Col span={3.5}>
                                         <Form.Item label="City">
                                             <Input placeholder="City" />
                                         </Form.Item>
                                     </Col>
 
-                                    <Col span={4}>
+                                    <Col span={3.5}>
                                         <Form.Item label="State">
                                             <MaskedInput 
                                                 mask ="AA"
