@@ -79,6 +79,34 @@ interface Props {
 export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
     const inputState = useState({state:''})
 
+    const columns = [
+        {
+            title: 'First Name',
+            dataIndex: 'first_name',
+            key: 'first_name'
+        },
+        {
+            title: 'Last Name',
+            dataIndex: 'last_name',
+            key: 'last_name'
+        },
+        {
+            title: 'Phone Number',
+            dataIndex: 'phone_number',
+            key: 'phone_number'
+        },
+        {
+            title: 'City',
+            dataIndex: 'city',
+            key: 'city'
+        },
+        {
+            title: 'State',
+            dataIndex: 'state',
+            key: 'state'
+        }
+    ]
+
     return (
         <>
             <MainHeader />
