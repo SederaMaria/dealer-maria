@@ -9,3 +9,5 @@ const ReferenceRenderer = (props: any) => {
         </div>
     )
 }
+
+export default ReferenceRenderer

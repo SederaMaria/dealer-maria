@@ -26,23 +26,6 @@ interface Applications {
 
 }
 
-const dataSource = [
-    {
-        first_name: 'Alvin',
-        last_name: 'Testco',
-        phone_number: 8042221111,
-        city: '2013 FLHX Street Glide',
-        state: 'State'
-    },
-    {
-        first_name: 'Debbie',
-        last_name: 'Delinquent',
-        phone_number: 8042221111,
-        city: '2018 XL883L',
-        state: 'State'
-    }
-
-]
 
 const columns = [
     {
@@ -78,6 +61,16 @@ interface Props {
 
 export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
     const inputState = useState({state:''})
+    const [dataSource, setDataSource] = useState([
+        {
+            key: 0,
+            first_name: '',
+            last_name:'',
+            phone_number:'',
+            city: '',
+            state: '',
+        }
+    ])
 
     const columns = [
         {
