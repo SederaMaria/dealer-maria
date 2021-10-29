@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Row,
     Col,
@@ -14,6 +14,7 @@ import { MainHeader, MainBreadcrumb } from '../../../layouts';
 import { ReferenceSider } from '../../../layouts/ReferenceSider';
 import '../../../layouts/styles/Reference.css'
 import MaskedInput from 'antd-mask-input'
+import { logger, network } from '../../../../utils';
 
 const { Content } = Layout;
 
@@ -61,6 +62,7 @@ interface Props {
 
 export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
     const inputState = useState({state:''})
+    const [loading, setLoading] = useState<boolean>(false)
     const [dataSource, setDataSource] = useState([
         {
             key: 0,
@@ -99,6 +101,24 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
             key: 'state'
         }
     ]
+
+    useEffect(() => {
+        getApplicationDetails();
+    }, [])
+
+    const getApplicationDetails = async () => {
+        if (!loading){
+            setLoading(true)
+        }
+        try{
+            let data = await network.GET(`/api/v1/dealers/get-details?id=${leaseApplicationId}`)
+            console.log(data.data.data.leaseApplication)
+            setDataSource(data.data.data.leaseApplication)
+        } catch (e) {
+            setLoading(false)
+            logger.error('Error fetching Application', e)
+        }
+    }
 
     return (
         <>
