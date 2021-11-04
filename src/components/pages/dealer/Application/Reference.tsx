@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Row,
     Col,
@@ -7,65 +7,63 @@ import {
     Form,
     Input,
     Button,
-    Table
+    Table,
+    message
 } from 'antd';
 
 import { MainHeader, MainBreadcrumb } from '../../../layouts';
 import { ReferenceSider } from '../../../layouts/ReferenceSider';
 import '../../../layouts/styles/Reference.css'
 import MaskedInput from 'antd-mask-input'
+import { logger, network } from '../../../../utils';
 
 const { Content } = Layout;
 
-interface Applications {
-    first_name: string;
-    last_name: string;
-    phone_number: number;
+interface References {
+    id: string | number;
+    firstName: string;
+    lastName: string;
+    phoneNumber: number;
     city: string;
     state: string
 
 }
 
-const dataSource = [
-    {
-        first_name: 'Alvin',
-        last_name: 'Testco',
-        phone_number: 8042221111,
-        city: '2013 FLHX Street Glide',
-        state: 'State'
-    },
-    {
-        first_name: 'Debbie',
-        last_name: 'Delinquent',
-        phone_number: 8042221111,
-        city: '2018 XL883L',
-        state: 'State'
-    }
-
-]
-
 
 interface Props {
-    leaseApplicationId?: string | undefined
+    data?: {
+        references: References[];
+    }
+    leaseApplicationId: string | number;
 }
 
-export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
+
+export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) => {
+
+
+   console.log("sss") 
+   console.log(data?.references) 
+    const [referenceForm] = Form.useForm();
+
+    const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
+    const [hasSubmitError, setHasSubmitError] = useState(false)
+    const [submitSuccess, setSubmitSuccess] = useState(false)
 
     const columns = [
         {
             title: 'First Name',
-            dataIndex: 'first_name',
-            key: 'first_name'
+            dataIndex: 'firstName',
+            key: 'firstName'
         },
         {
             title: 'Last Name',
-            dataIndex: 'last_name',
-            key: 'last_name'
+            dataIndex: 'lastName',
+            key: 'lastName'
         },
         {
             title: 'Phone Number',
-            dataIndex: 'phone_number',
-            key: 'phone_number'
+            dataIndex: 'phoneNumber',
+            key: 'phoneNumber'
         },
         {
             title: 'City',
@@ -78,14 +76,29 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
             key: 'state'
         }
     ]
-    
 
-    const layout = {
-        labelCol: { span: 24 },
-        wrapperCol: { span: 24 },
+    const handleSubmit = async (values: any) => {
+        values = { ...values };
+        setDisableSubmitBtn(true)
+        submitApplication(data)
     }
+
+    const submitApplication = async (values: any) => {
+        try {
+           await network.POST(`/api/v1/applications/${leaseApplicationId}/references`, values);
+           setHasSubmitError(false)
+           setDisableSubmitBtn(true)
+           setSubmitSuccess(true)
+           message.success("Reference Saved");
+        } catch (e) {
+          logger.error("Request Error", e);
+          message.error("Error saving reference");
+          setHasSubmitError(true)
+          setDisableSubmitBtn(false)
+        }
+        setDisableSubmitBtn(false)
+      }
     
-    const inputState = useState({state:''})
 
     return (
         <>
@@ -106,9 +119,12 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                     <Content id='main-content'>
                         <div className="reference-container">
                             <Card type="inner" title="Add Reference">
-                            <Form className="input" {...layout}>
-                                <Row gutter={14}>
-                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
+                                <Form
+                                    form={referenceForm}
+                                    onFinish={handleSubmit}
+                                >
+                                <Row className="largeInput">
+                                    <Col span={4}>
                                         <Form.Item label="First Name">
                                             <Input placeholder="First Name" />
                                         </Form.Item>
@@ -142,13 +158,13 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                                     </Col>
                                     
                                 </Row>
-                            </Form>
 
                                 <Row className="create-reference">
                                     <Col>
-                                        <Button id="create-reference" type="primary">Create Reference</Button>
+                                        <Button type="primary" htmlType="submit" disabled={disableSubmitBtn}>Create Reference</Button>
                                     </Col>
                                 </Row>
+                                </Form>
 
                             </Card>
 
@@ -157,10 +173,11 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                         <div className="reference-container">
                             <Card type="inner" title="References">
                                 <Table
-                                    dataSource={dataSource}
+                                    rowKey={(val) => val.id}
+                                    dataSource={data?.references}
                                     columns={columns}
                                     pagination={false}
-                                />;
+                                />
                             </Card>
 
                         </div>

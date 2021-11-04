@@ -29,7 +29,7 @@ function ApplicantRenderer(props: any)  {
       }
 
 
-    return (
+    return data ? (
         <Spin 
         spinning={loading}
         size='large'
@@ -37,7 +37,7 @@ function ApplicantRenderer(props: any)  {
         >
             <Applicant data={data}/>
         </Spin>
-    )
+    ) : null
 }
 
 export default ApplicantRenderer
