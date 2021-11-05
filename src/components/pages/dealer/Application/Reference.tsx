@@ -20,6 +20,7 @@ import { logger, network } from '../../../../utils';
 const { Content } = Layout;
 
 interface References {
+    name: string;
     id: string | number;
     firstName: string;
     lastName: string;
@@ -80,17 +81,18 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
     const handleSubmit = async (values: any) => {
         values = { ...values };
         setDisableSubmitBtn(true)
-        submitApplication(data)
+        submitApplication(values)
     }
 
     const submitApplication = async (values: any) => {
         try {
-           await network.POST(`/api/v1/applications/${leaseApplicationId}/references`, values);
+           await network.POST(`/api/v1/dealers/applications/${leaseApplicationId}/references`, values);
            setHasSubmitError(false)
            setDisableSubmitBtn(true)
            setSubmitSuccess(true)
            message.success("Reference Saved");
         } catch (e) {
+            
           logger.error("Request Error", e);
           message.error("Error saving reference");
           setHasSubmitError(true)
@@ -125,17 +127,17 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
                                 >
                                 <Row className="largeInput">
                                     <Col span={4}>
-                                        <Form.Item label="First Name">
+                                        <Form.Item label="First Name" name="firstName">
                                             <Input placeholder="First Name" />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Last Name">
+                                        <Form.Item label="Last Name" name="lastName">
                                             <Input placeholder="Last Name" />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Phone Number">
+                                        <Form.Item label="Phone Number" name="phoneNumber">
                                             <MaskedInput
                                                 mask="(111) 111-1111"
                                                 placeholder="Phone Number"
@@ -143,13 +145,13 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="City">
+                                        <Form.Item label="City" name="city">
                                             <Input placeholder="City" />
                                         </Form.Item>
                                     </Col>
 
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="State">
+                                        <Form.Item label="State" name="state">
                                             <MaskedInput 
                                                 mask ="AA"
                                                 placeholder="State"                             
