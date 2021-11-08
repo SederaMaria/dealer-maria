@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { network, logger } from '../../../../utils';
 import { Card, Row, Col, Form, Input, Button, Layout } from 'antd';
 import { MainHeader, BankSider, MainBreadcrumb } from '../../../layouts'
@@ -25,33 +25,62 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
     const [bankInfo, setBankinfo] = useState<Array<any>>([])
 
     const [currentInfo, setCurrentInfo] = useState<any>({
-        bank_name: "",
-        account_number: "",
-        routing_number: "",
-        account_type: "",
-        access_id: ""
+
+        payment_bank_name: "",
+        payment_account_number: "",
+        payment_aba_routing_number: "",
+        payment_account_type: ""
+        
     })
+
+    const [label, setLabel] = useState<any>({
+        bank_name:"your bank name",
+        account_number: "your routing number",
+        routing_number: "ABA Routing Number",
+        account_type: "Savings or Checking ?"
+    })
+
+    useEffect(() => {
+        try {
+            network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
+            .then(res=>{
+                setLabel({
+                    bank_name: res.data.payment.payment_bank_name,
+                    account_number: res.data.payment.payment_account_number,
+                    routing_number: res.data.payment.payment_aba_routing_number,
+                    account_type: res.data.payment.payment_account_type
+                })
+            })  
+            .catch(e=>{
+                console.log(`no data error test`, e)
+            })
+    
+          } catch (e) {
+            logger.error("fetch banking information Error", e);
+          }
+    }, [])
 
     const handleChange = (e:any) => {
         const {name, value} = e.target
         setCurrentInfo({...currentInfo, [name]:value})
+       
     }
 
+
     const handleClick = () => {
-        console.log(`currentInfo`, currentInfo)
-        if (!currentInfo.bank_name || !currentInfo.account_number || !currentInfo.routing_number || !currentInfo.account_type) return;
+        
+        if (!currentInfo.payment_bank_name || !currentInfo.payment_account_number || !currentInfo.payment_aba_routing_number || !currentInfo.payment_account_type) return;
         
         setCurrentInfo({
-            bank_name: currentInfo.bank_name,
-            account_number: currentInfo.account_number,
-            routing_number: currentInfo.routing_number,
-            account_type: currentInfo.account_type,
-            access_id: leaseApplicationId
+            payment_bank_name: currentInfo.payment_bank_name,
+            payment_account_number: currentInfo.payment_account_number,
+            payment_aba_routing_number: currentInfo.payment_aba_routing_number,
+            payment_account_type: currentInfo.payment_account_type,
         })
 
         try {
-            network.POST('/api/v1/applications/banking-information', currentInfo)
-            .then(res => console.log(`res`, res))
+            network.PUT(`/api/v1/dealers/${leaseApplicationId}/banking-information`, currentInfo)
+            .then(res => console.log(`res PUT`, res))
                 
           } catch (e) {
             logger.error("Error sending banking information", e)
@@ -82,25 +111,25 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                                 <Row gutter={16}>
                                     <Col xs={24} sm={12} md={6}>
                                         <Form.Item className="largeInput" label="Bank Name">
-                                            <Input name="bank_name" onChange={handleChange} placeholder="your bank name" /> 
+                                            <Input name="payment_bank_name" onChange={handleChange} placeholder={label.bank_name} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
                                         <Form.Item className="largeInput" label="ABA Routing Number">
-                                            <Input name="routing_number" onChange={handleChange} placeholder="your routing number" /> 
+                                            <Input name="payment_aba_routing_number" onChange={handleChange} placeholder={label.routing_number} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
                                         <Form.Item className="largeInput" label="Account Number">
-                                            <Input name="account_number" onChange={handleChange} placeholder="your account number" /> 
+                                            <Input name="payment_account_number" onChange={handleChange} placeholder={label.account_number} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
                                         <Form.Item className="largeInput" label="Checking/Savings Account">
-                                            <Input name="account_type" onChange={handleChange} placeholder="Savings or Checking ?" /> 
+                                            <Input name="payment_account_type" onChange={handleChange} placeholder={label.account_type} /> 
                                         </Form.Item>
                                     </Col> 
                                 </Row>
