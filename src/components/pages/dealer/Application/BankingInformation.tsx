@@ -37,7 +37,7 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
         bank_name:"your bank name",
         account_number: "your routing number",
         routing_number: "ABA Routing Number",
-        account_type: "Savings or Checking ?"
+        account_type: "Please Select"
     })
 
     useEffect(() => {
@@ -128,9 +128,9 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                                 
                                     <Col xs={24} sm={12} md={6}> 
                                         <Form.Item className="largeInput" label="Checking/Savings Account">
-                                            <Select placeholder="Please Select">
-                                                <Option value="checking">Checking</Option>
-                                                <Option value="savings">Savings</Option>
+                                            <Select placeholder={label.account_type}>
+                                                <Option name="payment_account_type" value="checking" onChange={handleChange}>Checking</Option>
+                                                <Option name="payment_account_type" value="savings" onChange={handleChange}>Savings</Option>
                                             </Select>
                                         </Form.Item>
                                     </Col> 
