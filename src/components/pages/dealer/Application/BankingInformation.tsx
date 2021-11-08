@@ -66,7 +66,6 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
        
     }
 
-
     const handleClick = () => {
         
         if (!currentInfo.payment_bank_name || !currentInfo.payment_account_number || !currentInfo.payment_aba_routing_number || !currentInfo.payment_account_type) return;
