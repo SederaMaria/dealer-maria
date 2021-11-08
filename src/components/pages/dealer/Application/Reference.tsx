@@ -78,6 +78,11 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
         }
     ]
 
+    const layout = {
+        labelCol: { span: 24 },
+        wrapperCol: { span: 24 },
+    }
+
     const handleSubmit = async (values: any) => {
         values = { ...values };
         setDisableSubmitBtn(true)
@@ -125,20 +130,21 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
                                 <Form
                                     form={referenceForm}
                                     onFinish={handleSubmit}
+                                    className="input" {...layout}
                                 >
-                                <Row className="largeInput">
-                                    <Col span={4}>
-                                        <Form.Item label="First Name" name="firstName">
+                                <Row gutter={14}>
+                                <Col className= "column-width" xs={24} sm={16} md={4}> 
+                                        <Form.Item label="First Name" name="firstName" className="label">
                                             <Input placeholder="First Name" />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Last Name" name="lastName">
+                                        <Form.Item label="Last Name" name="lastName" className="label">
                                             <Input placeholder="Last Name" />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Phone Number" name="phoneNumber">
+                                        <Form.Item label="Phone Number" name="phoneNumber" className="label">
                                             <MaskedInput
                                                 mask="(111) 111-1111"
                                                 placeholder="Phone Number"
@@ -146,13 +152,13 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="City" name="city">
+                                        <Form.Item label="City" name="city" className="label">
                                             <Input placeholder="City" />
                                         </Form.Item>
                                     </Col>
 
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="State" name="state">
+                                        <Form.Item label="State" name="state" className="label">
                                             <MaskedInput 
                                                 mask ="AA"
                                                 placeholder="State"                             
