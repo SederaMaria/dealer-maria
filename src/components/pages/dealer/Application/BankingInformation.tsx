@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { network, logger } from '../../../../utils';
-import { Card, Row, Col, Form, Input, Button, Layout } from 'antd';
+import { Card, Row, Col, Form, Input, Button, Layout, Select } from 'antd';
 import { MainHeader, BankSider, MainBreadcrumb } from '../../../layouts'
 import '../../../layouts/styles/BankInfo.css'
 
-
 const { Content } = Layout;
+const { Option } = Select;
 
 const layout = {
     labelCol: {
@@ -128,7 +128,10 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                                 
                                     <Col xs={24} sm={12} md={6}> 
                                         <Form.Item className="largeInput" label="Checking/Savings Account">
-                                            <Input name="payment_account_type" onChange={handleChange} placeholder={label.account_type} /> 
+                                            <Select placeholder="Please Select">
+                                                <Option value="checking">Checking</Option>
+                                                <Option value="savings">Savings</Option>
+                                            </Select>
                                         </Form.Item>
                                     </Col> 
                                 </Row>

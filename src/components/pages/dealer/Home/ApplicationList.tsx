@@ -104,7 +104,7 @@ const columns: ColumnsType<Applications> = [
     key: 'x',
     render(text, record, index) {
       return (
-        <Dropdown overlay={menu(record.actionPermission)} trigger={['click']}>
+        <Dropdown overlay={menu(record.actionPermission, record)} trigger={['click']} >
           <a className="ant-dropdown-link" href="#">
             <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
           </a>
@@ -114,16 +114,18 @@ const columns: ColumnsType<Applications> = [
   },
 ]
 
-const menu = (actionPermission: ActionPermission) => {
+const menu = (actionPermission: ActionPermission, record: Applications) => {
   let paymentCalcNode;
-
+  
   if (actionPermission.canOpenPaymentCalculator) {
-    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
+    paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
   } else if (actionPermission.canChangeBikes) {
-    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
+    paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
   } else {
     paymentCalcNode = <a href="#">View Payment Calculator</a>;
   }
+
+
 
   return (
     <Menu>
@@ -135,7 +137,7 @@ const menu = (actionPermission: ActionPermission) => {
           actionPermission.canOpenCreditApplication ?
             <a href="#">Open Credit Application</a>
             :
-            <a href="#">View Credit Application</a>
+            <Link to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
         }
       </Menu.Item>
       {
@@ -153,16 +155,16 @@ const menu = (actionPermission: ActionPermission) => {
       {
         actionPermission.canAddCoapplicant &&
           <Menu.Item>
-            <a href="#">Add Co-applicant</a>
+            <Link to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
           </Menu.Item>
       }
       <Menu.Item>
-        <a href="#">View / Add References</a>
+        <Link to={`/applications/${record.id}/references`}>View / Add References</Link>
       </Menu.Item>
       {
         !actionPermission.expired &&
           <Menu.Item>
-            <a href="#">Add Attachment</a>
+            <Link to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
           </Menu.Item>
       }
       {
@@ -194,7 +196,7 @@ const menu = (actionPermission: ActionPermission) => {
       {
         actionPermission.canSubmitBankInfo &&
           <Menu.Item>
-            <a href="#">Submit Bank Information</a>
+            <Link to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
           </Menu.Item>
       }
     </Menu>
