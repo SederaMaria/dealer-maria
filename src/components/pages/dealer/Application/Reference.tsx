@@ -90,7 +90,9 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
            setHasSubmitError(false)
            setDisableSubmitBtn(true)
            setSubmitSuccess(true)
-           message.success("Reference Saved");
+           message.success("Reference Saved")
+           referenceForm.resetFields()use
+           ;
         } catch (e) {
             
           logger.error("Request Error", e);
