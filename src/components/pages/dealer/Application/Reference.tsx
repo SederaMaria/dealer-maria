@@ -11,8 +11,7 @@ import {
     message
 } from 'antd';
 
-import { MainHeader, MainBreadcrumb } from '../../../layouts';
-import { ReferenceSider } from '../../../layouts/ReferenceSider';
+import { MainHeader, MainBreadcrumb, ReferenceSider }  from '../../../layouts';
 import '../../../layouts/styles/Reference.css'
 import MaskedInput from 'antd-mask-input'
 import { logger, network } from '../../../../utils';
