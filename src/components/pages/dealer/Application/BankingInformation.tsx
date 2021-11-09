@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { network, logger } from '../../../../utils';
-import { Card, Row, Col, Form, Input, Button, Layout, Select } from 'antd';
+import { Card, Row, Col, Form, Input, Button, Layout } from 'antd';
 import { MainHeader, BankSider, MainBreadcrumb } from '../../../layouts'
 import '../../../layouts/styles/BankInfo.css'
 
 const { Content } = Layout;
-const { Option } = Select;
 
 const layout = {
     labelCol: {
@@ -33,11 +32,12 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
         
     })
 
+    const [app_identifier, setApp_identifier] = useState(leaseApplicationId)
+
     const [label, setLabel] = useState<any>({
         bank_name:"your bank name",
-        account_number: "your routing number",
-        routing_number: "ABA Routing Number",
-        account_type: "Please Select"
+        account_number: "your account number",
+        routing_number: "your routing number"
     })
 
     useEffect(() => {
@@ -50,6 +50,8 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                     routing_number: res.data.payment.payment_aba_routing_number,
                     account_type: res.data.payment.payment_account_type
                 })
+
+                setApp_identifier(res.data.application_identifier)
             })  
             .catch(e=>{
                 console.log(`no data error test`, e)
@@ -63,7 +65,7 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
     const handleChange = (e:any) => {
         const {name, value} = e.target
         setCurrentInfo({...currentInfo, [name]:value})
-       
+        console.log(`currentInfo`, currentInfo)  
     }
 
     const handleClick = () => {
@@ -98,7 +100,7 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                                 items={[
                                     { text: " Dealers", link_type: "linkto", link: "#" },
                                     { text: " Lease Application", link_type: "linkto", link: "#" },
-                                    { text:  `${leaseApplicationId}`, link_type: "linkto", link: "#" },
+                                    { text:  `${app_identifier}`, link_type: "linkto", link: "#" },
                                     { text: " Bank Information", link_type: "linkto", link: "#" },
                                 ]}
                                 />
@@ -128,11 +130,12 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                                 
                                     <Col xs={24} sm={12} md={6}> 
                                         <Form.Item className="largeInput" label="Checking/Savings Account">
-                                            <Select placeholder={label.account_type}>
-                                                <Option name="payment_account_type" value="checking" onChange={handleChange}>Checking</Option>
-                                                <Option name="payment_account_type" value="savings" onChange={handleChange}>Savings</Option>
-                                            </Select>
-                                        </Form.Item>
+                                            <select name="payment_account_type" className="select-option" onChange={handleChange}>
+                                              <option value="">{label.account_type ? label.account_type : "Please Select"}</option>
+                                              <option value="checking">Checking</option>
+                                              <option value="savings">Savings</option>
+                                            </select>
+                                        </Form.Item>    
                                     </Col> 
                                 </Row>
                                 <Row className="submit-bank-info">
