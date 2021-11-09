@@ -1,0 +1,733 @@
+{
+    "id": 40125,
+    "applicationIdentifier": "2107020001",
+    "documentStatus": "lease_package_received",
+    "creditStatus": "Approved",
+    "documentsIssuedDate": "07/05/2021",
+    "isVerificationCallCompleted": false,
+    "fundingDelayOn": null,
+    "fundingApprovedOn": null,
+    "fundedOn": null,
+    "leasePackageReceivedDate": "2021-07-06T23:12:00.000-04:00",
+    "dealership": {
+        "dealership": "SPEED LEASING (TEST ACCOUNT)",
+        "isDealershipSubjectToClawback": false,
+        "thisDealDealershipClawbackAmount": "0.0",
+        "afterThisDealDealershipClawbackAmount": null
+    },
+    "payment": {
+        "payment": "$408.50",
+        "paymentBankName": "US Bank",
+        "paymentAbaRoutingNumber": "021000021",
+        "paymentAccountNumber": "123123123123",
+        "paymentAccountType": "checking",
+        "paymentAccountHolder": "Lessee",
+        "firstPaymentDate": "2021-07-30",
+        "paymentFirstDay": 30,
+        "secondPaymentDate": null,
+        "paymentSecondDay": null,
+        "paymentFrequency": 0,
+        "paymentMonthlyPaymentLabel": "Monthly"
+    },
+    "calculator": {
+        "creditTier": "Tier 6 (FICO 550 - 579)"
+    },
+    "vehicle": {
+        "assetMake": null,
+        "assetModel": null,
+        "assetYear": null,
+        "assetVin": null,
+        "assetColor": null,
+        "exactOdometerMileage": null,
+        "requestedDate": null
+    },
+    "leaseApplicationWelcomeCallForm": {
+        "assignedDepartment": {
+            "sales": 1,
+            "servicing": 2
+        }
+    },
+    "documentStatusOptions": [
+        {
+            "optionName": "No documents",
+            "optionValue": "no_documents",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Documents requested",
+            "optionValue": "documents_requested",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Documents issued",
+            "optionValue": "documents_issued",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Lease package received",
+            "optionValue": "lease_package_received",
+            "selected": true,
+            "disabled": false
+        },
+        {
+            "optionName": "Funding delay",
+            "optionValue": "funding_delay",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Funding approved",
+            "optionValue": "funding_approved",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Funded",
+            "optionValue": "funded",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Canceled",
+            "optionValue": "canceled",
+            "selected": false,
+            "disabled": false
+        }
+    ],
+    "paymentAccountHolderOptions": {
+        "lessee": "Lessee",
+        "coLessee": "Co-Lessee",
+        "both": "Both"
+    },
+    "paymentAccountTypeOptions": [
+        {
+            "optionName": "Checking",
+            "optionValue": "checking",
+            "selected": true
+        },
+        {
+            "optionName": "Savings",
+            "optionValue": "savings",
+            "selected": false
+        }
+    ],
+    "paymentFrequencyOptions": [
+        {
+            "optionName": "Full",
+            "optionValue": 0,
+            "selected": false
+        },
+        {
+            "optionName": "Split",
+            "optionValue": 1,
+            "selected": false
+        },
+        {
+            "optionName": "One time",
+            "optionValue": 2,
+            "selected": false
+        }
+    ],
+    "prenoteStatus": null,
+    "mailCarrierOptions": [
+        {
+            "optionName": "FedEx",
+            "optionValue": 2,
+            "selected": false
+        },
+        {
+            "optionName": "Hand Delivered",
+            "optionValue": 4,
+            "selected": false
+        },
+        {
+            "optionName": "USPS",
+            "optionValue": 3,
+            "selected": false
+        },
+        {
+            "optionName": "UPS",
+            "optionValue": 1,
+            "selected": false
+        }
+    ],
+    "mailCarrierId": null,
+    "approvedBy": null,
+    "fundingApprovalComplete": false,
+    "paymentInfoExists": true,
+    "leaseValidations": [
+        {
+            "id": 141647,
+            "item": "200 GREENBACKS DR LUTZ, FL 33559",
+            "phone_number_line": null,
+            "phone_number_carrier": null,
+            "type": "Address Validation",
+            "status": "Status Invalid",
+            "validatable_id": 82640
+        },
+        {
+            "id": 141648,
+            "item": "(123) 123-1231",
+            "phone_number_line": null,
+            "phone_number_carrier": null,
+            "type": "Home Phone Validation",
+            "status": "Status Invalid",
+            "validatable_id": 85886
+        },
+        {
+            "id": 141649,
+            "item": "(123) 123-1231",
+            "phone_number_line": null,
+            "phone_number_carrier": null,
+            "type": "Mobile Phone Validation",
+            "status": "Status Invalid",
+            "validatable_id": 85886
+        },
+        {
+            "id": 141650,
+            "item": "(123) 123-1231",
+            "phone_number_line": null,
+            "phone_number_carrier": null,
+            "type": "Employer Phone Validation",
+            "status": "Status Invalid",
+            "validatable_id": 85886
+        }
+    ],
+    "dataxEmploymentDetails": [
+        {
+            "id": 5098,
+            "first_name": "Sarah",
+            "last_name": "Milford",
+            "employer": "COSTCO",
+            "title": "Associate III",
+            "employment_status": "ACTIVE",
+            "employment_informaton_datax_path": "/admins/lease_application_blackbox_requests/5098/employment_information",
+            "lessee_id": 85886,
+            "name": "KARL KREDITOR",
+            "decision": "ACCEPT",
+            "adjusted_score": 643.33,
+            "suggested_correction": [],
+            "created_at": "July 2 2021 at 12:34:58 PM EDT",
+            "updated_at": "July 2 2021 at 12:34:58 PM EDT",
+            "blackbox_endpoint": null,
+            "application_identifier": "2107020001",
+            "updated_at_unformatted": "2021-07-02T12:34:58.405-04:00",
+            "lease_application_id": 40125,
+            "lease_application_blackbox_adverse_reasons": [],
+            "lease_application_blackbox_tlo_person_search_addresses": [],
+            "lease_application_blackbox_errors": []
+        }
+    ],
+    "stipulationLeaseApplicationAttachments": [],
+    "creditStatusOptions": [
+        {
+            "optionName": "Unsubmitted",
+            "optionValue": "unsubmitted",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Draft",
+            "optionValue": "draft",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Awaiting credit decision",
+            "optionValue": "awaiting_credit_decision",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Approved with contingencies",
+            "optionValue": "approved_with_contingencies",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Approved",
+            "optionValue": "approved",
+            "selected": true,
+            "disabled": true
+        },
+        {
+            "optionName": "Requires additional information",
+            "optionValue": "requires_additional_information",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Bike change requested",
+            "optionValue": "bike_change_requested",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Declined",
+            "optionValue": "declined",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Rescinded",
+            "optionValue": "rescinded",
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Withdrawn",
+            "optionValue": "withdrawn",
+            "selected": false,
+            "disabled": false
+        }
+    ],
+    "workflowStatusOptions": [
+        {
+            "optionName": "Application",
+            "optionValue": 1,
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Underwriting",
+            "optionValue": 2,
+            "selected": true,
+            "disabled": false
+        },
+        {
+            "optionName": "Underwriting Review",
+            "optionValue": 3,
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Verification",
+            "optionValue": 4,
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Funding",
+            "optionValue": 5,
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Done",
+            "optionValue": 6,
+            "selected": false,
+            "disabled": false
+        },
+        {
+            "optionName": "Underwriting Approved",
+            "optionValue": 7,
+            "selected": false,
+            "disabled": false
+        }
+    ],
+    "workflowStatusId": 2,
+    "workflowStatusDescription": "Underwriting",
+    "paymentFrequency": "full",
+    "creditReports": [
+        {
+            "id": 36198,
+            "lessee": "KARL KREDITOR",
+            "status": "success",
+            "average_score": 643.33,
+            "actions": "/uploads/credit_reports/36198/credit_report_162524369520210702-1-4spkil.pdf",
+            "requested_at": "July 2 2021 at 11:07:17 AM EDT",
+            "updated_at": "July 2 2021 at 12:34:58 PM EDT"
+        }
+    ],
+    "lesseeCreditSummary": {
+        "name": "KARL KREDITOR",
+        "creditScoreEquifax": 616,
+        "creditScoreExperian": 662,
+        "creditScoreTransunion": 652,
+        "creditScoreAverage": 643.33,
+        "blackboxDecision": "ACCEPT",
+        "leadrouterCreditScore": 643.33,
+        "recommendedBlackboxTier": "Tier 3"
+    },
+    "colesseeCreditSummary": {
+        "name": null,
+        "creditScoreEquifax": null,
+        "creditScoreExperian": null,
+        "creditScoreTransunion": null,
+        "creditScoreAverage": 0,
+        "blackboxDecision": "",
+        "leadrouterCreditScore": 0,
+        "recommendedBlackboxTier": 0
+    },
+    "creditAverageSummary": {
+        "averageCreditScore": 643,
+        "dataxAverageCreditScore": 643.33,
+        "recommendedBlackboxTier": "Tier 3"
+    },
+    "leaseApplicationAttachments": [],
+    "audits": [
+        {
+            "date": "Jul 6, 2021 at 07:13 AM EDT",
+            "audited": "2107020001",
+            "byWho": "Blas De los Santos",
+            "changes": "Changed <strong>Credit Status</strong> from <strong>awaiting_credit_decision</strong> to <strong>approved</strong>, and <strong>Lease Package Received Date</strong> from <strong>07/06/2021 19:12 PM PST</strong> to <strong>07/07/2021 11:12 AM PST</strong>"
+        },
+        {
+            "date": "Jul 6, 2021 at 07:13 AM EDT",
+            "audited": "Insurance",
+            "byWho": "Blas De los Santos",
+            "changes": "<strong>Created</strong> this Insurance with <strong>Loss Payee</strong> set to <strong>false</strong>, and <strong>Additional Insured</strong> set to <strong>false</strong>"
+        },
+        {
+            "date": "Jul 6, 2021 at 07:13 AM EDT",
+            "audited": "2107020001",
+            "byWho": "Blas De los Santos",
+            "changes": "Changed <strong>Document Status</strong> from <strong>no_documents</strong> to <strong>lease_package_received</strong>, <strong>First Payment Date</strong> from nil to <strong>07/30/2021</strong>, <strong>Payment Aba Routing Number</strong> from nil to <strong>021000021</strong>, <strong>Payment Account Number</strong> from nil to <strong>123123123123</strong>, <strong>Payment Bank Name</strong> from nil to <strong>US Bank</strong>, <strong>Payment Account Type</strong> from nil to <strong>checking</strong>, <strong>Payment Frequency</strong> from nil to <strong>full</strong>, <strong>Payment First Day</strong> from nil to <strong>30</strong>, <strong>This Deal Dealership Clawback Amount</strong> from nil to <strong>0.0</strong>, and <strong>Payment Account Holder</strong> from nil to <strong>Lessee</strong>"
+        },
+        {
+            "date": "Jul 6, 2021 at 07:09 AM EDT",
+            "audited": "2107020001",
+            "byWho": "Blas De los Santos",
+            "changes": "Changed <strong>Documents Issued Date</strong> from nil to <strong>07/05/2021</strong>, and <strong>Promotion Name</strong> from nil to nil"
+        },
+        {
+            "date": "Jul 2, 2021 at 12:34 PM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Record Errors</strong> from <strong>[\"undefined method `gsub' for nil:NilClass\\n\\n    1  class CreditReportJob\\n\\e[0m   35    def credit_info\\n\\e[0m   36      @credit_info ||= Credco::Client.new(lessee_record: @lessee).credit_report\\n\\e[0m❯  37  \\e[1;3m    credit_info_hash = Hash.from_xml(@credit_info.gsub(\\\"\\\\n\\\", \\\"\\\"))\\n\\e[0m   39      revolving_credit_available = nil\\n\\e[0m   40      open_auto_monthly_payment = nil\\n\\e[0m   41      credit_score_hash = credit_info_hash.dig(\\\"RESPONSE_GROUP\\\", \\\"RESPONSE\\\", \\\"RESPONSE_DATA\\\", \\\"CREDIT_RESPONSE\\\", \\\"CREDIT_SCORE\\\")\\n\\e[0m   42      credit_summary_hash = credit_info_hash.dig(\\\"RESPONSE_GROUP\\\", \\\"RESPONSE\\\", \\\"RESPONSE_DATA\\\", \\\"CREDIT_RESPONSE\\\", \\\"CREDIT_SUMMARY\\\")\\n\\e[0m   44      credco_summary = credit_summary_hash.select{ |n| n[\\\"_Name\\\"] == \\\"CREDCO_SUMMARY\\\" }.first\\n\\e[0m   45      credco_exec_summary = credit_summary_hash.select{ |n| n[\\\"_Name\\\"] == \\\"CREDCO_EXECUTIVE_SUMMARY\\\" }.first\\n\\e[0m   47      unless credco_summary.nil?\\n\\e[0m   51      end\\n\\e[0m   71    end\\n\\e[0m  234  end\\n\\e[0m\\n\", \"CreditReportJob: Failed pulling credit report for Lessee 85886: KARL KREDITOR\"]</strong> to <strong>[]</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 12:34 PM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Effective Date</strong> from nil to <strong>07/02/2021 12:34 PM EDT</strong>, <strong>End Date</strong> from nil to <strong>12/30/2999 19:00 PM EST</strong>, <strong>Credit Score</strong> from nil to <strong>662</strong>, <strong>Credit Score Equifax</strong> from nil to <strong>616</strong>, <strong>Credit Score Experian</strong> from nil to <strong>662</strong>, <strong>Credit Score Transunion</strong> from nil to <strong>652</strong>, and <strong>Credit Score Average</strong> from nil to <strong>643.33</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 12:34 PM EDT",
+            "audited": "KARL KREDITOR",
+            "byWho": "System",
+            "changes": "Changed <strong>Highest Fico Score</strong> from nil to <strong>662</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 12:34 PM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Status</strong> from <strong>failure</strong> to <strong>success</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 12:34 PM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Upload</strong> from nil to <strong>credit_report_162524369520210702-1-4spkil.pdf</strong>, <strong>Identifier</strong> from nil to <strong>115395794650000</strong>, and <strong>Visible To Dealers</strong> from nil to <strong>false</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:22 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Sidekiq Retry Count</strong> from <strong>5</strong> to <strong>6</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:17 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Sidekiq Retry Count</strong> from <strong>4</strong> to <strong>5</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:13 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Record Errors</strong> from <strong>[\"undefined method `gsub' for nil:NilClass\\n\\n    1  class CreditReportJob\\n\\e[0m   35    def credit_info\\n\\e[0m   36      @credit_info ||= Credco::Client.new(lessee_record: @lessee).credit_report\\n\\e[0m❯  37  \\e[1;3m    credit_info_hash = Hash.from_xml(@credit_info.gsub(\\\"\\\\n\\\", \\\"\\\"))\\n\\e[0m   39      revolving_credit_available = nil\\n\\e[0m   40      open_auto_monthly_payment = nil\\n\\e[0m   41      credit_score_hash = credit_info_hash.dig(\\\"RESPONSE_GROUP\\\", \\\"RESPONSE\\\", \\\"RESPONSE_DATA\\\", \\\"CREDIT_RESPONSE\\\", \\\"CREDIT_SCORE\\\")\\n\\e[0m   42      credit_summary_hash = credit_info_hash.dig(\\\"RESPONSE_GROUP\\\", \\\"RESPONSE\\\", \\\"RESPONSE_DATA\\\", \\\"CREDIT_RESPONSE\\\", \\\"CREDIT_SUMMARY\\\")\\n\\e[0m   44      credco_summary = credit_summary_hash.select{ |n| n[\\\"_Name\\\"] == \\\"CREDCO_SUMMARY\\\" }.first\\n\\e[0m   45      credco_exec_summary = credit_summary_hash.select{ |n| n[\\\"_Name\\\"] == \\\"CREDCO_EXECUTIVE_SUMMARY\\\" }.first\\n\\e[0m   47      unless credco_summary.nil?\\n\\e[0m   51      end\\n\\e[0m   71    end\\n\\e[0m  234  end\\n\\e[0m\\n\"]</strong> to <strong>[\"undefined method `gsub' for nil:NilClass\\n\\n    1  class CreditReportJob\\n\\e[0m   35    def credit_info\\n\\e[0m   36      @credit_info ||= Credco::Client.new(lessee_record: @lessee).credit_report\\n\\e[0m❯  37  \\e[1;3m    credit_info_hash = Hash.from_xml(@credit_info.gsub(\\\"\\\\n\\\", \\\"\\\"))\\n\\e[0m   39      revolving_credit_available = nil\\n\\e[0m   40      open_auto_monthly_payment = nil\\n\\e[0m   41      credit_score_hash = credit_info_hash.dig(\\\"RESPONSE_GROUP\\\", \\\"RESPONSE\\\", \\\"RESPONSE_DATA\\\", \\\"CREDIT_RESPONSE\\\", \\\"CREDIT_SCORE\\\")\\n\\e[0m   42      credit_summary_hash = credit_info_hash.dig(\\\"RESPONSE_GROUP\\\", \\\"RESPONSE\\\", \\\"RESPONSE_DATA\\\", \\\"CREDIT_RESPONSE\\\", \\\"CREDIT_SUMMARY\\\")\\n\\e[0m   44      credco_summary = credit_summary_hash.select{ |n| n[\\\"_Name\\\"] == \\\"CREDCO_SUMMARY\\\" }.first\\n\\e[0m   45      credco_exec_summary = credit_summary_hash.select{ |n| n[\\\"_Name\\\"] == \\\"CREDCO_EXECUTIVE_SUMMARY\\\" }.first\\n\\e[0m   47      unless credco_summary.nil?\\n\\e[0m   51      end\\n\\e[0m   71    end\\n\\e[0m  234  end\\n\\e[0m\\n\", #<RuntimeError: CreditReportJob: Failed pulling credit report for Lessee 85886: KARL KREDITOR>]</strong>, and <strong>Sidekiq Retry Count</strong> from <strong>3</strong> to <strong>4</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:10 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Sidekiq Retry Count</strong> from <strong>2</strong> to <strong>3</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:08 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Sidekiq Retry Count</strong> from <strong>1</strong> to <strong>2</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "Changed <strong>Status</strong> from <strong>pending</strong> to <strong>failure</strong>, <strong>Record Errors</strong> from <strong>[]</strong> to <strong>[#<NoMethodError: undefined method `gsub' for nil:NilClass\n\n    1  class CreditReportJob\n\u001b[0m   35    def credit_info\n\u001b[0m   36      @credit_info ||= Credco::Client.new(lessee_record: @lessee).credit_report\n\u001b[0m❯  37  \u001b[1;3m    credit_info_hash = Hash.from_xml(@credit_info.gsub(\"\\n\", \"\"))\n\u001b[0m   39      revolving_credit_available = nil\n\u001b[0m   40      open_auto_monthly_payment = nil\n\u001b[0m   41      credit_score_hash = credit_info_hash.dig(\"RESPONSE_GROUP\", \"RESPONSE\", \"RESPONSE_DATA\", \"CREDIT_RESPONSE\", \"CREDIT_SCORE\")\n\u001b[0m   42      credit_summary_hash = credit_info_hash.dig(\"RESPONSE_GROUP\", \"RESPONSE\", \"RESPONSE_DATA\", \"CREDIT_RESPONSE\", \"CREDIT_SUMMARY\")\n\u001b[0m   44      credco_summary = credit_summary_hash.select{ |n| n[\"_Name\"] == \"CREDCO_SUMMARY\" }.first\n\u001b[0m   45      credco_exec_summary = credit_summary_hash.select{ |n| n[\"_Name\"] == \"CREDCO_EXECUTIVE_SUMMARY\" }.first\n\u001b[0m   47      unless credco_summary.nil?\n\u001b[0m   51      end\n\u001b[0m   71    end\n\u001b[0m  234  end\n\u001b[0m\n>]</strong>, and <strong>Sidekiq Retry Count</strong> from <strong>0</strong> to <strong>1</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Credit report",
+            "byWho": "System",
+            "changes": "<strong>Created</strong> this Credit Report with <strong>Status</strong> set to <strong>pending</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Lease application stipulation",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Application Stipulation with <strong>Stipulation</strong> set to <strong>May be subject to payment limit (send POI, and we'll determine the exact limit, if any)</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Lease application stipulation",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Application Stipulation with <strong>Stipulation</strong> set to <strong>Subject to Pre-Funding verification call(s)</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Lease application stipulation",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Application Stipulation with <strong>Stipulation</strong> set to <strong>Proof of Residence (Matching Application & Within 30 Days)</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Lease application stipulation",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Application Stipulation with <strong>Stipulation</strong> set to <strong>4 Personal References (Name, City, State, Phone)</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:07 AM EDT",
+            "audited": "Lease application stipulation",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Application Stipulation with <strong>Stipulation</strong> set to <strong>Proof of All Stated Income (Within 30 Days)</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 11:06 AM EDT",
+            "audited": "2018 XL1200CX Roadster in Pasco County",
+            "byWho": "Blas Dls",
+            "changes": "Changed <strong>Total Dealer Price Cents</strong> from <strong>$0.00</strong> to <strong>$10000.00</strong>, <strong>Fi Maximum Total Cents</strong> from <strong>$0.00</strong> to <strong>$8184.00</strong>, <strong>Adjusted Capitalized Cost Cents</strong> from <strong>$0.00</strong> to <strong>$10745.00</strong>, <strong>Monthly Lease Charge Cents</strong> from <strong>$0.00</strong> to <strong>$195.30</strong>, <strong>Monthly Depreciation Charge Cents</strong> from <strong>$0.00</strong> to <strong>$180.74</strong>, <strong>Frontend Total Cents</strong> from <strong>$0.00</strong> to <strong>$10000.00</strong>, <strong>Original Msrp Cents</strong> from <strong>$0.00</strong> to <strong>$11949.00</strong>, <strong>Acc Less Fi Less Af Cents</strong> from <strong>$0.00</strong> to <strong>$1000000.00</strong>, <strong>New Used</strong> from nil to <strong>Used</strong>, <strong>Asset Make</strong> from nil to <strong>Harley-Davidson</strong>, <strong>Asset Year</strong> from nil to <strong>2018</strong>, <strong>Asset Model</strong> from nil to <strong>XL1200CX Roadster</strong>, <strong>Mileage Tier</strong> from nil to <strong>20,000 - 29,999</strong>, <strong>Credit Tier</strong> from nil to <strong>Tier 6 (FICO 550 - 579)</strong>, <strong>Term</strong> from nil to <strong>36</strong>, <strong>Dealer Sales Price Cents</strong> from <strong>$0.00</strong> to <strong>$10000.00</strong>, <strong>Cash Down Minimum Cents</strong> from <strong>$0.00</strong> to <strong>$1952.64</strong>, <strong>Total Cash At Signing Cents</strong> from <strong>$0.00</strong> to <strong>$409.50</strong>, <strong>Dealer Reserve Cents</strong> from <strong>$0.00</strong> to <strong>$100.00</strong>, <strong>Base Monthly Payment Cents</strong> from <strong>$0.00</strong> to <strong>$381.78</strong>, <strong>Monthly Sales Tax Cents</strong> from <strong>$0.00</strong> to <strong>$26.72</strong>, <strong>Total Monthly Payment Cents</strong> from <strong>$0.00</strong> to <strong>$408.50</strong>, <strong>Nada Retail Value Cents</strong> from <strong>$0.00</strong> to <strong>$10230.00</strong>, <strong>Nada Rough Value Cents</strong> from <strong>$0.00</strong> to <strong>$7075.00</strong>, <strong>Customer Purchase Option Cents</strong> from <strong>$0.00</strong> to <strong>$3714.38</strong>, <strong>Pre Tax Payments Sum Cents</strong> from <strong>$0.00</strong> to <strong>$13744.08</strong>, <strong>Frontend Max Advance Cents</strong> from <strong>$0.00</strong> to <strong>$8184.00</strong>, <strong>Backend Max Advance Cents</strong> from <strong>$0.00</strong> to <strong>$1023.00</strong>, <strong>Total Sales Price Cents</strong> from <strong>$0.00</strong> to <strong>$10000.00</strong>, <strong>Remit To Dealer Cents</strong> from <strong>$0.00</strong> to <strong>$9690.50</strong>, <strong>Acquisition Fee Cents</strong> from <strong>$0.00</strong> to <strong>$745.00</strong>, and <strong>Refundable Security Deposit Cents</strong> from <strong>$0.00</strong> to <strong>$1.00</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 10:46 AM EDT",
+            "audited": "2018 XL1200CX Roadster in Pasco County",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Calculator with <strong>Tax Jurisdiction</strong> set to <strong>Pasco County</strong>, and <strong>Us State</strong> set to <strong>florida</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 10:46 AM EDT",
+            "audited": "12, AL",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Address with <strong>City</strong> set to <strong>12</strong>, and <strong>State</strong> set to <strong>AL</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 10:46 AM EDT",
+            "audited": "200 GREENBACKS DR LUTZ, FL 33559",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Address with <strong>Street1</strong> set to <strong>200 GREENBACKS DR</strong>, <strong>State</strong> set to <strong>FL</strong>, <strong>Zipcode</strong> set to <strong>33559</strong>, and <strong>County</strong> set to <strong>PASCO</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 10:46 AM EDT",
+            "audited": "KARL KREDITOR",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lessee with <strong>First Name</strong> set to <strong>KARL</strong>, <strong>Last Name</strong> set to <strong>KREDITOR</strong>, <strong>Date Of Birth</strong> set to <strong>02/01/1995</strong>, <strong>Mobile Phone Number</strong> set to <strong>(123) 123-1231</strong>, <strong>Home Phone Number</strong> set to <strong>(123) 123-1231</strong>, <strong>At Address Years</strong> set to <strong>4</strong>, <strong>Monthly Mortgage</strong> set to <strong>12.0</strong>, <strong>Home Ownership</strong> set to <strong>own</strong>, <strong>Employer Name</strong> set to <strong>TGI FRIDAYS</strong>, <strong>Time At Employer Years</strong> set to <strong>12</strong>, <strong>Job Title</strong> set to <strong>SOFTWARE ENGINEER</strong>, <strong>Employment Status</strong> set to <strong>1</strong>, <strong>Employer Phone Number</strong> set to <strong>(123) 123-1231</strong>, and <strong>Gross Monthly Income</strong> set to <strong>123123.0</strong>"
+        },
+        {
+            "date": "Jul 2, 2021 at 10:46 AM EDT",
+            "audited": "2107020001",
+            "byWho": "Blas Dls",
+            "changes": "<strong>Created</strong> this Lease Application"
+        }
+    ],
+    "lessee": {
+        "id": 85886,
+        "firstName": "KARL",
+        "middleName": "",
+        "lastName": "KREDITOR",
+        "suffix": "",
+        "dateOfBirth": "February 01, 1995",
+        "driversLicenseIdNumber": "",
+        "ssn": "000-13-2563",
+        "city": "LUTZ",
+        "state": "FL",
+        "zipcode": "33559",
+        "homePhoneNumber": "(123) 123-1231",
+        "atAddressYears": 4,
+        "atAddressMonths": null,
+        "monthlyMortgage": "12.0",
+        "provenMonthlyIncome": null,
+        "employerName": "TGI FRIDAYS",
+        "employerPhoneNumber": "(123) 123-1231",
+        "employmentStatus": "Self employed",
+        "homeOwnership": 0,
+        "employmentDetails": null,
+        "timeAtEmployerYears": 12,
+        "timeAtEmployerMonths": null,
+        "jobTitle": "SOFTWARE ENGINEER",
+        "grossMonthlyIncome": "123123.0",
+        "mobilePhoneNumber": "(123) 123-1231",
+        "emailAddress": "",
+        "street1": "200 GREENBACKS DR",
+        "street2": "",
+        "fullName": "KARL KREDITOR",
+        "homeAddress": {
+            "id": 82640,
+            "city": null,
+            "state": "FL",
+            "zipcode": "33559",
+            "street1": "200 GREENBACKS DR",
+            "street2": "",
+            "county": "PASCO",
+            "newCityCollectionValue": [
+                [
+                    "LUTZ",
+                    6534
+                ]
+            ],
+            "newCityValue": "LUTZ",
+            "cityId": "6534",
+            "newCity": {
+                "city": "LUTZ",
+                "state": "FL",
+                "county": "PASCO"
+            }
+        },
+        "mailingAddress": null,
+        "employmentAddress": {
+            "id": 82641,
+            "city": "12",
+            "state": "AL",
+            "zipcode": null,
+            "street1": null,
+            "street2": null,
+            "county": null,
+            "newCityCollectionValue": [],
+            "newCityValue": "12",
+            "cityId": null,
+            "newCity": {
+                "city": null,
+                "state": null,
+                "county": null
+            }
+        }
+    },
+    "insurance": {
+        "companyName": "",
+        "propertyDamage": "",
+        "bodilyInjuryPerPerson": "",
+        "bodilyInjuryPerOccurrence": "",
+        "comprehensive": "",
+        "collision": "",
+        "effectiveDate": null,
+        "expirationDate": null,
+        "policyNumber": "",
+        "lossPayee": false,
+        "additionalInsured": false
+    },
+    "colessee": null,
+    "onlineFundingApprovalChecklist": null,
+    "fundingDelays": [],
+    "leaseApplicationWelcomeCalls": [],
+    "references": [],
+    "negativePays": [],
+    "prenotes": [],
+    "leaseApplicationStipulations": [
+        {
+            "id": 150084,
+            "leaseApplicationId": 40125,
+            "stipulation": "Proof of All Stated Income (Within 30 Days)",
+            "status": "Required",
+            "leaseApplicationAttachmentId": null,
+            "notes": null,
+            "applicationIdentifier": "2107020001",
+            "attachment": null
+        },
+        {
+            "id": 150085,
+            "leaseApplicationId": 40125,
+            "stipulation": "4 Personal References (Name, City, State, Phone)",
+            "status": "Required",
+            "leaseApplicationAttachmentId": null,
+            "notes": null,
+            "applicationIdentifier": "2107020001",
+            "attachment": null
+        },
+        {
+            "id": 150086,
+            "leaseApplicationId": 40125,
+            "stipulation": "Proof of Residence (Matching Application & Within 30 Days)",
+            "status": "Required",
+            "leaseApplicationAttachmentId": null,
+            "notes": null,
+            "applicationIdentifier": "2107020001",
+            "attachment": null
+        },
+        {
+            "id": 150087,
+            "leaseApplicationId": 40125,
+            "stipulation": "Subject to Pre-Funding verification call(s)",
+            "status": "Required",
+            "leaseApplicationAttachmentId": null,
+            "notes": null,
+            "applicationIdentifier": "2107020001",
+            "attachment": null
+        },
+        {
+            "id": 150088,
+            "leaseApplicationId": 40125,
+            "stipulation": "May be subject to payment limit (send POI, and we'll determine the exact limit, if any)",
+            "status": "Required",
+            "leaseApplicationAttachmentId": null,
+            "notes": null,
+            "applicationIdentifier": "2107020001",
+            "attachment": null
+        }
+    ],
+    "leaseDocumentRequests": [],
+    "leaseApplicationBlackboxRequests": [
+        {
+            "id": 5097,
+            "firstName": "",
+            "lastName": "",
+            "employer": "",
+            "title": "",
+            "employmentStatus": "",
+            "employmentInformatonDataxPath": "/admins/lease_application_blackbox_requests/5097/employment_information",
+            "lesseeId": 85886,
+            "name": "KARL KREDITOR",
+            "decision": "ACCEPT",
+            "adjustedScore": null,
+            "suggestedCorrection": [],
+            "createdAt": "July 2 2021 at 11:07:16 AM EDT",
+            "updatedAt": "July 2 2021 at 11:07:16 AM EDT",
+            "blackboxEndpoint": "Application Fill",
+            "applicationIdentifier": "2107020001",
+            "updatedAtUnformatted": "2021-07-02T11:07:16.244-04:00",
+            "leaseApplicationId": 40125
+        },
+        {
+            "id": 5098,
+            "firstName": "Sarah",
+            "lastName": "Milford",
+            "employer": "COSTCO",
+            "title": "Associate III",
+            "employmentStatus": "ACTIVE",
+            "employmentInformatonDataxPath": "/admins/lease_application_blackbox_requests/5098/employment_information",
+            "lesseeId": 85886,
+            "name": "KARL KREDITOR",
+            "decision": "ACCEPT",
+            "adjustedScore": 643.33,
+            "suggestedCorrection": [],
+            "createdAt": "July 2 2021 at 12:34:58 PM EDT",
+            "updatedAt": "July 2 2021 at 12:34:58 PM EDT",
+            "blackboxEndpoint": "Application Finalize",
+            "applicationIdentifier": "2107020001",
+            "updatedAtUnformatted": "2021-07-02T12:34:58.405-04:00",
+            "leaseApplicationId": 40125
+        }
+    ],
+    "leaseApplicationGpsUnit": null,
+    "historicalRelated": [
+        {
+            "id": 39658,
+            "applicationIdentifier": "2007300001",
+            "creditStatus": "Approved",
+            "documentStatus": "Lease Package Received",
+            "lessee": "DANIEL CREDCO",
+            "colessee": null
+        }
+    ]
+}
