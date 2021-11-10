@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, DatePicker } from "antd";
 import MaskedInput from "antd-mask-input";
 import moment from "moment";
@@ -45,12 +45,23 @@ export default function DobInput ({dateFormat, form}) {
     return age <= 18;
   }
 
+  useEffect(() => {
+    var date = moment(new Date(form.getFieldValue(['lesseeAttributes', 'dateOfBirth'])), dateFormat, true);
+    let dateString = date.format('MM/DD/YYYY');
+    console.log(dateString)
+    setDateObj(date);
+    setDateString(dateString);
+    validateInput(dateString);
+    // setDateObj(form.getFieldValue(['lesseeAttributes', 'dateOfBirth']));
+  }, []);
+
+
   return (
     <Form.Item
       label="Date of Birth (mm/dd/yyyy)"
       name={['lesseeAttributes', 'dateOfBirth']}
-      hasFeedback
-      rules={[{ required: true, message: 'Date of Birth is required!' }]}
+      // hasFeedback
+      // rules={[{ required: true, message: 'Date of Birth is required!' }]}
       validateStatus={dateOfBirthValidation}
       help={dateOfBirthValidationMessage}
     >

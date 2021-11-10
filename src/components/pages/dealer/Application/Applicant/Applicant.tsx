@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout } from "antd";
+import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message } from "antd";
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -22,31 +22,94 @@ const layout = {
   };
   
 
+  interface Address {
+    id?: number | undefined
+    state? : string | undefined
+    street1? : string | undefined
+    street2? : string | undefined
+    zipcode? : string | undefined
+    county? : string | undefined
+    cityId? : string | undefined
+    cityOptions? : OptionData | any
+    countyOptions? : OptionData | any
+    stateOptions? : OptionData | any
+  }
+
+  interface employmentAddress {
+      id?: number | undefined
+      city? : string | undefined
+      state? : string | undefined 
+  }
+
+
   interface Lessee {
+    firstName?: string | undefined
+    middleName?: string | undefined
+    lastName?: string | undefined
+    dateOfBirth?: string | undefined
     ssn?: string | undefined
+    driversLicenseIdNumber?: string | undefined
+    homePhoneNumber?: string | undefined
+    mobilePhoneNumber?: string | undefined
+    homeAddress?: Address
+    mailingAddress?: Address
+    atAddressMonths?: number | string | undefined
+    atAddressYears?: number | string | undefined
+    monthlyMortgage?: number | string | undefined
+    homeOwnership?: number | undefined 
+    employerName?: string | undefined
+    employerPhoneNumber?: string | undefined
+    employmentAddress?: employmentAddress
+    employmentStatus?: string | undefined
+    jobTitle?: string | undefined
+    timeAtEmployerYears?: number | string | undefined
+    timeAtEmployerMonths?: number | string | undefined
+    grossMonthlyIncome?: number | string | undefined
+
 }
 
 interface LeaseCalculator {
     id?: string | number | undefined
 }
 
-interface RootLeaseCalculator {
-    leaseCalculator?: LeaseCalculator
-}
-
 interface Props {
     data?: {
         id: string | number,
         lessee: Lessee,
-        leaseCalculator: RootLeaseCalculator
+        leaseCalculator: LeaseCalculator
     }
 }
 
 interface OptionData {
-    value: string | number,
-    label: string,
+    value?: string | number,
+    label?: string,
     parentId?: number
 }
+
+const formatOptions = (params: { options: Array<any>, type?: string }) => {
+    switch (params.type) {
+        case 'city': {
+            return params.options.map((value: any) => {
+                return {
+                    value: value['id'],
+                    label: value['name'],
+                    parentId: value['countyId']
+                }
+            })
+        }
+        default: {
+            return params.options.map((value: any) => {
+                return {
+                    value: value['id'],
+                    label: value['abbreviation'] ? value['abbreviation'] : value['name']
+                }
+            })
+        }
+    }
+}
+
+
+
 
 export const Applicant: React.FC<Props> = ({data}: Props) => {
 
@@ -56,7 +119,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     const [lesseeForm] = Form.useForm();
 
     let leaseApplicationId: string | number | undefined = data?.id
-    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.leaseCalculator?.id
+    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
+
 
     const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<OptionData>>([])
     const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<OptionData>>([])
@@ -91,7 +155,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     const [hasSubmitError, setHasSubmitError] = useState(false)
     const [submitSuccess, setSubmitSuccess] = useState(false)
 
-    const [disableSubmitBtn, setDisableSubmitBtn] = useState(true)
+    const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
 
 
     const [makesOptions, setMakesOptions] = useState([])
@@ -106,6 +170,32 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     const [showModelState, setShowModelState] = useState(null)
     const [showMileageRangeState, setShowMileageRangeState] = useState(null)
     const [showCreditTierState, setShowCreditTierState] = useState(null)
+
+
+
+    const submitApplication = async (values: any) => {
+        try {
+           await network.PUT(`/api/v1/dealers/update-details?id=${leaseApplicationId}`, values);
+           setHasSubmitError(false)
+           setDisableSubmitBtn(true)
+           setSubmitSuccess(true)
+           message.success("Save Successfully");
+        } catch (e) {
+          logger.error("Request Error", e);
+          message.error("Error saving details");
+          setHasSubmitError(true)
+          setDisableSubmitBtn(false)
+        }
+        setDisableSubmitBtn(false)
+      }
+
+
+    const handleSubmit = async (values: any) => {
+        values = { ...values };
+        setDisableSubmitBtn(true)
+        submitApplication(values)
+    }
+
 
     const handleLesseeHomeZipcodeBlur = async () => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
@@ -123,6 +213,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
+                    console.log(response.data.state)
+                    console.log("response.data.state")
                     setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
                     setLesseeHomeCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
@@ -181,27 +273,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
-    const formatOptions = (params: { options: Array<any>, type?: string }) => {
-        switch (params.type) {
-            case 'city': {
-                return params.options.map((value: any) => {
-                    return {
-                        value: value['id'],
-                        label: value['name'],
-                        parentId: value['countyId']
-                    }
-                })
-            }
-            default: {
-                return params.options.map((value: any) => {
-                    return {
-                        value: value['id'],
-                        label: value['abbreviation'] ? value['abbreviation'] : value['name']
-                    }
-                })
-            }
-        }
-    }
 
     const handleHomeStateChange = () => {
         setShowHomeState(null)
@@ -268,11 +339,43 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
+
+    
+
     useEffect(() => {
         getEmployerStatus()
+        window.addEventListener('beforeunload', alertUser)
+        window.addEventListener('unload', handleTabClosing)
+        return () => {
+            window.removeEventListener('beforeunload', alertUser)
+            window.removeEventListener('unload', handleTabClosing)
+        }
     }, []);
 
-    return (
+
+    useEffect(() => {
+        setLesseeHomeStateOptions(data?.lessee?.homeAddress?.stateOptions)
+        setLesseeHomeCountyOptions(data?.lessee?.homeAddress?.countyOptions)
+        setLesseeHomeCityOptions(data?.lessee?.homeAddress?.cityOptions)
+
+        setLesseeMailStateOptions(data?.lessee?.mailingAddress?.stateOptions)
+        setLesseeMailCountyOptions(data?.lessee?.mailingAddress?.countyOptions)
+        setLesseeMailCityOptions(data?.lessee?.mailingAddress?.cityOptions)
+    });
+
+
+    const handleTabClosing = () => {
+        // lesseeForm.submit()
+    }
+    
+    const alertUser = (event:any) => {
+        // lesseeForm.submit()
+        event.preventDefault()
+        event.returnValue = ''
+    }
+
+
+    return data ? (
         <>
               <ApplicationSteps 
                 stepType={`applicant`} 
@@ -288,12 +391,52 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
             <Form 
                     form={lesseeForm}
                     {...layout}  
-                    // colon={false}
-                    // onFinish={handleSubmit}
+                    onFinish={handleSubmit}
                     // scrollToFirstError={true}
-                    // initialValues={{
-                    //     applicationDisclosureAgreement: 'unchecked'
-                    // }}
+                    initialValues={{
+                        lesseeAttributes: {
+                            firstName: data?.lessee?.firstName,
+                            middleName: data?.lessee?.middleName,
+                            lastName: data?.lessee?.lastName,
+                            dateOfBirth: data?.lessee?.dateOfBirth,
+                            ssn: data?.lessee?.ssn,
+                            driversLicenseIdNumber: data?.lessee?.driversLicenseIdNumber,
+                            homePhoneNumber: data?.lessee?.homePhoneNumber,
+                            mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
+                            atAddressMonths: data?.lessee?.atAddressMonths,
+                            atAddressYears: data?.lessee?.atAddressYears,
+                            monthlyMortgage: data?.lessee?.monthlyMortgage,
+                            homeOwnership: data?.lessee?.homeOwnership,
+                            employerName: data?.lessee?.employerName,
+                            employerPhoneNumber: data?.lessee?.employerPhoneNumber,
+                            employmentStatus: data?.lessee?.employmentStatus,
+                            jobTitle: data?.lessee?.jobTitle,
+                            timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
+                            timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
+                            grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
+                            homeAddressAttributes: {
+                                state: data?.lessee?.homeAddress?.state,
+                                street1: data?.lessee?.homeAddress?.street1,
+                                street2: data?.lessee?.homeAddress?.street2,
+                                zipcode : data?.lessee?.homeAddress?.zipcode,
+                                county: data?.lessee?.homeAddress?.county,
+                                cityId: data?.lessee?.homeAddress?.cityId
+                            },
+                            mailingAddressAttributes: {
+                                state: data?.lessee?.mailingAddress?.state,
+                                street1: data?.lessee?.mailingAddress?.street1,
+                                street2: data?.lessee?.mailingAddress?.street2,
+                                zipcode : data?.lessee?.mailingAddress?.zipcode,
+                                county: data?.lessee?.mailingAddress?.county,
+                                cityId: data?.lessee?.mailingAddress?.cityId
+                            },
+                            employmentAddressAttributes: {
+                                id: lessee?.employmentAddress?.id,
+                                city: lessee?.employmentAddress?.city,
+                                state: lessee?.employmentAddress?.state,
+                              }
+                        }
+                    }}
                 >
                     <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 50}}>
 
@@ -311,8 +454,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="First Name" 
                                                 name={['lesseeAttributes', 'firstName']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'First Name is required!' }]}
                                             >  
                                                 <Input placeholder="First Name" className="ant-input-comp"  />
                                             </Form.Item>
@@ -332,8 +473,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Last Name" 
                                                 name={['lesseeAttributes', 'lastName']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'Last Name is required!' }]}
                                             >  
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
@@ -345,16 +484,25 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col> 
                                     </Row>
 
+
+
+
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
                                                     label="Social Security Number" 
                                                     name={['lesseeAttributes', 'ssn']}
-                                                    rules={[{ required: true, message: 'Social Security Number is required!' }]}
                                                 >  
                                                 <Input type="hidden" />
-                                                <SsnInput defaultValue="" form={lesseeForm} lesseeType="lessee"/>
                                             </Form.Item>
+                                        </Col> 
+                                    </Row>
+
+                                    <Row>
+                                        <Col span={24}> 
+                                        <Form.Item>  
+                                            <SsnInput defaultValue={(data?.lessee && data?.lessee?.ssn?.replace(/-/g, "")) || "" } form={lesseeForm} lesseeType="lessee"/>
+                                        </Form.Item>
                                         </Col> 
                                     </Row>
 
@@ -371,7 +519,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Phone Number" 
                                                 name={['lesseeAttributes', `${ phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber' }`]}
-                                                rules={[{ required: true, message: 'Phone Number is required!' }]}
                                                 >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
@@ -401,8 +548,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','street1']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp"  />
                                             </Form.Item>
@@ -420,8 +565,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="ZIP Code" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','zipcode']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                                 validateStatus={zipHomeValidateStatus}
                                                 help={zipHomeErrorMessage}
                                             >  
@@ -437,8 +580,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','state']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -460,8 +601,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="County/Parish" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','county']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'County/Parish is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -483,8 +622,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="City" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','cityId']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -506,8 +643,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Years at Current Address" 
                                                 name={['lesseeAttributes','atAddressYears']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Years at Current Address" />
                                             </Form.Item>
@@ -525,8 +660,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['lesseeAttributes','monthlyMortgage']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
@@ -536,8 +669,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                         <Form.Item 
                                             name={['lesseeAttributes','homeOwnership']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Home Owenership is required!' }]}
                                         >                      
                                             <Radio.Group>
                                             <Radio value={1}>Own</Radio>
@@ -557,7 +688,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['lesseeAttributes', 'mailingAddressAttributes','street1']}
-                                                hasFeedback
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
                                             </Form.Item>
@@ -575,7 +705,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="ZIP Code" 
                                                 name={['lesseeAttributes', 'mailingAddressAttributes','zipcode']}
-                                                hasFeedback
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
                                             >  
@@ -593,7 +722,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'mailingAddressAttributes','state']}
-                                                hasFeedback
                                             >  
                                                 <Select showSearch placeholder="State" {...showMailingState} 
                                                 onSelect={handleMailingStateChange}
@@ -612,7 +740,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="County/Parish" 
                                                 name={['lesseeAttributes', 'mailingAddressAttributes','county']}
-                                                hasFeedback
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -634,7 +761,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         <Form.Item 
                                             label="City" 
                                             name={['lesseeAttributes', 'mailingAddressAttributes','cityId']}
-                                            hasFeedback
                                         >  
                                             <Select 
                                                 showSearch 
@@ -670,13 +796,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             <Col xs={24} sm={24} md={24} lg={24} xl={4}></Col>
                             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
                                 <Card title="Employer">
+                                    { 
+                                        lessee?.employmentAddress && <Form.Item style={{display: 'none'}} name={['lesseeAttributes', 'employmentAddressAttributes','id']} > <Input /> </Form.Item>
+                                    }
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
                                             label="Employer Name" 
                                             name={['lesseeAttributes', 'employerName']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >  
                                                 <Input placeholder="Employer Name"  className="ant-input-comp"  />
                                             </Form.Item>
@@ -687,8 +814,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Phone Number" 
                                             name={['lesseeAttributes', 'employerPhoneNumber']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
@@ -703,8 +828,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="City" 
                                             name={['lesseeAttributes', 'employmentAddressAttributes', 'city']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Input placeholder="City" className="ant-input-comp"  />
                                             </Form.Item>
@@ -715,8 +838,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'employmentAddressAttributes','state']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                     <Select 
                                                         showSearch 
@@ -741,8 +862,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Employment Status" 
                                             name={['lesseeAttributes','employmentStatus']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Employment Status is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -764,8 +883,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Job Title" 
                                             name={['lesseeAttributes', 'jobTitle']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Job Title is required!' }]}
                                             >  
                                                 <Input placeholder="Job Title"  className="ant-input-comp"  />
                                             </Form.Item>
@@ -777,8 +894,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Years Employed" 
                                             name={['lesseeAttributes', 'timeAtEmployerYears']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Years Employed is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Years Employed" />
                                             </Form.Item>
@@ -787,8 +902,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Months Employed" 
                                             name={['lesseeAttributes', 'timeAtEmployerMonths']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Months Employed is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Months Employed" />
                                             </Form.Item>
@@ -799,8 +912,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Gross Monthly Income" 
                                             name={['lesseeAttributes', 'grossMonthlyIncome']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Gross Monthly Income is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Gross Monthly Income" />
                                             </Form.Item>
@@ -809,7 +920,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                 </Card>
 
                                 <div style={{ marginTop: 20, textAlign: `right`}}>
-                                    <Button style={{ marginRight: 10 }}>Save</Button>
+                                    <Button style={{ marginRight: 10 }}  disabled={disableSubmitBtn} htmlType="submit" >
+                                        Save
+                                        
+                                    </Button>
                                     <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
                                     </Button>
@@ -852,7 +966,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
             </div>
         </>
-    )
+    ) : null
 }
 
 export default Applicant

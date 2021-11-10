@@ -23,15 +23,11 @@ interface LeaseCalculator {
     id?: string | number | undefined
 }
 
-interface RootLeaseCalculator {
-    leaseCalculator?: LeaseCalculator
-}
-
 interface Props {
     data?: {
         id: string | number,
         lessee: Lessee,
-        leaseCalculator: RootLeaseCalculator
+        leaseCalculator: LeaseCalculator
     }
 }
 
@@ -42,7 +38,7 @@ export const Summary: React.FC<Props> = ({data}) => {
 
 
     let leaseApplicationId: string | number | undefined = data?.id
-    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.leaseCalculator?.id
+    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
 
     const switchActiveKey = (key:number)=> {
        activeKey == key ? setActiveKey(0): setActiveKey(key)
