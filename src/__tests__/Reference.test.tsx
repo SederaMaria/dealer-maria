@@ -4,7 +4,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Reference from '../components/pages/dealer/Application/Reference';
 import { Form, Input, Table } from 'antd';
 import MaskedInput from 'antd-mask-input'
-import DummyResponse from './get_details.json'
+import DummyResponse from './references.json'
 import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -35,15 +35,14 @@ describe('Reference', () => {
 
 describe('Test case for References', () => {
     let wrapper;
-    const data = DummyResponse;
+    const data = DummyResponse
   
     it('Should Display References', async () => {
       await act(async () => {
           wrapper = shallow(
             <Reference 
-                  data={data} leaseApplicationId={''}            />);
-          expect(wrapper.exists()).toBe(true);
-          
+                leaseApplicationId={''} data={data}  />);
+          expect(wrapper.exists()).toBe(true)
           const form = wrapper.find(Form);
           expect(form.length).toEqual(1);
       });
