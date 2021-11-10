@@ -18,7 +18,6 @@ export const ReferenceRenderer = (props: any) => {
         }
         try {
             let referencesData = await network.GET(`/api/v1/dealers/applications/${leaseApplicationId}/references`)
-            console.log(referencesData)
             setData(referencesData.data)
         } catch (e) {
             setLoading(false)

@@ -40,9 +40,6 @@ interface Props {
 
 export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) => {
 
-
-   console.log("sss") 
-   console.log(data?.references) 
     const [referenceForm] = Form.useForm();
 
     const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
