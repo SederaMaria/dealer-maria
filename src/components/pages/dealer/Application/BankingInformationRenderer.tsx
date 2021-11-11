@@ -1,30 +1,42 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { Spin } from "antd";
 import BankingInformation from './BankingInformation';
-import { network, logger } from '../../../../utils';
-
+import { logger, network } from '../../../../utils';
 
 const BankingInformationRenderer = (props:any) => {
     const leaseApplicationId: string = `${props.match.params.leaseApplicationId}`
-    const [data, setData] = useState<any>('')
+    const [data, setData] = useState<any>()
+    const [loading, setLoading] = useState<boolean>(false)
 
-    const fetchPaymentData = async () => {
-        try {
-            let data = await network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
-            setData(data.data.payment)
-            console.log(`data`, data)
-          } catch (e) {
-            logger.error("fetch banking information Error", e);
-          }
-    }
 
     useEffect(() => {
-        fetchPaymentData()
-    }, [])
+        getApplicationDetails();
+      },[]);
+      
+      const getApplicationDetails = async () => {
+        if (!loading) {
+          setLoading(true)
+        }
+        try {
+            let data = await network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
+            console.log(data.data)
+            setData(data.data)
+        } catch (e) {
+            setLoading(false)
+            logger.error("Error fetching Applicatins", e);
+        }
+        setLoading(false)
+      }
 
-    return (
-        <div>
+
+    return data ? (
+        <Spin 
+        spinning={loading}
+        size='large'
+        tip='Loading...'
+        >
             <BankingInformation leaseApplicationId={leaseApplicationId} data={data} />
-        </div>
-    )
+        </Spin>
+    ) : null
 }
 export default BankingInformationRenderer

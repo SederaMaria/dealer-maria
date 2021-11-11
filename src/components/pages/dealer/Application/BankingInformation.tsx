@@ -16,19 +16,23 @@ const layout = {
     },
   };
 
+  interface Payments {
+        payment_bank_name?: string | number | undefined
+        payment_aba_routing_number?: string | number | undefined
+        payment_account_number?: string | number | undefined
+        payment_account_type?: string | number | undefined
+    }
+
   interface Props {
     leaseApplicationId?: string | undefined
-    data? : string | number | any
+    data?: {
+        payment?: Payments
+    }
 }
 
 const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
 
-    const {
-        payment_bank_name,
-        payment_aba_routing_number,
-        payment_account_number,
-        payment_account_type
-    } = data
+    console.log(data?.payment)
 
     const [bankInfo, setBankinfo] = useState<Array<any>>([])
 
@@ -38,6 +42,27 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
         paymentAbaRoutingNumber: ""
     })
 
+    // useEffect(() => {
+    //     try {
+    //         network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
+    //         .then(res=>{
+    //             setLabel({
+    //                 bank_name: res.data.payment.payment_bank_name,
+    //                 account_number: res.data.payment.payment_account_number,
+    //                 routing_number: res.data.payment.payment_aba_routing_number,
+    //                 account_type: res.data.payment.payment_account_type
+    //             })
+
+    //             setApp_identifier(res.data.application_identifier)
+    //         })  
+    //         .catch(e=>{
+    //             console.log(`no data error test`, e)
+    //         })
+    
+    //       } catch (e) {
+    //         logger.error("fetch banking information Error", e);
+    //       }
+    // }, [])
 
     const handleChange = (e:any) => {
         const {name, value} = e.target
@@ -85,39 +110,41 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
                     <Content id='main-content'>
                     <div className="bank-info-container">
                         <Card type="inner" title="Lessee Banking Information">
-                            <Form {...layout}
+                            <Form 
+                                {...layout}
                                 initialValues={{
-                                    paymentBankName: payment_bank_name,
-                                    paymentAbaRoutingNumber: payment_aba_routing_number,
-                                    paymentAccountNumber: payment_account_number,
-                                    paymentAccountType: payment_account_type
-                                }}
-                            >
+                                    payment_bank_name: data?.payment?.payment_bank_name,
+                                    payment_aba_routing_number: data?.payment?.payment_aba_routing_number,
+                                    payment_account_number : data?.payment?.payment_account_number,
+                                    payment_account_type : data?.payment?.payment_account_type,
+                                }}   
+                                    >
                                 <Row gutter={16}>
                                     <Col xs={24} sm={12} md={6}>
-                                        <Form.Item name="paymentBankName" className="largeInput" label="Bank Name">
-                                            <Input onChange={handleChange} /> 
+                                        <Form.Item className="largeInput" label="Bank Name" name="payment_bank_name" >
+                                            <Input name="payment_bank_name" onChange={handleChange} placeholder={label.bank_name} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item name="paymentAbaRoutingNumber" className="largeInput" label="ABA Routing Number">
-                                            <Input  onChange={handleChange} /> 
+                                        <Form.Item className="largeInput" label="ABA Routing Number" name="payment_aba_routing_number" >
+                                            <Input name="payment_aba_routing_number" onChange={handleChange} placeholder={label.routing_number} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item name="paymentAccountNumber" className="largeInput" label="Account Number">
-                                            <Input onChange={handleChange} /> 
+                                        <Form.Item className="largeInput" label="Account Number" name="payment_account_number" >
+                                            <Input name="payment_account_number" onChange={handleChange} placeholder={label.account_number} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item name="paymentAccountType" className="largeInput" label="Checking/Savings Account">
-                                            <Select>
-                                                <Option  value="checking">Checking</Option>
-                                                <Option value="savings">Savings</Option>    
-                                            </Select>
+                                        <Form.Item className="largeInput" label="Checking/Savings Account" name="payment_account_type" >
+                                            <select name="payment_account_type" className="select-option" onChange={handleChange}>
+                                              <option value="">{label.account_type ? label.account_type : "Please Select"}</option>
+                                              <option value="checking">Checking</option>
+                                              <option value="savings">Savings</option>
+                                            </select>
                                         </Form.Item>    
                                     </Col> 
                                 </Row>
