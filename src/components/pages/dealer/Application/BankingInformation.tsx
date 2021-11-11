@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { network, logger } from '../../../../utils';
-import { Card, Row, Col, Form, Input, Button, Layout } from 'antd';
+import { Card, Row, Col, Form, Input, Button, Layout, Select } from 'antd';
 import { MainHeader, BankSider, MainBreadcrumb } from '../../../layouts'
 import '../../../layouts/styles/BankInfo.css'
 
 const { Content } = Layout;
+const {Option} = Select;
 
 const layout = {
     labelCol: {
@@ -17,66 +18,41 @@ const layout = {
 
   interface Props {
     leaseApplicationId?: string | undefined
+    data? : string | number | any
 }
 
-const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
+const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
+
+    const {
+        payment_bank_name,
+        payment_aba_routing_number,
+        payment_account_number,
+        payment_account_type
+    } = data
 
     const [bankInfo, setBankinfo] = useState<Array<any>>([])
 
     const [currentInfo, setCurrentInfo] = useState<any>({
-
-        payment_bank_name: "",
-        payment_account_number: "",
-        payment_aba_routing_number: "",
-        payment_account_type: ""
-        
+        paymentBankName: "",
+        paymentAccountNumber: "",
+        paymentAbaRoutingNumber: ""
     })
 
-    const [app_identifier, setApp_identifier] = useState(leaseApplicationId)
-
-    const [label, setLabel] = useState<any>({
-        bank_name:"your bank name",
-        account_number: "your account number",
-        routing_number: "your routing number"
-    })
-
-    useEffect(() => {
-        try {
-            network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
-            .then(res=>{
-                setLabel({
-                    bank_name: res.data.payment.payment_bank_name,
-                    account_number: res.data.payment.payment_account_number,
-                    routing_number: res.data.payment.payment_aba_routing_number,
-                    account_type: res.data.payment.payment_account_type
-                })
-
-                setApp_identifier(res.data.application_identifier)
-            })  
-            .catch(e=>{
-                console.log(`no data error test`, e)
-            })
-    
-          } catch (e) {
-            logger.error("fetch banking information Error", e);
-          }
-    }, [])
 
     const handleChange = (e:any) => {
         const {name, value} = e.target
         setCurrentInfo({...currentInfo, [name]:value})
-        console.log(`currentInfo`, currentInfo)  
     }
 
     const handleClick = () => {
         
-        if (!currentInfo.payment_bank_name || !currentInfo.payment_account_number || !currentInfo.payment_aba_routing_number || !currentInfo.payment_account_type) return;
+        if (!currentInfo.paymentBankName || !currentInfo.paymentAccountNumber || !currentInfo.paymentAbaRoutingNumber || !currentInfo.paymentAccountType) return;
         
         setCurrentInfo({
-            payment_bank_name: currentInfo.payment_bank_name,
-            payment_account_number: currentInfo.payment_account_number,
-            payment_aba_routing_number: currentInfo.payment_aba_routing_number,
-            payment_account_type: currentInfo.payment_account_type,
+            paymentBankName: currentInfo.paymentBankName,
+            paymentAccountNumber: currentInfo.paymentAccountNumber,
+            paymentAbaRoutingNumber: currentInfo.paymentAbaRoutingNumber,
+            paymentAccountType: currentInfo.paymentAccountType,
         })
 
         try {
@@ -89,6 +65,7 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
           setBankinfo([...bankInfo, currentInfo])
     }
 
+    console.log(`payment.bank_name`, payment_bank_name)
     return (
         <> 
             <MainHeader />
@@ -100,7 +77,7 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                                 items={[
                                     { text: " Dealers", link_type: "linkto", link: "#" },
                                     { text: " Lease Application", link_type: "linkto", link: "#" },
-                                    { text:  `${app_identifier}`, link_type: "linkto", link: "#" },
+                                    { text:  `1234`, link_type: "linkto", link: "#" },
                                     { text: " Bank Information", link_type: "linkto", link: "#" },
                                 ]}
                                 />
@@ -108,33 +85,39 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId}) => {
                     <Content id='main-content'>
                     <div className="bank-info-container">
                         <Card type="inner" title="Lessee Banking Information">
-                            <Form {...layout}>
+                            <Form {...layout}
+                                initialValues={{
+                                    paymentBankName: payment_bank_name,
+                                    paymentAbaRoutingNumber: payment_aba_routing_number,
+                                    paymentAccountNumber: payment_account_number,
+                                    paymentAccountType: payment_account_type
+                                }}
+                            >
                                 <Row gutter={16}>
                                     <Col xs={24} sm={12} md={6}>
-                                        <Form.Item className="largeInput" label="Bank Name">
-                                            <Input name="payment_bank_name" onChange={handleChange} placeholder={label.bank_name} /> 
+                                        <Form.Item name="paymentBankName" className="largeInput" label="Bank Name">
+                                            <Input onChange={handleChange} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item className="largeInput" label="ABA Routing Number">
-                                            <Input name="payment_aba_routing_number" onChange={handleChange} placeholder={label.routing_number} /> 
+                                        <Form.Item name="paymentAbaRoutingNumber" className="largeInput" label="ABA Routing Number">
+                                            <Input  onChange={handleChange} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item className="largeInput" label="Account Number">
-                                            <Input name="payment_account_number" onChange={handleChange} placeholder={label.account_number} /> 
+                                        <Form.Item name="paymentAccountNumber" className="largeInput" label="Account Number">
+                                            <Input onChange={handleChange} /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item className="largeInput" label="Checking/Savings Account">
-                                            <select name="payment_account_type" className="select-option" onChange={handleChange}>
-                                              <option value="">{label.account_type ? label.account_type : "Please Select"}</option>
-                                              <option value="checking">Checking</option>
-                                              <option value="savings">Savings</option>
-                                            </select>
+                                        <Form.Item name="paymentAccountType" className="largeInput" label="Checking/Savings Account">
+                                            <Select>
+                                                <Option  value="checking">Checking</Option>
+                                                <Option value="savings">Savings</Option>    
+                                            </Select>
                                         </Form.Item>    
                                     </Col> 
                                 </Row>
