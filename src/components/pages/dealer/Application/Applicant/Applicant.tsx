@@ -158,21 +158,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
 
 
-    const [makesOptions, setMakesOptions] = useState([])
-    const [yearsOptions, setYearsOptions] = useState([])
-    const [modelsOptions, setModelsOptions] = useState([])
-    const [mileageRangeOptions, setMileageRangeOptions] = useState([])
-    const [creditTierOptions, setCreditTierOptions] = useState([])
-    
-
-    const [showMakeState, setShowMakeState] = useState(null)
-    const [showYearState, setShowYearState] = useState(null)
-    const [showModelState, setShowModelState] = useState(null)
-    const [showMileageRangeState, setShowMileageRangeState] = useState(null)
-    const [showCreditTierState, setShowCreditTierState] = useState(null)
-
-
-
     const submitApplication = async (values: any) => {
         try {
            await network.PUT(`/api/v1/dealers/update-details?id=${leaseApplicationId}`, values);
@@ -213,8 +198,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
-                    console.log(response.data.state)
-                    console.log("response.data.state")
                     setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
                     setLesseeHomeCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
@@ -255,8 +238,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                     setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeMailCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
                     setLesseeMailCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
-                    console.log(lesseeHomeStateOptions)
-                    console.log("BALASS")
                     setShowMailingState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {

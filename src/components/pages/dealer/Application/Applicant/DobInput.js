@@ -48,7 +48,6 @@ export default function DobInput ({dateFormat, form}) {
   useEffect(() => {
     var date = moment(new Date(form.getFieldValue(['lesseeAttributes', 'dateOfBirth'])), dateFormat, true);
     let dateString = date.format('MM/DD/YYYY');
-    console.log(dateString)
     setDateObj(date);
     setDateString(dateString);
     validateInput(dateString);

@@ -155,20 +155,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
     const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
 
 
-    const [makesOptions, setMakesOptions] = useState([])
-    const [yearsOptions, setYearsOptions] = useState([])
-    const [modelsOptions, setModelsOptions] = useState([])
-    const [mileageRangeOptions, setMileageRangeOptions] = useState([])
-    const [creditTierOptions, setCreditTierOptions] = useState([])
-    
-
-    const [showMakeState, setShowMakeState] = useState(null)
-    const [showYearState, setShowYearState] = useState(null)
-    const [showModelState, setShowModelState] = useState(null)
-    const [showMileageRangeState, setShowMileageRangeState] = useState(null)
-    const [showCreditTierState, setShowCreditTierState] = useState(null)
-
-
 
     const submitApplication = async (values: any) => {
         try {
@@ -210,11 +196,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
 
             await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
                 if (response.data.is_state_active_on_calculator) {
-                
-
-                    let formatOpt = formatOptions({ options: (response.data.state || []), type: 'state' })
-                    setLesseeHomeStateOptions(formatOpt)
-                    console.log("settt formatOpt")
+                    setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeHomeCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
                     setLesseeHomeCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
                     setShowHomeState({ "open": true })
@@ -391,7 +373,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                     form={lesseeForm}
                     {...layout}  
                     onFinish={handleSubmit}
-                    // scrollToFirstError={true}
                     initialValues={{
                         colesseeAttributes: {
                             firstName: data?.colessee?.firstName,
@@ -588,8 +569,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     >
                                                 {
                                                     lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
-                                                    console.log("BBALLASS")
-                                                    console.log(lesseeHomeStateOptions)
                                                     return <Option key={index} value={`${value}`}>{label}</Option>
                                                     })
                                                 }
