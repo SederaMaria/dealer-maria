@@ -255,6 +255,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                     setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
                     setLesseeMailCountyOptions(formatOptions({ options: (response.data.county || []), type: 'county' }))
                     setLesseeMailCityOptionsData(formatOptions({ options: (response.data.city || []), type: 'city' }))
+                    console.log(lesseeHomeStateOptions)
+                    console.log("BALASS")
                     setShowMailingState({ "open": true })
                 }
                 if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
@@ -361,7 +363,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         setLesseeMailStateOptions(data?.lessee?.mailingAddress?.stateOptions)
         setLesseeMailCountyOptions(data?.lessee?.mailingAddress?.countyOptions)
         setLesseeMailCityOptions(data?.lessee?.mailingAddress?.cityOptions)
-    });
+    }, [data]);
 
 
     const handleTabClosing = () => {
