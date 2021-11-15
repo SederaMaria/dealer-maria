@@ -19,7 +19,6 @@ function ApplicantRenderer(props: any)  {
         }
         try {
             let data = await network.GET(`/api/v1/dealers/get-details?id=${leaseApplicationId}`)
-            console.log(data.data.data.leaseApplication)
             setData(data.data.data.leaseApplication)
         } catch (e) {
             setLoading(false)
@@ -29,7 +28,7 @@ function ApplicantRenderer(props: any)  {
       }
 
 
-    return (
+    return data ? (
         <Spin 
         spinning={loading}
         size='large'
@@ -37,7 +36,7 @@ function ApplicantRenderer(props: any)  {
         >
             <Applicant data={data}/>
         </Spin>
-    )
+    ) : null
 }
 
 export default ApplicantRenderer

@@ -34,10 +34,21 @@
 
 .input {
   flex: 0 1 250px;
+  margin-left: 15px;
+  margin-top: 50px;
+} 
+
+.dragger-form {
+  display: flex;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255);
+  border: 1px solid rgba(168, 165, 165, 0.562);
+  border-radius: 5px;
 }
 
-
-
+.card-content {
+  width: 55%;
+}
 
 
 

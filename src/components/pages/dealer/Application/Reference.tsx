@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Row,
     Col,
@@ -7,65 +7,60 @@ import {
     Form,
     Input,
     Button,
-    Table
+    Table,
+    message
 } from 'antd';
 
-import { MainHeader, MainBreadcrumb } from '../../../layouts';
-import { ReferenceSider } from '../../../layouts/ReferenceSider';
+import { MainHeader, MainBreadcrumb, ReferenceSider }  from '../../../layouts';
 import '../../../layouts/styles/Reference.css'
 import MaskedInput from 'antd-mask-input'
+import { logger, network } from '../../../../utils';
 
 const { Content } = Layout;
 
-interface Applications {
-    first_name: string;
-    last_name: string;
-    phone_number: number;
+interface References {
+    name: string;
+    id: string | number;
+    firstName: string;
+    lastName: string;
+    phoneNumber: number;
     city: string;
     state: string
 
 }
 
-const dataSource = [
-    {
-        first_name: 'Alvin',
-        last_name: 'Testco',
-        phone_number: 8042221111,
-        city: '2013 FLHX Street Glide',
-        state: 'State'
-    },
-    {
-        first_name: 'Debbie',
-        last_name: 'Delinquent',
-        phone_number: 8042221111,
-        city: '2018 XL883L',
-        state: 'State'
-    }
-
-]
-
 
 interface Props {
-    leaseApplicationId?: string | undefined
+    data?: {
+        references: References[];
+    }
+    leaseApplicationId: string | number;
 }
 
-export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
+
+export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) => {
+
+    const [referenceForm] = Form.useForm();
+
+    const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
+    const [hasSubmitError, setHasSubmitError] = useState(false)
+    const [submitSuccess, setSubmitSuccess] = useState(false)
 
     const columns = [
         {
             title: 'First Name',
-            dataIndex: 'first_name',
-            key: 'first_name'
+            dataIndex: 'firstName',
+            key: 'firstName'
         },
         {
             title: 'Last Name',
-            dataIndex: 'last_name',
-            key: 'last_name'
+            dataIndex: 'lastName',
+            key: 'lastName'
         },
         {
             title: 'Phone Number',
-            dataIndex: 'phone_number',
-            key: 'phone_number'
+            dataIndex: 'phoneNumber',
+            key: 'phoneNumber'
         },
         {
             title: 'City',
@@ -78,14 +73,36 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
             key: 'state'
         }
     ]
-    
 
     const layout = {
         labelCol: { span: 24 },
         wrapperCol: { span: 24 },
     }
+
+    const handleSubmit = async (values: any) => {
+        values = { ...values };
+        setDisableSubmitBtn(true)
+        submitApplication(values)
+    }
+
+    const submitApplication = async (values: any) => {
+        try {
+           await network.POST(`/api/v1/dealers/applications/${leaseApplicationId}/references`, values);
+           setHasSubmitError(false)
+           setDisableSubmitBtn(true)
+           setSubmitSuccess(true)
+           message.success("Reference Saved")
+           referenceForm.resetFields();
+        } catch (e) {
+            
+          logger.error("Request Error", e);
+          message.error("Error saving reference");
+          setHasSubmitError(true)
+          setDisableSubmitBtn(false)
+        }
+        setDisableSubmitBtn(false)
+      }
     
-    const inputState = useState({state:''})
 
     return (
         <>
@@ -106,20 +123,24 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                     <Content id='main-content'>
                         <div className="reference-container">
                             <Card type="inner" title="Add Reference">
-                            <Form className="input" {...layout}>
+                                <Form
+                                    form={referenceForm}
+                                    onFinish={handleSubmit}
+                                    className="input" {...layout}
+                                >
                                 <Row gutter={14}>
-                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="First Name">
+                                <Col className= "column-width" xs={24} sm={16} md={4}> 
+                                        <Form.Item label="First Name" name="firstName" className="label">
                                             <Input placeholder="First Name" />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Last Name">
+                                        <Form.Item label="Last Name" name="lastName" className="label">
                                             <Input placeholder="Last Name" />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Phone Number">
+                                        <Form.Item label="Phone Number" name="phoneNumber" className="label">
                                             <MaskedInput
                                                 mask="(111) 111-1111"
                                                 placeholder="Phone Number"
@@ -127,13 +148,13 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="City">
+                                        <Form.Item label="City" name="city" className="label">
                                             <Input placeholder="City" />
                                         </Form.Item>
                                     </Col>
 
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="State">
+                                        <Form.Item label="State" name="state" className="label">
                                             <MaskedInput 
                                                 mask ="AA"
                                                 placeholder="State"                             
@@ -142,13 +163,13 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                                     </Col>
                                     
                                 </Row>
-                            </Form>
 
                                 <Row className="create-reference">
                                     <Col>
-                                        <Button id="create-reference" type="primary">Create Reference</Button>
+                                        <Button type="primary" htmlType="submit" disabled={disableSubmitBtn}>Create Reference</Button>
                                     </Col>
                                 </Row>
+                                </Form>
 
                             </Card>
 
@@ -157,10 +178,11 @@ export const Reference: React.FC<Props> = ({leaseApplicationId}) => {
                         <div className="reference-container">
                             <Card type="inner" title="References">
                                 <Table
-                                    dataSource={dataSource}
+                                    rowKey={(val) => val.id}
+                                    dataSource={data?.references}
                                     columns={columns}
                                     pagination={false}
-                                />;
+                                />
                             </Card>
 
                         </div>
