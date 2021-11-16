@@ -17,28 +17,24 @@ const layout = {
   };
 
   interface Payments {
-        payment_bank_name?: string | number | undefined 
-        payment_aba_routing_number?: string | number | undefined
-        payment_account_number?: string | number | undefined
-        payment_account_type?: string | number | undefined
-        application_identifier?: number | undefined
+        applicationIdentifier?: string | number | undefined 
+        payment: any
     }
 
 
   interface Props {
     leaseApplicationId?: string | undefined
     data?: {
-        payment?: Payments
-        application_identifier? : Payments
+        leaseApplication?: Payments
     }
 }
 
 const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
-    console.log(`data`, data)
+    
     const [bankInfo, setBankinfo] = useState<Array<any>>([])
 
-    const appIdentifier = (data?.application_identifier) ? (data?.application_identifier) : leaseApplicationId
-
+    const appIdentifier = (data?.leaseApplication?.applicationIdentifier) ? (data?.leaseApplication?.applicationIdentifier) : leaseApplicationId
+    
     const onFinish = (values: any) =>{
         try {
             network.PUT(`/api/v1/dealers/${leaseApplicationId}/banking-information`, values)
@@ -72,10 +68,10 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
                             <Form 
                                 {...layout}
                                 initialValues={{
-                                    paymentBankName: data?.payment?.payment_bank_name,
-                                    paymentAbaRoutingNumber: data?.payment?.payment_aba_routing_number,
-                                    paymentAccountNumber : data?.payment?.payment_account_number,
-                                    paymentAccountType : data?.payment?.payment_account_type,
+                                    paymentBankName: data?.leaseApplication?.payment.paymentBankName,
+                                    paymentAbaRoutingNumber: data?.leaseApplication?.payment.paymentAbaRoutingNumber,
+                                    paymentAccountNumber : data?.leaseApplication?.payment.paymentAccountNumber,
+                                    paymentAccountType : data?.leaseApplication?.payment.paymentAccountType,
                                 }}  
                                 onFinish = {onFinish} 
                             >
