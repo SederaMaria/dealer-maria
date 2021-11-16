@@ -19,7 +19,6 @@ const BankingInformationRenderer = (props:any) => {
         }
         try {
             let data = await network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
-            console.log(data.data)
             setData(data.data)
         } catch (e) {
             setLoading(false)
