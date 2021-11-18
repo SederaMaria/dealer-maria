@@ -66,7 +66,6 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
     const [vinYear, setVinYear] = useState<string | number | undefined>("")
     const [vinModel, setVinModel] = useState<string | undefined>("")
 
-    
 
     const handleVin = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length === 17){
