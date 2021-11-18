@@ -66,7 +66,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
     const [vinYear, setVinYear] = useState<string | number | undefined>("")
     const [vinModel, setVinModel] = useState<string | undefined>("")
 
-    const [vinNotFound, setVinNotFound] = useState('')
+    
 
     const handleVin = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length === 17){
@@ -85,12 +85,6 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                     setVinModel(res.data.vehicleInfo.model[0])
                     setShowViaVIN(true)
                     setShowBikeForm(true)
-                }).catch(e => {
-                    console.log(e.response.status)
-                    if (e && e.response.status == 404){
-                        console.log("VIN not found")
-                        setVinNotFound("VIN not found")
-                    }
                 })
             } catch (e) {
                 logger.error("Error verifying vin", e);
@@ -254,7 +248,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                         >  
     
                                             <Input allowClear maxLength={17} onChange={(e) => handleVin(e)} style={{marginBottom: 10}} />
-                                            <Text style={{color: `red`, fontWeight: `bolder`}}>{vinNotFound}</Text>
+                                            
                                             <Button type="link" block onClick={handleNoVin} style={{textAlign: `left`, padding: `4px 0px`}}>
                                                 I don't know the VIN 
                                             </Button>
