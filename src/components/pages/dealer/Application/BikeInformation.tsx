@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent } from 'react'
-import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input, message } from "antd";
+import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input } from "antd";
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
