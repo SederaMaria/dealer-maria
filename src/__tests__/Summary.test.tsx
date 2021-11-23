@@ -6,24 +6,10 @@ import Summary from '../components/pages/dealer/Application/Summary';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('test the edit and expand button', ()=>{
-    it('should render a button', ()=> {
+
+    test('expanded component renders content correctly', ()=>{
         const wrapper = shallow(<Summary />);
-        const editButton = wrapper.find('#edit');
-        const expandButton = wrapper.find('#expand');
-
-        expect(editButton.text()).toMatch(/Edit/);
-        expect(expandButton.text()).toMatch(/Expand/);
-
+        const element = wrapper.find('#locateTest').text();
+        expect(element).toEqual('First Name: ');
     })
-
-    test('when clicked, it expands and render a content', ()=>{
-        const wrapper = shallow(<Summary />);
-        const expandButton = wrapper.find('#expand');
-        expandButton.simulate('click');
-        const theader = wrapper.find('.expand-test').text();
-
-        expect(theader).toEqual('First Name');
-    })
-
-
 })

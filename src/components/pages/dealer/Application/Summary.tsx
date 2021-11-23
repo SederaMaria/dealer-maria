@@ -85,7 +85,7 @@ export const Summary: React.FC<Props> = ({data}) => {
                               <Panel header="Applicant" key="1" style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/applicant`}><Tag>Edit</Tag></Link>}>
                                   <div className="applicant-elements-above">
                                       <Card title="Personal">
-                                        <p><em>First Name:</em> {data?.lessee?.firstName}</p><Divider dashed />
+                                        <p id="locateTest"><em>First Name:</em> {data?.lessee?.firstName}</p><Divider dashed />
                                         <p><em>Middle Name:</em> {data?.lessee?.middleName}</p><Divider dashed />
                                         <p><em>Last Name:</em> {data?.lessee?.lastName}</p><Divider dashed />
                                         <p><em>Date of Birth(mm/dd/yyyy):</em> {data?.lessee?.dateOfBirth}</p><Divider dashed />
