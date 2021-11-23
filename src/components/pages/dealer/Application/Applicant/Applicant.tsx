@@ -22,7 +22,7 @@ const layout = {
   };
   
 
-  interface Address {
+  export interface Address {
     id?: number | undefined
     state? : string | undefined
     street1? : string | undefined
@@ -35,14 +35,14 @@ const layout = {
     stateOptions? : OptionData | any
   }
 
-  interface employmentAddress {
+ export interface employmentAddress {
       id?: number | undefined
       city? : string | undefined
       state? : string | undefined 
   }
 
 
-  interface Lessee {
+export interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
     lastName?: string | undefined
@@ -112,7 +112,6 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 
 
 export const Applicant: React.FC<Props> = ({data}: Props) => {
-
 
     const { lessee } = data || {};
 

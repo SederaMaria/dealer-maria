@@ -40,7 +40,7 @@ interface Props {
 
 export const Calculator: React.FC<Props> = ({data}: Props) => {
 
-
+    
     interface CalculatorDataProps {
         nadaRental?: string,
         purchaseOption?: string,
