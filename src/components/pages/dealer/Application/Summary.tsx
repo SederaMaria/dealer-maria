@@ -7,7 +7,7 @@ import ApplicationSteps from './ApplicationSteps';
 import { Lessee as SummaryLessee } from './Applicant/Applicant';
 import '../../../layouts/styles/Summary.css';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Content } = Layout;
 const { Panel } = Collapse;
 
@@ -21,11 +21,19 @@ interface Props {
         lessee: SummaryLessee,
         colessee: SummaryLessee,
         leaseCalculator: LeaseCalculator
-    }
+    }, 
+    label?: any
+}
+
+const MotorSummary: React.FC<Props>  = ({label, children }) => {
+  return <div>         
+    <p><Text style={{color: "rgba(0, 0, 0, 0.65)", fontWeight: 700, fontSize: "1.1em"}}>{label}</Text></p>
+    <p>{children}</p>
+    </div>
 }
 
 export const Summary: React.FC<Props> = ({data}) => {
-
+    console.log(`data the calculator`, data)
     let leaseApplicationId: string | number | undefined = data?.id
     let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
 
@@ -40,46 +48,29 @@ export const Summary: React.FC<Props> = ({data}) => {
             <div style={{ margin: `20px 100px` }}>
                 <div style={{ textAlign: `center`,  marginBottom: 20}}>
                     <Title level={2}> Summary </Title>
-
                     <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 50}}>
-                        <Row gutter={[16, 40]}>
-                            <Col span={5} style={{ textAlign: `center`}}>
-                                <Avatar shape="square" size={150} style={{marginLeft:`15px`}} icon={<UserOutlined />} />
-                            </Col>
-                            <Col lg = {{span:19}} style={{ textAlign: `center`, marginTop: `3%`}}>
-                                <Row>
-                                    <Col span={5}><b>Make</b></Col>
-                                    <Col span={6}><b>Model</b></Col>
-                                    <Col span={3}><b>Year</b></Col>
-                                    <Col span={5}><b>Total Sales Price</b></Col>
-                                    <Col span={4}><b>Term</b></Col>
-                                </Row>
-                                <Row>
-                                    <Col span={5}><p>Harley-Davidson</p></Col>
-                                    <Col span={6}><p>XL 1200CX Roadster</p></Col>
-                                    <Col span={3}><p>2019</p></Col>
-                                    <Col span={5}><p>1000</p></Col>
-                                    <Col span={4}><p>1000</p></Col>
-                                </Row>
-
-                                <Row  style={{ marginTop: `3%`}}>
-                                    <Col span={5}><b>Monthly Base Payment</b></Col>
-                                    <Col span={6}><b>Monthly Payment</b></Col>
-                                    <Col span={3}><b>Monthly Tax</b></Col>
-                                    <Col span={5}><b>Total Monthly Payment</b></Col>
-                                    <Col span={4}><b>Funding Breakdown</b></Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={5}><p>1000</p></Col>
-                                    <Col span={6}><p>1000</p></Col>
-                                    <Col span={3}><p>100</p></Col>
-                                    <Col span={5}><p>1000</p></Col>
-                                    <Col span={4}><p>1000</p></Col>
-                                </Row>
-
-                            </Col>
-                        </Row>
+                        <div id="motor-content">
+                            <div>
+                                <Avatar shape="square" size={150} style={{marginLeft:`35px`}} icon={<UserOutlined />} />
+                            </div>
+                            <div className="motor-details">
+                                <div className="motor-summary">
+                                    <MotorSummary label="Make">N/A</MotorSummary>
+                                    <MotorSummary label="Model">N/A</MotorSummary>
+                                    <MotorSummary label="Year">N/A</MotorSummary>
+                                    <MotorSummary label="Total Sales Price">N/A</MotorSummary>
+                                    <MotorSummary label="Term">N/A</MotorSummary>
+                                </div>
+                                <div className="motor-summary">
+                                    <MotorSummary label="Make">N/A</MotorSummary>
+                                    <MotorSummary label="Model">N/A</MotorSummary>
+                                    <MotorSummary label="Year">N/A</MotorSummary>
+                                    <MotorSummary label="Total Sales Price">N/A</MotorSummary>
+                                    <MotorSummary label="Term">N/A</MotorSummary>
+                                </div>
+                               
+                            </div>
+                        </div>
                         <div className="collapse-container">
                             <Collapse>
                               <Panel header="Applicant" key="1" style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/applicant`}><Tag>Edit</Tag></Link>}>
