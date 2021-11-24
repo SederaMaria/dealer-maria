@@ -20,7 +20,6 @@ function SummaryRenderer(props: any) {
         }
         try {
             let data = await network.GET(`/api/v1/dealers/get-details?id=${leaseApplicationId}`)
-            console.log(data.data.data.leaseApplication)
             setData(data.data.data.leaseApplication)
         } catch (e) {
             setLoading(false)

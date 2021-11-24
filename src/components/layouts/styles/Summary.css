@@ -1,25 +1,37 @@
-.edit-expand-buttons {
-    width: 31%;
-    margin-top: 1.5%;
-   }
-    .ant-collapse-header {
-     display: none;
-   }
-   
-   .ant-collapse, .ant-collapse-content, .ant-collapse-content-box {
-     border: none;
-   }
-   
-   .ant-collapse > .ant-collapse-item {
-     border-bottom: none;
-   }
-   
-   .personal, .address {
-     border: 2px solid black;
-     border-radius: 2px;
-     padding: 7px;
-   }
-   
-   .address, .address-down {
-     margin-top: 2%;
-   }
+html,body{
+  height:100%;
+}
+
+.collapse-container {
+  padding: 15px;
+}
+
+.applicant-elements-below, .applicant-elements-above {
+  display: flex;
+  justify-content: center;
+}
+
+.applicant-elements-above > * {
+  width: 33%;
+  margin: 0 1%
+}
+
+.applicant-elements-below > * {
+  width: 35%;
+  margin: 2% 1%;
+}
+
+.motor-details {
+  width: 75%;  
+  margin-top: 1%;
+}
+
+.motor-summary {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2%;
+}
+
+#motor-content {
+  display: flex;
+}
