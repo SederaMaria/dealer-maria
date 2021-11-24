@@ -158,9 +158,6 @@ const menu = (actionPermission: ActionPermission, record: Applications) => {
             <Link to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
           </Menu.Item>
       }
-      <Menu.Item>
-        <Link to={`/applications/${record.id}/references`}>View / Add References</Link>
-      </Menu.Item>
       {
         !actionPermission.expired &&
           <Menu.Item>
