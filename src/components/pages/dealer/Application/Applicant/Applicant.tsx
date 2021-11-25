@@ -65,6 +65,7 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
+    motorCycleLicence? : string | undefined
 
 }
 
@@ -109,10 +110,8 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 }
 
 
-
-
 export const Applicant: React.FC<Props> = ({data}: Props) => {
-
+    console.log(`incoming-data`, data)
     const { lessee } = data || {};
 
     const [lesseeForm] = Form.useForm();
@@ -396,6 +395,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
+                            motorCycleLicence: data?.lessee?.motorCycleLicence,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -466,9 +466,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col> 
                                     </Row>
 
-
-
-
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
@@ -490,8 +487,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
                                     <Row>
                                         <Col span={24}> 
-                                            <Form.Item label="Driver's License Number" name={['lesseeAttributes', 'driversLicenseIdNumber']}>  
-                                                <InputNumber placeholder="Driver's License Number"/>
+                                            <Form.Item 
+                                            label="Motorcycle License ?" 
+                                            name={['lesseeAttributes','motorCycleLicence']}
+                                            >  
+                                                <Select placeholder="Please select">
+                                                  <Option  value="yes">Yes</Option>
+                                                  <Option value="no">No</Option>
+                                                </Select>
                                             </Form.Item>
                                         </Col> 
                                     </Row>
