@@ -7,6 +7,7 @@ import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
+import { AnyTxtRecord } from 'dns';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -65,6 +66,7 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
+    firstTimeRider?: boolean | string | AnyTxtRecord
 
 }
 
@@ -396,6 +398,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
+                            firstTimeRider: data?.lessee?.firstTimeRider,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -518,6 +521,20 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Radio value={1}>Mobile</Radio>
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
+                                        </Col> 
+                                    </Row>
+
+                                    <Row>
+                                        <Col span={24}> 
+                                            <Form.Item 
+                                            label="First Time Rider ?" 
+                                            name={['lesseeAttributes','firstTimeRider']}
+                                            >  
+                                            <Select placeholder="Please select">
+                                              <Option  value="yes">Yes</Option>
+                                              <Option value="no">No</Option>
+                                            </Select>
+                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
