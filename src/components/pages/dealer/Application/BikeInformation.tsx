@@ -197,11 +197,6 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
         setShowCreditTierState({ "open": true })
     }
 
-    const handleCreditTierStateChange = () => {
-        hideBikeSelectOptions()
-
-    }
-
 
       const formatOptions = (options: Object[], type?: string) => {
         let newOptions: Array<object> = [];
@@ -421,29 +416,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                 </Form.Item>
                                             </Col> 
                                         </Row>
-                                        <Row>
-                                            <Col span={24}> 
-                                                <Form.Item 
-                                                label="Credit Tier" 
-                                                name={['leaseCalculatorAttributes', 'creditTier']} 
-                                                rules={[{ required: true, message: 'Credit Tier is required!' }]}
-                                                >  
-                                                    <Select 
-                                                        showSearch 
-                                                        placeholder="Credit Tier" 
-                                                        {...showCreditTierState}
-                                                        onSelect={handleCreditTierStateChange}
-                                                        onBlur={hideBikeSelectOptions}
-                                                        >
-                                                        {
-                                                            creditTierOptions && creditTierOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${value}`}>{label}</Option>
-                                                            })
-                                                        }
-                                                    </Select>
-                                                </Form.Item>
-                                            </Col> 
-                                        </Row>
+                                    
                                     </div>
                                 }
                             </Card>
