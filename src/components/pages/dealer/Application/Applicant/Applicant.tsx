@@ -492,8 +492,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             name={['lesseeAttributes','motorcycleLicence']}
                                             >  
                                                 <Select placeholder="Please select">
-                                                  <Option  value="yes">Yes</Option>
-                                                  <Option value="no">No</Option>
+                                                  <Option  value="1">Yes</Option>
+                                                  <Option value="0">No</Option>
                                                 </Select>
                                             </Form.Item>
                                         </Col> 
