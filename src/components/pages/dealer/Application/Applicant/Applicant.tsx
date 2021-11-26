@@ -65,7 +65,7 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
-    motorCycleLicence? : string | undefined
+    motorcycleLicence? : string | undefined
 
 }
 
@@ -395,7 +395,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
-                            motorCycleLicence: data?.lessee?.motorCycleLicence,
+                            motorcycleLicence: data?.lessee?.motorcycleLicence,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -489,7 +489,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                             label="Motorcycle License ?" 
-                                            name={['lesseeAttributes','motorCycleLicence']}
+                                            name={['lesseeAttributes','motorcycleLicence']}
                                             >  
                                                 <Select placeholder="Please select">
                                                   <Option  value="yes">Yes</Option>
