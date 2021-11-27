@@ -65,7 +65,7 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
-    motorcycleLicence? : string | undefined
+    motorcycleLicence? : boolean | undefined
 
 }
 
@@ -111,7 +111,7 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 
 
 export const Applicant: React.FC<Props> = ({data}: Props) => {
-    console.log(`incoming-data`, data)
+   
     const { lessee } = data || {};
 
     const [lesseeForm] = Form.useForm();
@@ -491,10 +491,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             label="Motorcycle License ?" 
                                             name={['lesseeAttributes','motorcycleLicence']}
                                             >  
-                                                <Select placeholder="Please select">
-                                                  <Option  value="1">Yes</Option>
-                                                  <Option value="0">No</Option>
-                                                </Select>
+                                            <Radio.Group defaultValue={false}>
+                                                <Radio value={true}>Yes</Radio>
+                                                <Radio value={false}>No</Radio>
+                                            </Radio.Group> 
                                             </Form.Item>
                                         </Col> 
                                     </Row>
