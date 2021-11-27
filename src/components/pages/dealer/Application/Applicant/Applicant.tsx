@@ -111,8 +111,6 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 
 export const Applicant: React.FC<Props> = ({data}: Props) => {
 
-    console.log(`data`, data)
-
     const { lessee } = data || {};
 
     const [lesseeForm] = Form.useForm();
