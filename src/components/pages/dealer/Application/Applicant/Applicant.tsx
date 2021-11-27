@@ -66,8 +66,7 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
-    firstTimeRider?: boolean | string | AnyTxtRecord
-
+    firstTimeRider?: boolean | AnyTxtRecord | undefined
 }
 
 interface LeaseCalculator {
@@ -110,10 +109,9 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
     }
 }
 
-
-
-
 export const Applicant: React.FC<Props> = ({data}: Props) => {
+
+    console.log(`data`, data)
 
     const { lessee } = data || {};
 
@@ -323,9 +321,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
-
-    
-
     useEffect(() => {
         getEmployerStatus()
         window.addEventListener('beforeunload', alertUser)
@@ -469,9 +464,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col> 
                                     </Row>
 
-
-
-
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
@@ -488,6 +480,20 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         <Form.Item>  
                                             <SsnInput defaultValue={(data?.lessee && data?.lessee?.ssn?.replace(/-/g, "")) || "" } form={lesseeForm} lesseeType="lessee"/>
                                         </Form.Item>
+                                        </Col> 
+                                    </Row>
+
+                                    <Row>
+                                        <Col span={24}> 
+                                            <Form.Item 
+                                            label="First Time Rider ?" 
+                                            name={['lesseeAttributes','firstTimeRider']}
+                                            >  
+                                             <Radio.Group defaultValue={true}>
+                                                <Radio value={true}>YES</Radio>
+                                                <Radio value={false}>NO</Radio>
+                                            </Radio.Group> 
+                                            </Form.Item>
                                         </Col> 
                                     </Row>
 
@@ -521,20 +527,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Radio value={1}>Mobile</Radio>
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="First Time Rider ?" 
-                                            name={['lesseeAttributes','firstTimeRider']}
-                                            >  
-                                            <Select placeholder="Please select">
-                                              <Option  value="yes">Yes</Option>
-                                              <Option value="no">No</Option>
-                                            </Select>
-                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
@@ -859,7 +851,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                            label="Employment Status" 
+                                            label="Employment Status TEST" 
                                             name={['lesseeAttributes','employmentStatus']}
                                             >  
                                                 <Select 
