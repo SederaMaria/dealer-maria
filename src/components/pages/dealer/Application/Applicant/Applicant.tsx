@@ -7,7 +7,7 @@ import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
-import { AnyTxtRecord } from 'dns';
+
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -66,7 +66,8 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
-    firstTimeRider?: boolean | AnyTxtRecord | undefined
+    motorcycleLicence? : boolean | undefined
+
 }
 
 interface LeaseCalculator {
@@ -110,7 +111,7 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 }
 
 export const Applicant: React.FC<Props> = ({data}: Props) => {
-
+   
     const { lessee } = data || {};
 
     const [lesseeForm] = Form.useForm();
@@ -391,7 +392,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
-                            firstTimeRider: data?.lessee?.firstTimeRider,
+                            motorcycleLicence: data?.lessee?.motorcycleLicence,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -484,21 +485,13 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                            label="First Time Rider ?" 
-                                            name={['lesseeAttributes','firstTimeRider']}
+                                            label="Motorcycle License ?" 
+                                            name={['lesseeAttributes','motorcycleLicence']}
                                             >  
-                                             <Radio.Group defaultValue={true}>
-                                                <Radio value={true}>YES</Radio>
-                                                <Radio value={false}>NO</Radio>
+                                            <Radio.Group defaultValue={false}>
+                                                <Radio value={true}>Yes</Radio>
+                                                <Radio value={false}>No</Radio>
                                             </Radio.Group> 
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Driver's License Number" name={['lesseeAttributes', 'driversLicenseIdNumber']}>  
-                                                <InputNumber placeholder="Driver's License Number"/>
                                             </Form.Item>
                                         </Col> 
                                     </Row>
