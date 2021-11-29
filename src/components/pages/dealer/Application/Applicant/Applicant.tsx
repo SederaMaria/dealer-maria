@@ -510,7 +510,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             </Form.Item>
                                         </Col> 
                                     </Row>
-
+                                    
                                     <Row>
                                         <Col span={24}> 
                                             <Radio.Group defaultValue={1}>
@@ -519,7 +519,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
                                         </Col> 
-                                    </Row>
+                                    </Row> 
                                 </Card>
                             </Col>
                             
