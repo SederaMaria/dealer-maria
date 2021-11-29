@@ -849,7 +849,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                            label="Employment Status TEST" 
+                                            label="Employment Status" 
                                             name={['lesseeAttributes','employmentStatus']}
                                             >  
                                                 <Select 
