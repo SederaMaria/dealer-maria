@@ -8,6 +8,7 @@ import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
 
+
 const { Option } = Select;
 const { Title } = Typography;
 const { Content } = Layout;
@@ -22,7 +23,7 @@ const layout = {
   };
   
 
-  interface Address {
+  export interface Address {
     id?: number | undefined
     state? : string | undefined
     street1? : string | undefined
@@ -35,14 +36,14 @@ const layout = {
     stateOptions? : OptionData | any
   }
 
-  interface employmentAddress {
+ export interface employmentAddress {
       id?: number | undefined
       city? : string | undefined
       state? : string | undefined 
   }
 
 
-  interface Lessee {
+export interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
     lastName?: string | undefined
@@ -65,6 +66,7 @@ const layout = {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
+    motorcycleLicence? : boolean | undefined
 
 }
 
@@ -108,12 +110,8 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
     }
 }
 
-
-
-
 export const Applicant: React.FC<Props> = ({data}: Props) => {
-
-
+   
     const { lessee } = data || {};
 
     const [lesseeForm] = Form.useForm();
@@ -322,9 +320,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
-
-    
-
     useEffect(() => {
         getEmployerStatus()
         window.addEventListener('beforeunload', alertUser)
@@ -397,6 +392,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
+                            motorcycleLicence: data?.lessee?.motorcycleLicence,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -467,9 +463,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col> 
                                     </Row>
 
-
-
-
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
@@ -491,8 +484,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
                                     <Row>
                                         <Col span={24}> 
-                                            <Form.Item label="Driver's License Number" name={['lesseeAttributes', 'driversLicenseIdNumber']}>  
-                                                <InputNumber placeholder="Driver's License Number"/>
+                                            <Form.Item 
+                                            label="Motorcycle License ?" 
+                                            name={['lesseeAttributes','motorcycleLicence']}
+                                            >  
+                                            <Radio.Group defaultValue={false}>
+                                                <Radio value={true}>Yes</Radio>
+                                                <Radio value={false}>No</Radio>
+                                            </Radio.Group> 
                                             </Form.Item>
                                         </Col> 
                                     </Row>

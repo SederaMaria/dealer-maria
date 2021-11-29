@@ -60,8 +60,7 @@ interface Props {
 
 export const Calculator: React.FC<Props> = ({data}: Props) => {
 
-    console.log("balas")
-    console.log(data)
+    
     interface CalculatorDataProps {
         nadaRental?: string,
         purchaseOption?: string,
@@ -718,7 +717,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                                 {/* <Input style={{textAlign: `right`}} ></Input> */}
                                                 <InputNumber   
                                                     formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    parser={value => `${value}`.replace(/\$\s?|(,*)/g, '')}
                                                     precision={2}
                                                     style={{textAlign: `right`}}
                                                 />

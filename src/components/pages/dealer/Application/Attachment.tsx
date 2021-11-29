@@ -90,30 +90,32 @@ const Attachments: React.FC<Props> = ({leaseApplicationId}) => {
                                 />
               </div>
                 <Content id='main-content'>
-                  <Card type="inner" title="Add Attachments">
-                    <Dragger {...props} id="upload-zone">
-                      <div className="card-elements">
-                        <div className="dragger">
-                            <p className="ant-upload-drag-icon">
-                              <InboxOutlined />
-                            </p>
-                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                            <p className="ant-upload-hint">
-                              Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                              band files
-                            </p>
-                        </div>
-                        <Form className="input" {...layout}>
-                            <Form.Item label="Description" />
-                            <Input placeholder="Large Input" />
-                            <Form.Item label="Notes" />
-                            <TextArea placeholder="text Area Placeholder" rows={1} />
-                        </Form>
-                      </div>
-                    </Dragger>
-                  </Card>
-                  
-                  <Card type="inner" title="Add Attachments" className="container-below">
+                  <div className="dragger-form">
+                      <Card type="inner" title="Add Attachments" className="card-content">
+                        <Dragger {...props} id="upload-zone">
+                          <div className="card-elements">
+                            <div className="dragger">
+                                <p className="ant-upload-drag-icon">
+                                  <InboxOutlined />
+                                </p>
+                                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                                <p className="ant-upload-hint">
+                                  Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                                  band files
+                                </p>
+                            </div>
+                          </div>
+                        </Dragger>
+                      </Card>
+                      <Form className="input" {...layout}>
+                          <Form.Item label="Description" />
+                          <Input placeholder="Large Input" />
+                          <Form.Item label="Notes" />
+                          <TextArea placeholder="text Area Placeholder" rows={1} />
+                      </Form>
+                  </div>
+                 
+                  <Card type="inner" title="Attachments" className="container-below">
                       <Table dataSource={dataSource} columns={columns} />
                   </Card>
                 </Content>

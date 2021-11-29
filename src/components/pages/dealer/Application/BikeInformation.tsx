@@ -66,6 +66,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
     const [vinYear, setVinYear] = useState<string | number | undefined>("")
     const [vinModel, setVinModel] = useState<string | undefined>("")
 
+    const [validateVIN, setValidateVIN] = useState<string | null>(null)
 
     const handleVin = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length === 17){
@@ -84,6 +85,12 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                     setVinModel(res.data.vehicleInfo.model[0])
                     setShowViaVIN(true)
                     setShowBikeForm(true)
+                }).catch(e => {
+                    if (e && e.response.status === 404){
+                        setValidateVIN("error")
+                    } else {
+                        setValidateVIN("success")
+                    }
                 })
             } catch (e) {
                 logger.error("Error verifying vin", e);
@@ -190,11 +197,6 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
         setShowCreditTierState({ "open": true })
     }
 
-    const handleCreditTierStateChange = () => {
-        hideBikeSelectOptions()
-
-    }
-
 
       const formatOptions = (options: Object[], type?: string) => {
         let newOptions: Array<object> = [];
@@ -244,8 +246,9 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                         <Form.Item 
                                         label="VIN" 
                                         name={['leaseCalculatorAttributes', 'vin']} 
+                                        validateStatus={validateVIN ? (validateVIN === "error" ? "error" : "success") : undefined}
+                                        help={validateVIN && (validateVIN === "error" ? "VIN not found" : " ")}
                                         >  
-    
                                             <Input allowClear maxLength={17} onChange={(e) => handleVin(e)} style={{marginBottom: 10}} />
                                             <Button type="link" block onClick={handleNoVin} style={{textAlign: `left`, padding: `4px 0px`}}>
                                                 I don't know the VIN 
@@ -413,29 +416,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                 </Form.Item>
                                             </Col> 
                                         </Row>
-                                        <Row>
-                                            <Col span={24}> 
-                                                <Form.Item 
-                                                label="Credit Tier" 
-                                                name={['leaseCalculatorAttributes', 'creditTier']} 
-                                                rules={[{ required: true, message: 'Credit Tier is required!' }]}
-                                                >  
-                                                    <Select 
-                                                        showSearch 
-                                                        placeholder="Credit Tier" 
-                                                        {...showCreditTierState}
-                                                        onSelect={handleCreditTierStateChange}
-                                                        onBlur={hideBikeSelectOptions}
-                                                        >
-                                                        {
-                                                            creditTierOptions && creditTierOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${value}`}>{label}</Option>
-                                                            })
-                                                        }
-                                                    </Select>
-                                                </Form.Item>
-                                            </Col> 
-                                        </Row>
+                                    
                                     </div>
                                 }
                             </Card>
