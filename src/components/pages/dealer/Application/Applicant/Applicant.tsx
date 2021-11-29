@@ -485,12 +485,12 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                            label="Motorcycle License ?" 
-                                            name={['lesseeAttributes','motorcycleLicence']}
+                                            label="First Time Rider ?" 
+                                            name={['lesseeAttributes','firstTimeRider']}
                                             >  
-                                            <Radio.Group defaultValue={false}>
-                                                <Radio value={true}>Yes</Radio>
-                                                <Radio value={false}>No</Radio>
+                                             <Radio.Group defaultValue={true}>
+                                                <Radio value={true}>YES</Radio>
+                                                <Radio value={false}>NO</Radio>
                                             </Radio.Group> 
                                             </Form.Item>
                                         </Col> 
