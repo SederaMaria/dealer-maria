@@ -110,7 +110,6 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
     }
 }
 
-
 export const Applicant: React.FC<Props> = ({data}: Props) => {
    
     const { lessee } = data || {};
@@ -321,9 +320,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
-
-    
-
     useEffect(() => {
         getEmployerStatus()
         window.addEventListener('beforeunload', alertUser)
@@ -522,20 +518,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Radio value={1}>Mobile</Radio>
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="First Time Rider ?" 
-                                            name={['lesseeAttributes','firstTimeRider']}
-                                            >  
-                                            <Select placeholder="Please select">
-                                              <Option  value="yes">Yes</Option>
-                                              <Option value="no">No</Option>
-                                            </Select>
-                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
