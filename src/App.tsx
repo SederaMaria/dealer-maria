@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import IdleTimer from 'react-idle-timer';
 import { 
   SignIn,
   SignOut, 
@@ -35,6 +36,11 @@ function App() {
     network.POST(`/api/v1/validate-token`, {})
   }
 
+  const handleOnIdle = (event: any) => {
+    auth.logout()
+    window.location.href = '/login'
+  }
+
   useEffect(() => {
     // if (authenticated) { validateToken() }
   }, []);
@@ -48,6 +54,20 @@ function App() {
               <Redirect to="/login" />
               <Route path="/login" exact component={SignIn} />
             </Route>
+          }
+
+          {
+            authenticated &&
+              // https://github.com/supremetechnopriest/react-idle-timer#documentation
+              <IdleTimer
+                events={['keydown', 'wheel', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'visibilitychange']}
+                timeout={1000 * 60 * 60} // 1000ms * 60 * 60 = 1 hour
+                onIdle={handleOnIdle}
+                debounce={500}
+                crossTab={{
+                  emitOnAllTabs: true
+                }}
+              />
           }
 
           {
