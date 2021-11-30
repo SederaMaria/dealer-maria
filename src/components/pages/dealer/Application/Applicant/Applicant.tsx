@@ -487,32 +487,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                                label="Phone Number" 
-                                                name={['lesseeAttributes', `${ phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber' }`]}
-                                                >
-                                                <MaskedInput
-                                                    mask="(111) 111-1111"
-                                                    placeholder="Phone Number"
-                                                    className="credit-app-phone-no"
-                                                    />
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    
-                                    <Row>
-                                        <Col span={24} style={{marginBottom: `12px`}}> 
-                                            <Radio.Group defaultValue={1}>
-                                            {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
-                                                <Radio value={1}>Mobile</Radio>
-                                                <Radio value={2}>Home</Radio>
-                                            </Radio.Group> 
-                                        </Col> 
-                                    </Row> 
-
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
                                             label="First Time Rider ?" 
                                             name={['lesseeAttributes','firstTimeRider']}
                                             >  
@@ -537,6 +511,31 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             </Form.Item>
                                         </Col> 
                                     </Row>
+
+                                    <Row>
+                                        <Col span={24}> 
+                                            <Form.Item 
+                                                label="Phone Number" 
+                                                name={['lesseeAttributes', `${ phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber' }`]}
+                                                >
+                                                <MaskedInput
+                                                    mask="(111) 111-1111"
+                                                    placeholder="Phone Number"
+                                                    className="credit-app-phone-no"
+                                                    />
+                                            </Form.Item>
+                                        </Col> 
+                                    </Row>
+                                    
+                                    <Row>
+                                        <Col span={24} style={{marginBottom: `12px`}}> 
+                                            <Radio.Group defaultValue={1}>
+                                            {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
+                                                <Radio value={1}>Mobile</Radio>
+                                                <Radio value={2}>Home</Radio>
+                                            </Radio.Group> 
+                                        </Col> 
+                                    </Row> 
                                 </Card>
                             </Col>
                             
