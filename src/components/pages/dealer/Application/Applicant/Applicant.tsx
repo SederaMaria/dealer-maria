@@ -67,6 +67,7 @@ export interface Lessee {
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
     motorcycleLicence? : boolean | undefined
+    firstTimeRider?: boolean | undefined
 
 }
 
@@ -393,6 +394,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
                             motorcycleLicence: data?.lessee?.motorcycleLicence,
+                            firstTimeRider: data?.lessee?.firstTimeRider,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -525,7 +527,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                            label="Motorcycle License ?" 
+                                            label="Motorcycle Licence ?" 
                                             name={['lesseeAttributes','motorcycleLicence']}
                                             >  
                                             <Radio.Group defaultValue={false}>
