@@ -67,6 +67,7 @@ export interface Lessee {
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
     motorcycleLicence? : boolean | undefined
+    firstTimeRider?: boolean | undefined
 
 }
 
@@ -393,6 +394,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
                             motorcycleLicence: data?.lessee?.motorcycleLicence,
+                            firstTimeRider: data?.lessee?.firstTimeRider,
                             homeAddressAttributes: {
                                 state: data?.lessee?.homeAddress?.state,
                                 street1: data?.lessee?.homeAddress?.street1,
@@ -485,6 +487,34 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
+                                            label="First Time Rider ?" 
+                                            name={['lesseeAttributes','firstTimeRider']}
+                                            >  
+                                             <Radio.Group defaultValue={true}>
+                                                <Radio value={true}>YES</Radio>
+                                                <Radio value={false}>NO</Radio>
+                                            </Radio.Group> 
+                                            </Form.Item>
+                                        </Col> 
+                                    </Row>
+
+                                    <Row>
+                                        <Col span={24}> 
+                                            <Form.Item 
+                                            label="Motorcycle Licence ?" 
+                                            name={['lesseeAttributes','motorcycleLicence']}
+                                            >  
+                                            <Radio.Group defaultValue={false}>
+                                                <Radio value={true}>Yes</Radio>
+                                                <Radio value={false}>No</Radio>
+                                            </Radio.Group> 
+                                            </Form.Item>
+                                        </Col> 
+                                    </Row>
+
+                                    <Row>
+                                        <Col span={24}> 
+                                            <Form.Item 
                                                 label="Phone Number" 
                                                 name={['lesseeAttributes', `${ phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber' }`]}
                                                 >
@@ -506,35 +536,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             </Radio.Group> 
                                         </Col> 
                                     </Row> 
-
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="First Time Rider ?" 
-                                            name={['lesseeAttributes','firstTimeRider']}
-                                            >  
-                                             <Radio.Group defaultValue={true}>
-                                                <Radio value={true}>YES</Radio>
-                                                <Radio value={false}>NO</Radio>
-                                            </Radio.Group> 
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="Motorcycle License ?" 
-                                            name={['lesseeAttributes','motorcycleLicence']}
-                                            >  
-                                            <Radio.Group defaultValue={false}>
-                                                <Radio value={true}>Yes</Radio>
-                                                <Radio value={false}>No</Radio>
-                                            </Radio.Group> 
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
                                 </Card>
                             </Col>
                             
