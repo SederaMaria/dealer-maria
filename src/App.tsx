@@ -28,6 +28,10 @@ import { auth, network } from './utils';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
+// Configure IdleTimer timeout. Default: 60
+const ENV_TIMEOUT_MINUTE : string | undefined = process.env.REACT_APP_IDLE_TIMER_TIMEOUT_MINUTE
+const TIMEOUT_MINUTE = ENV_TIMEOUT_MINUTE ? parseInt(ENV_TIMEOUT_MINUTE) : 60
+
 function App() {
 
   const [authenticated] = useState<boolean>(auth.isAuth());
@@ -61,7 +65,7 @@ function App() {
               // https://github.com/supremetechnopriest/react-idle-timer#documentation
               <IdleTimer
                 events={['keydown', 'wheel', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'visibilitychange']}
-                timeout={1000 * 60 * 60} // 1000ms * 60 * 60 = 1 hour
+                timeout={1000 * 60 * TIMEOUT_MINUTE}
                 onIdle={handleOnIdle}
                 debounce={500}
                 crossTab={{
