@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message } from "antd";
+import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox } from "antd";
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -154,7 +154,24 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
 
     const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
 
+    const [homeAddress, setHomeAddress] = useState({
+        street1: "",
+        street2: "",
+        zipcode: ""
+    })
 
+    const [stateTarget, setStateTarget] = useState("")
+    const [countyTarget, setCountytarget] = useState("")
+    const [cityTarget, setCityTarget] = useState("")
+
+    const [mailingAddress, setMailingAddress] = useState<any>({
+        street1: "",
+        street2: "",
+        zipcode: "",
+        state:"",
+        county:"",
+        city:""
+    })
 
     const submitApplication = async (values: any) => {
         try {
@@ -355,6 +372,57 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         event.returnValue = ''
     }
 
+    const handleChange = (e:any)=> {
+        const { name, value } = e.target
+       setHomeAddress({
+            ...homeAddress,
+            [name]: value
+        });
+    }
+
+    const handleStateTarget = (e:any, f:any)=> {
+        setStateTarget(f.children)
+    }
+
+    const handleCountyTarget = (e:any, f:any)=> {
+        setCountytarget(f.children)
+    }
+
+    const handleCityTarget = (e:any, f:any)=> {
+        setCityTarget(f.children)
+    }
+
+    const fillMailingAddress = (e:any)=>{
+        if(e.target.checked){
+            setMailingAddress({
+              street1: homeAddress.street1 ? homeAddress.street1 : data?.colessee?.homeAddress?.street1,
+              street2: homeAddress.street2 ? homeAddress.street2 : data?.colessee?.homeAddress?.street2, 
+              zipcode: homeAddress.zipcode ? homeAddress.zipcode : data?.colessee?.homeAddress?.zipcode,
+              state: stateTarget ? stateTarget : data?.colessee?.homeAddress?.state, 
+              county: countyTarget ? countyTarget : data?.colessee?.homeAddress?.county, 
+              city:cityTarget ? cityTarget : data?.colessee?.homeAddress?.cityId
+            })
+        }else {
+            setMailingAddress({
+                street1: "",
+                street2: "",
+                zipcode: "",
+                state:"",
+                county: "",
+                city:""
+            })
+        }
+    }
+
+    lesseeForm.setFieldsValue({
+        street1: mailingAddress.street1,
+        street2: mailingAddress.street2,
+        zipcode: mailingAddress.zipcode,
+        state:   mailingAddress.state,
+        county:  mailingAddress.county,
+        city: mailingAddress.city
+    })
+
 
     return data ? (
         <>
@@ -529,14 +597,14 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','street1']}
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp"  />
+                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item label="Appartment / Unit" name={['colesseeAttributes', 'homeAddressAttributes','street2']}>  
-                                                <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
+                                                <Input placeholder="Appartment / Unit"  name="street2"  onChange={handleChange} className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -551,7 +619,9 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 <MaskedInput mask="11111" placeholder="ZIP Code" 
                                                 onPressEnter={handleLesseeHomeZipcodeBlur}
                                                 onBlur={handleLesseeHomeZipcodeBlur}
-                                                className="ant-input-comp" />
+                                                className="ant-input-comp"
+                                                name="zipcode" onChange={handleChange}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -566,6 +636,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="State" 
                                                     {...showHomeState} 
                                                     onSelect={handleHomeStateChange}
+                                                    onChange={handleStateTarget}
                                                     >
                                                 {
                                                     lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
@@ -587,6 +658,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="County/Parish" 
                                                     {...showHomeCountyState} 
                                                     onSelect={handleHomeCountyStateChange}
+                                                    onChange={handleCountyTarget}
                                                     >
                                                 {
                                                     lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
@@ -608,6 +680,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="City" 
                                                     {...showHomeCityState} 
                                                     onSelect={handleHomeCityStateChange}
+                                                    onChange={handleCityTarget}
                                                 >
                                                 {
                                                     lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
@@ -665,9 +738,11 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                 <Card title="Mailing Address">
                                     <Row>
                                         <Col span={24}> 
+                                        <Checkbox style={{fontSize: `13px`, position: `relative`, top:`-45px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
-                                                name={['colesseeAttributes', 'mailingAddressAttributes','street1']}
+                                                name="street1"
+                                                style={{marginTop: `-22.5px`}}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
                                             </Form.Item>
@@ -675,7 +750,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                     </Row>
                                     <Row>
                                         <Col span={24}> 
-                                            <Form.Item label="Appartment / Unit" name={['colesseeAttributes', 'mailingAddressAttributes','street2']}>  
+                                            <Form.Item label="Appartment / Unit"  name="street2">  
                                                 <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col> 
@@ -684,7 +759,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                                 label="ZIP Code" 
-                                                name={['colesseeAttributes', 'mailingAddressAttributes','zipcode']}
+                                                name="zipcode"
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
                                             >  
@@ -701,7 +776,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                                 label="State" 
-                                                name={['colesseeAttributes', 'mailingAddressAttributes','state']}
+                                                name="state"
                                             >  
                                                 <Select showSearch placeholder="State" {...showMailingState} 
                                                 onSelect={handleMailingStateChange}
@@ -719,7 +794,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                                 label="County/Parish" 
-                                                name={['colesseeAttributes', 'mailingAddressAttributes','county']}
+                                                name="county"
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -740,7 +815,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                         <Form.Item 
                                             label="City" 
-                                            name={['colesseeAttributes', 'mailingAddressAttributes','cityId']}
+                                            name="city"
                                         >  
                                             <Select 
                                                 showSearch 
