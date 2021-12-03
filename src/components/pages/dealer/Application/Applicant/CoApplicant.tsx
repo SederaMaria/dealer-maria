@@ -65,6 +65,9 @@ const layout = {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
+    relationshipToLesseeId?: number | string | undefined
+    relationshipToLesseeOptions?: any | undefined
+    isDriving: number | undefined
 
 }
 
@@ -135,6 +138,8 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
     const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any | undefined>(undefined)
     const [zipMailErrorMessage, setZipMailErrorMessage] = useState<string | undefined>(undefined)
 
+    const [relationshipToLesseeOptions, setRelationshipToLesseeOptions] = useState<Array<OptionData>>([])
+    
     const [employerStateOptions, setEmployerStateOptions] = useState([])
     const [employmentStatusOptions, setEmploymentStatusOptions] = useState([])
 
@@ -342,6 +347,8 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         setLesseeMailStateOptions(data?.colessee?.mailingAddress?.stateOptions)
         setLesseeMailCountyOptions(data?.colessee?.mailingAddress?.countyOptions)
         setLesseeMailCityOptions(data?.colessee?.mailingAddress?.cityOptions)
+
+        setRelationshipToLesseeOptions(data?.colessee?.relationshipToLesseeOptions)
     }, [data]);
 
 
@@ -394,6 +401,8 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.colessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.colessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.colessee?.grossMonthlyIncome,
+                            relationshipToLesseeId: data?.colessee?.relationshipToLesseeId,
+                            isDriving: data?.colessee?.isDriving,
                             homeAddressAttributes: {
                                 state: data?.colessee?.homeAddress?.state,
                                 street1: data?.colessee?.homeAddress?.street1,
@@ -429,6 +438,25 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                         <Row gutter={[16, 16]}>
                             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
                                 <Card title="Personal">
+                                <Row>
+                                        <Col span={24}> 
+                                            <Form.Item 
+                                                label="Relationship To Applicant" 
+                                                name={['colesseeAttributes', 'relationshipToLesseeId']}
+                                            >  
+                                                <Select 
+                                                    showSearch 
+                                                    placeholder="Relationship To Applicant" 
+                                                    >
+                                                {
+                                                    relationshipToLesseeOptions && relationshipToLesseeOptions.map(({value, label}, index) => {
+                                                    return <Option key={index} value={`${value}`}>{label}</Option>
+                                                    })
+                                                }
+                                                </Select>
+                                            </Form.Item>
+                                        </Col> 
+                                    </Row>
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
@@ -509,13 +537,26 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         </Col> 
                                     </Row>
 
-                                    <Row>
+                                    <Row style={{ marginTop: 5}}>
                                         <Col span={24}> 
                                             <Radio.Group defaultValue={1}>
                                             {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
                                                 <Radio value={1}>Mobile</Radio>
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
+                                        </Col> 
+                                    </Row>
+                                    <Row style={{ marginTop: 5}}>
+                                        <Col span={24}> 
+                                        <Form.Item 
+                                            label="Driving or not?" 
+                                            name={['colesseeAttributes','isDriving']}
+                                        >                      
+                                            <Radio.Group>
+                                            <Radio value={1}>Yes</Radio>
+                                            <Radio value={0}>No</Radio>
+                                            </Radio.Group> 
+                                        </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
