@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox } from "antd";
+import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox, DatePicker, Space } from "antd";
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -90,6 +91,9 @@ export interface Lessee {
     mailingAddress?: Address
     atAddressMonths?: number | string | undefined
     atAddressYears?: number | string | undefined
+
+    atAddressMonthsYears?: number | string | undefined
+
     monthlyMortgage?: number | string | undefined
     homeOwnership?: number | undefined 
     employerName?: string | undefined
@@ -208,6 +212,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         county:"",
         city:""
     })
+
+    const monthFormat = "MM/YYYY"
 
 
     const submitApplication = async (values: any) => {
@@ -487,6 +493,9 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
                             atAddressMonths: data?.lessee?.atAddressMonths,
                             atAddressYears: data?.lessee?.atAddressYears,
+
+                            atAddressMonthsYears: data?.lessee?.atAddressMonthsYears,
+
                             monthlyMortgage: data?.lessee?.monthlyMortgage,
                             homeOwnership: data?.lessee?.homeOwnership,
                             employerName: data?.lessee?.employerName,
@@ -725,6 +734,18 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <InputNumber placeholder="Months at Current Address" />
                                             </Form.Item>
                                         </Col>
+
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item 
+                                                label="Months/Years at Current Address (mm/yyyy)" 
+                                                name={['lesseeAttributes','atAddressMonthsYears']}
+                                            >  
+                                                <Space direction="vertical" size={12}>
+                                                    <DatePicker placeholder="01/2015" format={monthFormat} picker="month" />
+                                                </Space>
+                                            </Form.Item>
+                                        </Col>
+
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
