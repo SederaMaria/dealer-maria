@@ -1009,9 +1009,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                     </Content>
 
-
-
-
     {/* 
                     <Content className="content-2">
                         <Row >
