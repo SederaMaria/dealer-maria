@@ -511,6 +511,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Relationship To Applicant" 
                                                 name={['colesseeAttributes', 'relationshipToLesseeId']}
+                                                rules={[{ required: true, message: 'Relationship To Applicant is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -530,6 +531,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="First Name" 
                                                 name={['colesseeAttributes', 'firstName']}
+                                                rules={[{ required: true, message: 'First Name is required!' }]}
                                             >  
                                                 <Input placeholder="First Name" className="ant-input-comp"  />
                                             </Form.Item>
@@ -549,6 +551,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Last Name" 
                                                 name={['colesseeAttributes', 'lastName']}
+                                                rules={[{ required: true, message: 'Last Name is required!' }]}
                                             >  
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
@@ -619,6 +622,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Form.Item 
                                             label="Driving or not?" 
                                             name={['colesseeAttributes','isDriving']}
+                                            rules={[{ required: true, message: 'Driving or not? is required!' }]}
                                         >                      
                                             <Radio.Group>
                                             <Radio value={1}>Yes</Radio>
@@ -637,6 +641,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','street1']}
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp"  />
                                             </Form.Item>
@@ -656,6 +661,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['colesseeAttributes', 'homeAddressAttributes','zipcode']}
                                                 validateStatus={zipHomeValidateStatus}
                                                 help={zipHomeErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >  
                                                 <MaskedInput mask="11111" placeholder="ZIP Code" 
                                                 onPressEnter={handleLesseeHomeZipcodeBlur}
@@ -671,6 +677,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','state']}
+                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -693,6 +700,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="County/Parish" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','county']}
+                                                rules={[{ required: true, message: 'County/Parish is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -715,6 +723,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="City" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','cityId']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -737,6 +746,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Years at Current Address" 
                                                 name={['colesseeAttributes','atAddressYears']}
+                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Years at Current Address" />
                                             </Form.Item>
@@ -754,6 +764,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['colesseeAttributes','monthlyMortgage']}
+                                                rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
@@ -763,6 +774,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                         <Form.Item 
                                             name={['colesseeAttributes','homeOwnership']}
+                                            rules={[{ required: true, message: 'Ownership is required!' }]}
                                         >                      
                                             <Radio.Group>
                                             <Radio value={1}>Own</Radio>
@@ -784,6 +796,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name="street1"
                                                 style={{marginTop: `-22.5px`}}
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
                                             </Form.Item>
@@ -803,6 +816,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 name="zipcode"
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >  
                                                 <MaskedInput 
                                                 mask="11111" 
@@ -857,6 +871,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Form.Item 
                                             label="City" 
                                             name="city"
+                                            rules={[{ required: true, message: 'City is required!' }]}
                                         >  
                                             <Select 
                                                 showSearch 
@@ -900,6 +915,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Employer Name" 
                                             name={['colesseeAttributes', 'employerName']}
+                                            rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >  
                                                 <Input placeholder="Employer Name"  className="ant-input-comp"  />
                                             </Form.Item>
@@ -910,6 +926,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Phone Number" 
                                             name={['colesseeAttributes', 'employerPhoneNumber']}
+                                            rules={[{ required: true, message: 'Phone Number is required!' }]}
                                             >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
@@ -924,6 +941,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="City" 
                                             name={['colesseeAttributes', 'employmentAddressAttributes', 'city']}
+                                            rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Input placeholder="City" className="ant-input-comp"  />
                                             </Form.Item>
@@ -934,6 +952,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['colesseeAttributes', 'employmentAddressAttributes','state']}
+                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                     <Select 
                                                         showSearch 
@@ -958,6 +977,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Employment Status" 
                                             name={['colesseeAttributes','employmentStatus']}
+                                            rules={[{ required: true, message: 'Status is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -979,6 +999,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Job Title" 
                                             name={['colesseeAttributes', 'jobTitle']}
+                                            rules={[{ required: true, message: 'Job Tile is required!' }]}
                                             >  
                                                 <Input placeholder="Job Title"  className="ant-input-comp"  />
                                             </Form.Item>
@@ -990,6 +1011,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Years Employed" 
                                             name={['colesseeAttributes', 'timeAtEmployerYears']}
+                                            rules={[{ required: true, message: 'Years Employed is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Years Employed" />
                                             </Form.Item>
@@ -1008,6 +1030,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                             label="Gross Monthly Income" 
                                             name={['colesseeAttributes', 'grossMonthlyIncome']}
+                                            rules={[{ required: true, message: 'Gross Monthly Income is required!' }]}
                                             >  
                                                 <InputNumber placeholder="Gross Monthly Income" />
                                             </Form.Item>
