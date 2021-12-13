@@ -29,9 +29,9 @@ const formLayouts = {
       formCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
     },
     field: {
-      col: { xs: 24, sm: 24, md: 8, lg: 8, xl: 6 },
-      colgroup: {
-        2: { xs: 24, sm: 24, md: 8, lg: 8, xl: 6 },
+        col: { xs: 24, sm: 24, md: 8, lg: 9, xl: 8 },
+        colgroup: {
+        2: { xs: 24, sm: 24, md: 16, lg: 10, xl: 8 },
       },
       colmem: {
         2: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
@@ -532,7 +532,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                         <Row gutter={[16, 16]}>
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Personal">
+                                <Card title="Personal" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
@@ -558,7 +558,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col}>
+                                        <Col {...formLayout.field.col} style={{marginTop:`5px`}}>
                                             <DobInput dateFormat={dateFormat} form={lesseeForm} />
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -616,14 +616,15 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
 
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Home Address">
+                                <Card title="Home Address" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['lesseeAttributes','homeAddressAttributes','street1']}
+                                                className="street-address"
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -631,7 +632,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Appartment / Unit"
                                                 name={['lesseeAttributes', 'homeAddressAttributes','street2']}
                                             >
-                                                <Input placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -649,6 +650,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     className="ant-input-comp"
                                                     name="zipcode"
                                                     onChange={handleChange}
+                                                    style={{marginTop: `5px`}}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -663,6 +665,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeState} 
                                                     onSelect={handleHomeStateChange}
                                                     onChange={handleStateTarget}
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
@@ -683,6 +686,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeCountyState} 
                                                     onSelect={handleHomeCountyStateChange}
                                                     onChange={handleCountyTarget}
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
@@ -703,6 +707,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeCityState} 
                                                     onSelect={handleHomeCityStateChange}
                                                     onChange={handleCityTarget}
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
@@ -717,12 +722,12 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Years at Current Address" 
                                                 name={['lesseeAttributes','atAddressYears']}
                                             >  
-                                                <InputNumber placeholder="Years at Current Address" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Years at Current Address" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber placeholder="Months at Current Address" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Months at Current Address" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -730,12 +735,12 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['lesseeAttributes','monthlyMortgage']}
                                             >  
-                                                <InputNumber placeholder="Monthly Mortgage or Rent" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
                                             <Form.Item
                                                 name={['lesseeAttributes','homeOwnership']}
                                             >
-                                                <Radio.Group>
+                                                <Radio.Group style={{marginTop: `5px`}}>
                                                     <Radio value={1}>Own</Radio>
                                                     <Radio value={2}>Rent</Radio>
                                                 </Radio.Group>
@@ -746,21 +751,24 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
 
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Mailing Address">
+                                <Card title="Mailing Address" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
-                                            <Checkbox style={{fontSize: `13px`, position: `relative`, top:`-45px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                            <Checkbox style={{fontSize: `13px`, marginTop:`5px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                        </Col>
+
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)"  
                                                 name="street1"
-                                                style={{marginTop: `-22.5px`}}
+                                                className="street-address"
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
+                                                <Input style={{marginTop: `5px`}} placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item label="Appartment / Unit" name="street2">  
-                                                <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Appartment / Unit" className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -776,6 +784,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     onPressEnter={handleLesseeMailZipcodeBlur}
                                                     onBlur={handleLesseeMailZipcodeBlur}
                                                     className="ant-input-comp"
+                                                    style={{marginTop: `5px`}}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -789,6 +798,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="State"
                                                     {...showMailingState}
                                                     onSelect={handleMailingStateChange}
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
@@ -808,6 +818,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="County/Parish" 
                                                     {...showMailingCountyState} 
                                                     onSelect={handleMailingCountyStateChange}
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
@@ -827,6 +838,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="City"
                                                     {...showMailingCityState}
                                                     onSelect={handleMailingCityStateChange}
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
@@ -854,7 +866,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         <Row gutter={[16, 16]}>
                             <Col {...formLayout.container.placeholderCol}></Col>
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Employer">
+                                <Card title="Employer" className="card">
                                     <Row gutter={[16, 0]}>
                                         {
                                             lessee?.employmentAddress &&
@@ -863,7 +875,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                         style={{display: 'none'}}
                                                         name={['lesseeAttributes', 'employmentAddressAttributes','id']}
                                                     >
-                                                        <Input />
+                                                        <Input style={{marginTop: `5px`}} />
                                                     </Form.Item>
                                                 </Col>
                                         }
@@ -872,7 +884,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Employer Name"
                                                 name={['lesseeAttributes', 'employerName']}
                                             >  
-                                                <Input placeholder="Employer Name"  className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Employer Name"  className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -884,6 +896,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no"
+                                                    style={{marginTop: `5px`}}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -892,7 +905,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="City"
                                                 name={['lesseeAttributes', 'employmentAddressAttributes', 'city']}
                                             >  
-                                                <Input placeholder="City" className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="City" className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -903,6 +916,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Select
                                                     showSearch
                                                     placeholder="State"
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         employerStateOptions && employerStateOptions.map(({value, label}, index) => {
@@ -917,7 +931,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
 
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Employment Details">
+                                <Card title="Employment Details" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
@@ -929,6 +943,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="Employment Status"
                                                     onChange={handleEmploymentStatus}
                                                     optionFilterProp="children"
+                                                    style={{marginTop: `5px`}}
                                                 >
                                                     {
                                                         employmentStatusOptions && employmentStatusOptions.map(({value, label}, index) => {
@@ -943,7 +958,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Job Title"
                                                 name={['lesseeAttributes', 'jobTitle']}
                                             >  
-                                                <Input placeholder="Job Title"  className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Job Title"  className="ant-input-comp"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.colgroup[2]}>
@@ -953,7 +968,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                       label="Years Employed"
                                                       name={['lesseeAttributes', 'timeAtEmployerYears']}
                                                   >
-                                                      <InputNumber placeholder="Years Employed" />
+                                                      <InputNumber style={{marginTop: `5px`}} placeholder="Years Employed" />
                                                   </Form.Item>
                                                 </Col>
                                                 <Col {...formLayout.field.colmem[2]}>
@@ -961,7 +976,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                       label="Months Employed"
                                                       name={['lesseeAttributes', 'timeAtEmployerMonths']}
                                                   >
-                                                      <InputNumber placeholder="Months Employed" />
+                                                      <InputNumber style={{marginTop: `5px`}} placeholder="Months Employed" />
                                                   </Form.Item>
                                                 </Col>
                                             </Row>
@@ -971,7 +986,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Gross Monthly Income"
                                                 name={['lesseeAttributes', 'grossMonthlyIncome']}
                                             >  
-                                                <InputNumber placeholder="Gross Monthly Income" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Gross Monthly Income" />
                                             </Form.Item>
                                         </Col> 
                                     </Row>

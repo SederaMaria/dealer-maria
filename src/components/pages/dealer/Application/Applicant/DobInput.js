@@ -54,7 +54,6 @@ export default function DobInput ({dateFormat, form}) {
     // setDateObj(form.getFieldValue(['lesseeAttributes', 'dateOfBirth']));
   }, []);
 
-
   return (
     <Form.Item
       label="Date of Birth (mm/dd/yyyy)"
@@ -67,7 +66,7 @@ export default function DobInput ({dateFormat, form}) {
       <DatePicker
         value={dateObj}
         open={calendarOpen}
-        style={{ visibility: "hidden", width: 0, padding: 0, margin: "-1px" }}
+        style={{ visibility: "hidden", width: 0, padding: 0, margin: "-1px"}}
         onChange={onDatePickerChange}
         format={dateFormat}
         showToday={false}

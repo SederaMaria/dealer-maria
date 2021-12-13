@@ -20,6 +20,41 @@ const layout = {
       span: 24,
     },
   };
+
+  const formLayouts = {
+    horizontal: {
+      container: {
+        placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+        formCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      },
+      field: {
+          col: { xs: 24, sm: 24, md: 8, lg: 9, xl: 8 },
+          colgroup: {
+          2: { xs: 24, sm: 24, md: 16, lg: 10, xl: 8 },
+        },
+        colmem: {
+          2: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
+        },
+      },
+    },
+    vertical: {
+      container: {
+        placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 4 },
+        formCol: { xs: 24, sm: 24, md: 24, lg: 12, xl: 8 },
+      },
+      field: {
+        col: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+        colgroup: {
+          2: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+        },
+        colmem: {
+          2: { xs: 24, sm: 24, md: 24, lg: 12, xl: 12 },
+        },
+      },
+    },
+  }
+  
+  const formLayout = formLayouts.horizontal
   
 
   interface Address {
@@ -110,8 +145,6 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
         }
     }
 }
-
-
 
 
 export const CoApplicant: React.FC<Props> = ({data}: Props) => {
@@ -504,170 +537,130 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
                         </Row>
                         <Row gutter={[16, 16]}>
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Personal">
-                                <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                                label="Relationship To Applicant" 
-                                                name={['colesseeAttributes', 'relationshipToLesseeId']}
-                                            >  
-                                                <Select 
-                                                    showSearch 
-                                                    placeholder="Relationship To Applicant" 
-                                                    >
-                                                {
-                                                    relationshipToLesseeOptions && relationshipToLesseeOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
-                                                </Select>
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                            <Col {...formLayout.container.formCol}>
+                            <Card title="Personal" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="First Name" 
                                                 name={['colesseeAttributes', 'firstName']}
                                             >  
                                                 <Input placeholder="First Name" className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Middle Name" 
-                                                name={['colesseeAttributes', 'middleName']}>  
-                                                    <Input placeholder="Middle Name" className="ant-input-comp" />
+                                                name={['colesseeAttributes', 'middleName']}
+                                            >
+                                                <Input placeholder="Middle Name" className="ant-input-comp" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Last Name" 
                                                 name={['colesseeAttributes', 'lastName']}
                                             >  
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col} style={{marginTop:`5px`}}>
                                             <DobInput dateFormat={dateFormat} form={lesseeForm} />
-                                        </Col> 
-                                    </Row>
-
-
-
-
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                    label="Social Security Number" 
-                                                    name={['colesseeAttributes', 'ssn']}
-                                                >  
+                                                label="Social Security Number"
+                                                name={['colesseeAttributes', 'ssn']}
+                                            >
                                                 <Input type="hidden" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                        <Form.Item>  
-                                            <SsnInput defaultValue={(data?.colessee && data?.colessee?.ssn?.replace(/-/g, "")) || "" } form={lesseeForm} lesseeType="lessee"/>
-                                        </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Driver's License Number" name={['colesseeAttributes', 'driversLicenseIdNumber']}>  
-                                                <InputNumber placeholder="Driver's License Number"/>
+                                            <Form.Item>
+                                                <SsnInput defaultValue={(data?.colessee && data?.colessee?.ssn?.replace(/-/g, "")) || "" } form={lesseeForm} lesseeType="lessee"/>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="First Time Rider ?"
+                                                name={['colesseeAttributes','firstTimeRider']}
+                                            >
+                                                <Radio.Group defaultValue={true}>
+                                                    <Radio value={true}>YES</Radio>
+                                                    <Radio value={false}>NO</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item 
+                                                label="Motorcycle Licence ?"
+                                                name={['colesseeAttributes','motorcycleLicence']}
+                                            >
+                                                <Radio.Group defaultValue={false}>
+                                                    <Radio value={true}>Yes</Radio>
+                                                    <Radio value={false}>No</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Phone Number" 
                                                 name={['colesseeAttributes', `${ phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber' }`]}
-                                                >
+                                            >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no"
-                                                    />
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row style={{ marginTop: 5}}>
-                                        <Col span={24}> 
                                             <Radio.Group defaultValue={1}>
                                             {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
                                                 <Radio value={1}>Mobile</Radio>
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
                                         </Col> 
-                                    </Row>
-                                    <Row style={{ marginTop: 5}}>
-                                        <Col span={24}> 
-                                        <Form.Item 
-                                            label="Driving or not?" 
-                                            name={['colesseeAttributes','isDriving']}
-                                        >                      
-                                            <Radio.Group>
-                                            <Radio value={1}>Yes</Radio>
-                                            <Radio value={0}>No</Radio>
-                                            </Radio.Group> 
-                                        </Form.Item>
-                                        </Col> 
-                                    </Row>
+                                    </Row> 
                                 </Card>
                             </Col>
                             
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Home Address">
-                                    <Row>
-                                        <Col span={24}> 
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Home Address" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
-                                                name={['colesseeAttributes', 'homeAddressAttributes','street1']}
+                                                name={['colesseeAttributes','homeAddressAttributes','street1']}
+                                                className="street-address"
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Appartment / Unit" name={['colesseeAttributes', 'homeAddressAttributes','street2']}>  
-                                                <Input placeholder="Appartment / Unit"  name="street2"  onChange={handleChange} className="ant-input-comp"  />
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="Appartment / Unit"
+                                                name={['colesseeAttributes', 'homeAddressAttributes','street2']}
+                                            >
+                                                <Input style={{marginTop: `5px`}} placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="ZIP Code" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','zipcode']}
                                                 validateStatus={zipHomeValidateStatus}
                                                 help={zipHomeErrorMessage}
                                             >  
-                                                <MaskedInput mask="11111" placeholder="ZIP Code" 
-                                                onPressEnter={handleLesseeHomeZipcodeBlur}
-                                                onBlur={handleLesseeHomeZipcodeBlur}
-                                                className="ant-input-comp"
-                                                name="zipcode" onChange={handleChange}
+                                                <MaskedInput
+                                                    mask="11111"
+                                                    placeholder="ZIP Code"
+                                                    onPressEnter={handleLesseeHomeZipcodeBlur}
+                                                    onBlur={handleLesseeHomeZipcodeBlur}
+                                                    className="ant-input-comp"
+                                                    name="zipcode"
+                                                    onChange={handleChange}
+                                                    style={{marginTop: `5px`}}
                                                 />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="State" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','state']}
@@ -678,40 +671,38 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeState} 
                                                     onSelect={handleHomeStateChange}
                                                     onChange={handleStateTarget}
-                                                    >
-                                                {
-                                                    lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    style={{marginTop: `5px`}}
+                                                >
+                                                    {
+                                                        lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
                                                 label="County/Parish" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','county']}
-                                            >  
+                                            >
                                                 <Select 
                                                     showSearch 
                                                     placeholder="County/Parish" 
                                                     {...showHomeCountyState} 
                                                     onSelect={handleHomeCountyStateChange}
                                                     onChange={handleCountyTarget}
-                                                    >
-                                                {
-                                                    lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    style={{marginTop: `5px`}}
+                                                >
+                                                    {
+                                                        lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="City" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','cityId']}
@@ -722,117 +713,108 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeCityState} 
                                                     onSelect={handleHomeCityStateChange}
                                                     onChange={handleCityTarget}
+                                                    style={{marginTop: `5px`}}
                                                 >
-                                                {
-                                                    lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    {
+                                                        lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${(value)}`} name="city">{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Years at Current Address" 
                                                 name={['colesseeAttributes','atAddressYears']}
                                             >  
-                                                <InputNumber placeholder="Years at Current Address" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Years at Current Address" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Months at Current Address" name={['colesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber placeholder="Months at Current Address" />
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Months at Current Address" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['colesseeAttributes','monthlyMortgage']}
                                             >  
-                                                <InputNumber placeholder="Monthly Mortgage or Rent" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                        <Form.Item 
-                                            name={['colesseeAttributes','homeOwnership']}
-                                        >                      
-                                            <Radio.Group>
-                                            <Radio value={1}>Own</Radio>
-                                            <Radio value={2}>Rent</Radio>
-                                            </Radio.Group> 
-                                        </Form.Item>
+                                            <Form.Item
+                                                name={['colesseeAttributes','homeOwnership']}
+                                            >
+                                                <Radio.Group style={{marginTop: `5px`}}>
+                                                    <Radio value={1}>Own</Radio>
+                                                    <Radio value={2}>Rent</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
                             </Col>
 
+                            <Col  {...formLayout.container.formCol}>
+                                <Card title="Mailing Address" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
+                                            <Checkbox style={{fontSize: `13px`, marginTop:`5px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                        </Col>
 
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Mailing Address">
-                                    <Row>
-                                        <Col span={24}> 
-                                        <Checkbox style={{fontSize: `13px`, position: `relative`, top:`-45px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                label="Street Address (no P.O. Boxes)" 
+                                                label="Street Address (no P.O. Boxes)"  
                                                 name="street1"
-                                                style={{marginTop: `-22.5px`}}
+                                                className="street-address"
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
+                                                <Input style={{marginTop: `5px`}} placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Appartment / Unit"  name="street2">  
-                                                <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item label="Appartment / Unit" name="street2">  
+                                                <Input style={{marginTop: `5px`}} placeholder="Appartment / Unit" className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
                                                 label="ZIP Code" 
                                                 name="zipcode"
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
-                                            >  
+                                            >
                                                 <MaskedInput 
-                                                mask="11111" 
-                                                placeholder="ZIP Code" 
-                                                onPressEnter={handleLesseeMailZipcodeBlur}
-                                                onBlur={handleLesseeMailZipcodeBlur}
-                                                className="ant-input-comp" />
+                                                    mask="11111"
+                                                    placeholder="ZIP Code"
+                                                    onPressEnter={handleLesseeMailZipcodeBlur}
+                                                    onBlur={handleLesseeMailZipcodeBlur}
+                                                    className="ant-input-comp"
+                                                    style={{marginTop: `5px`}}
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
                                                 label="State" 
                                                 name="state"
-                                            >  
-                                                <Select showSearch placeholder="State" {...showMailingState} 
-                                                onSelect={handleMailingStateChange}
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="State"
+                                                    {...showMailingState}
+                                                    onSelect={handleMailingStateChange}
+                                                    style={{marginTop: `5px`}}
                                                 >
-                                                {
-                                                    lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
-                                                </Select>
+                                                    {
+                                                        lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                  </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="County/Parish" 
                                                 name="county"
@@ -842,35 +824,35 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="County/Parish" 
                                                     {...showMailingCountyState} 
                                                     onSelect={handleMailingCountyStateChange}
+                                                    style={{marginTop: `5px`}}
                                                 >
-                                                {
-                                                    lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    {
+                                                        lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                        <Form.Item 
-                                            label="City" 
-                                            name="city"
-                                        >  
-                                            <Select 
-                                                showSearch 
-                                                placeholder="City" 
-                                                {...showMailingCityState} 
-                                                onSelect={handleMailingCityStateChange}
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="City"
+                                                name="city"
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="City"
+                                                    {...showMailingCityState}
+                                                    onSelect={handleMailingCityStateChange}
+                                                    style={{marginTop: `5px`}}
                                                 >
-                                            {
-                                                lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
-                                                return <Option key={index} value={`${value}`}>{label}</Option>
-                                                })
-                                            }
-                                            </Select>
-                                        </Form.Item>
+                                                    {
+                                                        lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                </Select>
+                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
@@ -889,127 +871,129 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
 
                         <Row gutter={[16, 16]}>
-                            <Col xs={24} sm={24} md={24} lg={24} xl={4}></Col>
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Employer">
-                                    { 
-                                        data?.colessee?.employmentAddress && <Form.Item style={{display: 'none'}} name={['colesseeAttributes', 'employmentAddressAttributes','id']} > <Input /> </Form.Item>
-                                    }
-                                    <Row>
-                                        <Col span={24}> 
+                            <Col {...formLayout.container.placeholderCol}></Col>
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Employer" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        {
+                                            data?.colessee?.employmentAddress &&
+                                                <Col {...formLayout.field.col}>
+                                                    <Form.Item
+                                                        style={{display: 'none'}}
+                                                        name={['colesseeAttributes', 'employmentAddressAttributes','id']}
+                                                    >
+                                                        <Input style={{marginTop: `5px`}} />
+                                                    </Form.Item>
+                                                </Col>
+                                        }
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Employer Name" 
-                                            name={['colesseeAttributes', 'employerName']}
+                                                label="Employer Name"
+                                                name={['colesseeAttributes', 'employerName']}
                                             >  
-                                                <Input placeholder="Employer Name"  className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Employer Name"  className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Phone Number" 
-                                            name={['colesseeAttributes', 'employerPhoneNumber']}
+                                                label="Phone Number"
+                                                name={['colesseeAttributes', 'employerPhoneNumber']}
                                             >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no"
-                                                    />
+                                                    style={{marginTop: `5px`}}
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="City" 
-                                            name={['colesseeAttributes', 'employmentAddressAttributes', 'city']}
+                                                label="City"
+                                                name={['colesseeAttributes', 'employmentAddressAttributes', 'city']}
                                             >  
-                                                <Input placeholder="City" className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="City" className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="State" 
                                                 name={['colesseeAttributes', 'employmentAddressAttributes','state']}
                                             >  
-                                                    <Select 
-                                                        showSearch 
-                                                        placeholder="State"
-                                                    >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="State"
+                                                    style={{marginTop: `5px`}}
+                                                >
                                                     {
                                                         employerStateOptions && employerStateOptions.map(({value, label}, index) => {
-                                                        return <Option key={index} value={`${value}`}>{label}</Option>
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
                                                         })
                                                     }
-                                                    </Select>
+                                                </Select>
                                             </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
                             </Col>
 
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Employment Details">
-                                    <Row>
-                                        <Col span={24}> 
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Employment Details" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Employment Status" 
-                                            name={['colesseeAttributes','employmentStatus']}
-                                            >  
-                                                <Select 
+                                                label="Employment Status"
+                                                name={['colesseeAttributes','employmentStatus']}
+                                            >
+                                                <Select
                                                     showSearch 
-                                                    placeholder="Employment Status" 
+                                                    placeholder="Employment Status"
                                                     onChange={handleEmploymentStatus}
                                                     optionFilterProp="children"
-                                                    >
+                                                    style={{marginTop: `5px`}}
+                                                >
                                                     {
-                                                    employmentStatusOptions && employmentStatusOptions.map(({value, label}, index) => {
-                                                        return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
+                                                        employmentStatusOptions && employmentStatusOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
                                                     }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Job Title" 
-                                            name={['colesseeAttributes', 'jobTitle']}
+                                                label="Job Title"
+                                                name={['colesseeAttributes', 'jobTitle']}
                                             >  
-                                                <Input placeholder="Job Title"  className="ant-input-comp"  />
+                                                <Input style={{marginTop: `5px`}} placeholder="Job Title"  className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row gutter={[16, 16]}>
-                                        <Col span={12}> 
+                                        </Col>
+                                        <Col {...formLayout.field.colgroup[2]}>
+                                            <Row gutter={[16, 0]}>
+                                                <Col {...formLayout.field.colmem[2]}>
+                                                  <Form.Item 
+                                                      label="Years Employed"
+                                                      name={['colesseeAttributes', 'timeAtEmployerYears']}
+                                                  >
+                                                      <InputNumber style={{marginTop: `5px`}} placeholder="Years Employed" />
+                                                  </Form.Item>
+                                                </Col>
+                                                <Col {...formLayout.field.colmem[2]}>
+                                                  <Form.Item 
+                                                      label="Months Employed"
+                                                      name={['colesseeAttributes', 'timeAtEmployerMonths']}
+                                                  >
+                                                      <InputNumber style={{marginTop: `5px`}} placeholder="Months Employed" />
+                                                  </Form.Item>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Years Employed" 
-                                            name={['colesseeAttributes', 'timeAtEmployerYears']}
+                                                label="Gross Monthly Income"
+                                                name={['colesseeAttributes', 'grossMonthlyIncome']}
                                             >  
-                                                <InputNumber placeholder="Years Employed" />
-                                            </Form.Item>
-                                        </Col> 
-                                        <Col span={12}> 
-                                            <Form.Item 
-                                            label="Months Employed" 
-                                            name={['colesseeAttributes', 'timeAtEmployerMonths']}
-                                            >  
-                                                <InputNumber placeholder="Months Employed" />
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="Gross Monthly Income" 
-                                            name={['colesseeAttributes', 'grossMonthlyIncome']}
-                                            >  
-                                                <InputNumber placeholder="Gross Monthly Income" />
+                                                <InputNumber style={{marginTop: `5px`}} placeholder="Gross Monthly Income" />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -1021,21 +1005,18 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         
                                     </Button>
                                     <Button style={{ marginRight: 10 }} type="primary" >
-                                        <Link to={`/applications/${leaseApplicationId}/applicant`}> prev </Link>
+                                        <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
                                     </Button>
                                     <Button style={{ marginRight: 10 }} type="primary" >
-                                        <Link to={`/applications/${leaseApplicationId}/summary`}> Next </Link>
+                                        <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>
                                     </Button>
                                 </div>
 
                             </Col>
                         </Row>
                     </Content>
-
-
-
-
-    {/* 
+   
+                    {/* 
                     <Content className="content-2">
                         <Row >
                             <Col span={24} >
