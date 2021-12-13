@@ -1187,9 +1187,9 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                 </Card>
                                 <div style={{ marginTop: 20, textAlign: `right`}}>
                                     <Button style={{ marginRight: 10 }}>Save</Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                    {/* <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/bike`}> prev </Link>
-                                    </Button>
+                                    </Button> */}
                                     <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
                                     </Button>
