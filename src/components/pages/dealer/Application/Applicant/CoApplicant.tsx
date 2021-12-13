@@ -116,9 +116,6 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 
 export const CoApplicant: React.FC<Props> = ({data}: Props) => {
 
-
-    console.log(data)
-
     const [lesseeForm] = Form.useForm();
 
     let leaseApplicationId: string | number | undefined = data?.id
