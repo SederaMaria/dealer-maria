@@ -66,7 +66,6 @@ const layout = {
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
     relationshipToLesseeId?: number | string | undefined
-    relationshipToLesseeOptions?: any | undefined
     isDriving: number | undefined
 
 }
@@ -79,7 +78,8 @@ interface Props {
     data?: {
         id: string | number,
         colessee?: Lessee | undefined,
-        leaseCalculator: LeaseCalculator
+        leaseCalculator: LeaseCalculator,
+        relationshipToLesseeOptions?: any | undefined
     }
 }
 
@@ -115,6 +115,9 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
 
 
 export const CoApplicant: React.FC<Props> = ({data}: Props) => {
+
+
+    console.log(data)
 
     const [lesseeForm] = Form.useForm();
 
@@ -365,7 +368,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         setLesseeMailCountyOptions(data?.colessee?.mailingAddress?.countyOptions)
         setLesseeMailCityOptions(data?.colessee?.mailingAddress?.cityOptions)
 
-        setRelationshipToLesseeOptions(data?.colessee?.relationshipToLesseeOptions)
+        setRelationshipToLesseeOptions(data?.relationshipToLesseeOptions)
     }, [data]);
 
 
