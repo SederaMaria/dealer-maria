@@ -11,6 +11,7 @@ import '../../styles/Applicant.css';
 
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Content } = Layout;
 const dateFormat = 'MM/DD/YYYY';
@@ -199,6 +200,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         street2: "",
         zipcode: ""
     })
+
+    const [type, setType] = useState('month');
 
     const [stateTarget, setStateTarget] = useState("")
     const [countyTarget, setCountytarget] = useState("")
@@ -721,7 +724,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 </Select>
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col}>
+                                        {/* <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Years at Current Address" 
                                                 name={['lesseeAttributes','atAddressYears']}
@@ -733,7 +736,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
                                                 <InputNumber placeholder="Months at Current Address" />
                                             </Form.Item>
-                                        </Col>
+                                        </Col> */}
 
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
@@ -741,8 +744,11 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes','atAddressMonthsYears']}
                                             >  
                                                 <Space direction="vertical" size={12}>
-                                                    <DatePicker placeholder="01/2015" format={monthFormat} picker="month" />
+                                                    <RangePicker picker="month" onCalendarChange={val => [val?.[1]?.toDate().getTime(), val?.[0]?.toDate().getTime()]}>
+                                                        <InputNumber placeholder="10"/>
+                                                    </RangePicker>
                                                 </Space>
+                                                
                                             </Form.Item>
                                         </Col>
 
