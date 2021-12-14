@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-// import IdleTimer from 'react-idle-timer';
+import IdleTimer from 'react-idle-timer';
 import { 
   SignIn,
   SignOut, 
@@ -61,17 +61,17 @@ function App() {
           }
 
           {
-            // authenticated &&
-            //   // https://github.com/supremetechnopriest/react-idle-timer#documentation
-            //   <IdleTimer
-            //     events={['keydown', 'wheel', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'visibilitychange']}
-            //     timeout={1000 * 60 * TIMEOUT_MINUTE}
-            //     onIdle={handleOnIdle}
-            //     debounce={500}
-            //     crossTab={{
-            //       emitOnAllTabs: true
-            //     }}
-            //   />
+            authenticated &&
+              // https://github.com/supremetechnopriest/react-idle-timer#documentation
+              <IdleTimer
+                events={['keydown', 'wheel', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'visibilitychange']}
+                timeout={1000 * 60 * TIMEOUT_MINUTE}
+                onIdle={handleOnIdle}
+                debounce={500}
+                crossTab={{
+                  emitOnAllTabs: true
+                }}
+              />
           }
 
           {
