@@ -52,8 +52,16 @@
 }
 
 .space-up {
-  margin-top:'5px';
+  margin-top: 5px;
 }
+
+.space-down {
+  margin-top: 0;
+}
+
+.coApplicant-last-name {
+  margin-top: 5px; 
+ }
 
 .button-container {
   text-align: right;
@@ -65,11 +73,23 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 904px) {
-  .street-address {
-    margin-top: -11px;
+  .dob {
+    margin-top: -3px;
   }
 
-  label {
-    padding-bottom: 10px;
+  label[for="lesseeAttributes_dateOfBirth"],
+  label[for="colesseeAttributes_dateOfBirth"] {
+    padding-bottom: 5px;
+    font-size: 13px;
+  }
+
+  label[for="colesseeAttributes_relationshipToLesseeId"], 
+  label[for="lesseeAttributes_ssn"],
+  label[for="colesseeAttributes_ssn"] {
+    font-size: 12px;
+  }
+
+  .years-current-address, .monthly-mortgage{
+    margin-top: 11px;
   }
 }

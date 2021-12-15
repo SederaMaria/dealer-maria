@@ -57,7 +57,7 @@ const formLayouts = {
 
 const formLayout = formLayouts.horizontal
 
-  export interface Address {
+  interface Address {
     id?: number | undefined
     state? : string | undefined
     street1? : string | undefined
@@ -70,14 +70,14 @@ const formLayout = formLayouts.horizontal
     stateOptions? : OptionData | any
   }
 
- export interface employmentAddress {
+ interface employmentAddress {
       id?: number | undefined
       city? : string | undefined
       state? : string | undefined 
   }
 
 
-export interface Lessee {
+interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
     lastName?: string | undefined
@@ -100,8 +100,8 @@ export interface Lessee {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
-    motorcycleLicence? : boolean | undefined
-    firstTimeRider?: boolean | undefined
+    relationshipToLesseeId?: number | string | undefined
+    isDriving: number | undefined
 
 }
 
@@ -113,7 +113,8 @@ interface Props {
     data?: {
         id: string | number,
         colessee?: Lessee | undefined,
-        leaseCalculator: LeaseCalculator
+        leaseCalculator: LeaseCalculator,
+        relationshipToLesseeOptions?: any | undefined
     }
 }
 
@@ -145,7 +146,7 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
     }
 }
 
-export const Applicant: React.FC<Props> = ({data}: Props) => {
+export const CoApplicant: React.FC<Props> = ({data}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
@@ -168,6 +169,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
     const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any | undefined>(undefined)
     const [zipMailErrorMessage, setZipMailErrorMessage] = useState<string | undefined>(undefined)
+
+    const [relationshipToLesseeOptions, setRelationshipToLesseeOptions] = useState<Array<OptionData>>([])
 
     const [employerStateOptions, setEmployerStateOptions] = useState([])
     const [employmentStatusOptions, setEmploymentStatusOptions] = useState([])
@@ -391,6 +394,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         setLesseeMailStateOptions(data?.colessee?.mailingAddress?.stateOptions)
         setLesseeMailCountyOptions(data?.colessee?.mailingAddress?.countyOptions)
         setLesseeMailCityOptions(data?.colessee?.mailingAddress?.cityOptions)
+        setRelationshipToLesseeOptions(data?.relationshipToLesseeOptions)
     }, [data]);
 
 
@@ -458,14 +462,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     return data ? (
         <>
               <ApplicationSteps 
-                stepType={`applicant`} 
+                stepType={`co-applicant`} 
                 leaseApplicationId={`${leaseApplicationId}`} 
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
             />
             <div className="title-container">
                 <div className="subtitle-container">
-                    <Title level={2}> Applicant </Title>
+                    <Title level={2}> Co-Applicant </Title>
                     <p> Enter information about yourself to apply for a lease. </p>
                 </div>
             <Form 
@@ -494,8 +498,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.colessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.colessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.colessee?.grossMonthlyIncome,
-                            motorcycleLicence: data?.colessee?.motorcycleLicence,
-                            firstTimeRider: data?.colessee?.firstTimeRider,
+                            relationshipToLesseeId: data?.colessee?.relationshipToLesseeId,
+                            isDriving: data?.colessee?.isDriving,
                             homeAddressAttributes: {
                                 state: data?.colessee?.homeAddress?.state,
                                 street1: data?.colessee?.homeAddress?.street1,
@@ -532,6 +536,24 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             <Col {...formLayout.container.formCol}>
                                 <Card title="Personal" className="card">
                                     <Row gutter={[16, 0]}>
+                                    <Col {...formLayout.field.col}>
+                                            <Form.Item 
+                                                label="Relationship To Applicant" 
+                                                name={['colesseeAttributes', 'relationshipToLesseeId']}
+                                                rules={[{ required: true, message: 'Relationship To Applicant is required!' }]}
+                                            >  
+                                                <Select 
+                                                    showSearch 
+                                                    placeholder="Relationship To Applicant" 
+                                                    >
+                                                {
+                                                    relationshipToLesseeOptions && relationshipToLesseeOptions.map(({value, label}, index) => {
+                                                    return <Option key={index} value={`${value}`}>{label}</Option>
+                                                    })
+                                                }
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="First Name" 
@@ -555,16 +577,17 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['colesseeAttributes', 'lastName']}
                                                 rules={[{ required: true, message: 'Last Name is required!' }]}
                                             >  
-                                                <Input placeholder="Last Name"  className="ant-input-comp" />
+                                                <Input placeholder="Last Name"  className="ant-input-comp coApplicant-last-name" />
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col} className="space-up">
+                                        <Col {...formLayout.field.col} className="space-up dob">
                                             <DobInput dateFormat={dateFormat} form={lesseeForm} />
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Social Security Number"
                                                 name={['colesseeAttributes', 'ssn']}
+                                                className="space-down"
                                             >
                                                 <Input type="hidden" />
                                             </Form.Item>
@@ -572,28 +595,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <SsnInput defaultValue={(data?.colessee && data?.colessee?.ssn?.replace(/-/g, "")) || "" } form={lesseeForm} lesseeType="lessee"/>
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item
-                                                label="First Time Rider ?"
-                                                name={['colesseeAttributes','firstTimeRider']}
-                                            >
-                                                <Radio.Group defaultValue={true}>
-                                                    <Radio value={true}>YES</Radio>
-                                                    <Radio value={false}>NO</Radio>
-                                                </Radio.Group>
-                                            </Form.Item>
-                                        </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item 
-                                                label="Motorcycle Licence ?"
-                                                name={['colesseeAttributes','motorcycleLicence']}
-                                            >
-                                                <Radio.Group defaultValue={false}>
-                                                    <Radio value={true}>Yes</Radio>
-                                                    <Radio value={false}>No</Radio>
-                                                </Radio.Group>
-                                            </Form.Item>
-                                        </Col>
+                                        
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Phone Number" 
@@ -611,6 +613,19 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
                                         </Col> 
+
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item 
+                                                label="Driving or not?" 
+                                                name={['colesseeAttributes','isDriving']}
+                                                rules={[{ required: true, message: 'Driving or not? is required!' }]}
+                                            	>                      
+                                                <Radio.Group>
+                                                <Radio value={1}>Yes</Radio>
+                                                <Radio value={0}>No</Radio>
+                                                </Radio.Group> 
+                                            </Form.Item>
+                                        </Col>
                                     </Row> 
                                 </Card>
                             </Col>
@@ -727,7 +742,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['colesseeAttributes','atAddressYears']}
                                                 rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
-                                                <InputNumber className="space-up" placeholder="Years at Current Address" />
+                                                <InputNumber className="space-up years-current-address" placeholder="Years at Current Address" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -741,7 +756,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['colesseeAttributes','monthlyMortgage']}
                                                 rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
-                                                <InputNumber className="space-up" placeholder="Monthly Mortgage or Rent" />
+                                                <InputNumber className="space-up monthly-mortgage" placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
                                             <Form.Item
                                                 name={['colesseeAttributes','homeOwnership']}
@@ -1014,10 +1029,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         
                                     </Button>
                                     <Button className="button" type="primary" >
-                                        <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
+                                        <Link to={`/applications/${leaseApplicationId}/applicant`}> prev </Link>
                                     </Button>
                                     <Button className="button" type="primary" >
-                                        <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>
+                                        <Link to={`/applications/${leaseApplicationId}/summary`}> Next </Link>
                                     </Button>
                                 </div>
 
@@ -1055,4 +1070,4 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     ) : null
 }
 
-export default Applicant
+export default CoApplicant

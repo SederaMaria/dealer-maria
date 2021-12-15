@@ -560,13 +560,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col} className="space-up">
+                                        <Col {...formLayout.field.col} className="space-up dob">
                                             <DobInput dateFormat={dateFormat} form={lesseeForm} />
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Social Security Number"
                                                 name={['lesseeAttributes', 'ssn']}
+                                                className="space-down"
                                             >
                                                 <Input type="hidden" />
                                             </Form.Item>
@@ -729,7 +730,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes','atAddressYears']}
                                                 rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
-                                                <InputNumber className="space-up" placeholder="Years at Current Address" />
+                                                <InputNumber className="space-up years-current-address" placeholder="Years at Current Address" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -743,7 +744,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes','monthlyMortgage']}
                                                 rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
-                                                <InputNumber className="space-up" placeholder="Monthly Mortgage or Rent" />
+                                                <InputNumber className="space-up monthly-mortgage" placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
                                             <Form.Item
                                                 name={['lesseeAttributes','homeOwnership']}
