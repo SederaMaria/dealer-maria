@@ -78,6 +78,11 @@ const formLayout = formLayouts.horizontal
       state? : string | undefined 
   }
 
+  export interface MonthsYears{
+      id?: number | undefined
+      monthyears? : string | undefined
+  }
+
 
 export interface Lessee {
     firstName?: string | undefined
@@ -93,7 +98,7 @@ export interface Lessee {
     atAddressMonths?: number | string | undefined
     atAddressYears?: number | string | undefined
 
-    atAddressMonthsYears?: number | string | undefined
+    atAddressMonthsYears?: MonthsYears
 
     monthlyMortgage?: number | string | undefined
     homeOwnership?: number | undefined 
@@ -217,6 +222,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     })
 
     const monthFormat = "MM/YYYY"
+
+    const [monthYear, setMonthYear] = useState({
+        monthyears: ""
+    })
 
 
     const submitApplication = async (values: any) => {
@@ -435,6 +444,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         setCityTarget(f.children)
     }
 
+    const handleMonthYear = (e:any) => {
+        const { name, value } = e.target
+        setMonthYear({
+            ...monthYear,
+            [name]: value 
+        });
+    }
+
     const fillMailingAddress = (e:any)=>{
         if(e.target.checked){
             setMailingAddress({
@@ -497,7 +514,9 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             atAddressMonths: data?.lessee?.atAddressMonths,
                             atAddressYears: data?.lessee?.atAddressYears,
 
-                            atAddressMonthsYears: data?.lessee?.atAddressMonthsYears,
+                            atAddressMonthsYears: {
+                                monthyears: data?.lessee?.atAddressMonthsYears?.monthyears
+                            },
 
                             monthlyMortgage: data?.lessee?.monthlyMortgage,
                             homeOwnership: data?.lessee?.homeOwnership,
@@ -744,11 +763,18 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes','atAddressMonthsYears']}
                                             >  
                                                 <Space direction="vertical" size={12}>
-                                                    <RangePicker picker="month" onCalendarChange={val => [val?.[1]?.toDate().getTime(), val?.[0]?.toDate().getTime()]}>
+                                                    <RangePicker picker="month" onCalendarChange={handleMonthYear}>
                                                         <InputNumber placeholder="10"/>
                                                     </RangePicker>
                                                 </Space>
-                                                
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item 
+                                                label="Months/Years at Current Address (mm/yyyy)" 
+                                                name={['lesseeAttributes','atAddressMonthsYears']}
+                                            >  
+                                                <InputNumber placeholder="Months at Current Address" />
                                             </Form.Item>
                                         </Col>
 
