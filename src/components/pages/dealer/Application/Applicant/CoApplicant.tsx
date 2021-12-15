@@ -8,6 +8,7 @@ import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
 
+
 const { Option } = Select;
 const { Title } = Typography;
 const { Content } = Layout;
@@ -20,44 +21,43 @@ const layout = {
       span: 24,
     },
   };
-
-  const formLayouts = {
-    horizontal: {
-      container: {
-        placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
-        formCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
-      },
-      field: {
-          col: { xs: 24, sm: 24, md: 8, lg: 9, xl: 8 },
-          colgroup: {
-          2: { xs: 24, sm: 24, md: 16, lg: 10, xl: 8 },
-        },
-        colmem: {
-          2: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
-        },
-      },
+  
+const formLayouts = {
+  horizontal: {
+    container: {
+      placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      formCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
     },
-    vertical: {
-      container: {
-        placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 4 },
-        formCol: { xs: 24, sm: 24, md: 24, lg: 12, xl: 8 },
-      },
-      field: {
-        col: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+    field: {
+        col: { xs: 24, sm: 24, md: 8, lg: 9, xl: 8 },
         colgroup: {
-          2: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
-        },
-        colmem: {
-          2: { xs: 24, sm: 24, md: 24, lg: 12, xl: 12 },
-        },
+        2: { xs: 24, sm: 24, md: 16, lg: 10, xl: 8 },
+      },
+      colmem: {
+        2: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
       },
     },
-  }
-  
-  const formLayout = formLayouts.horizontal
-  
+  },
+  vertical: {
+    container: {
+      placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 4 },
+      formCol: { xs: 24, sm: 24, md: 24, lg: 12, xl: 8 },
+    },
+    field: {
+      col: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      colgroup: {
+        2: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      },
+      colmem: {
+        2: { xs: 24, sm: 24, md: 24, lg: 12, xl: 12 },
+      },
+    },
+  },
+}
 
-  interface Address {
+const formLayout = formLayouts.horizontal
+
+  export interface Address {
     id?: number | undefined
     state? : string | undefined
     street1? : string | undefined
@@ -70,14 +70,14 @@ const layout = {
     stateOptions? : OptionData | any
   }
 
-  interface employmentAddress {
+ export interface employmentAddress {
       id?: number | undefined
       city? : string | undefined
       state? : string | undefined 
   }
 
 
-  interface Lessee {
+export interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
     lastName?: string | undefined
@@ -100,9 +100,8 @@ const layout = {
     timeAtEmployerYears?: number | string | undefined
     timeAtEmployerMonths?: number | string | undefined
     grossMonthlyIncome?: number | string | undefined
-    relationshipToLesseeId?: number | string | undefined
-    relationshipToLesseeOptions?: any | undefined
-    isDriving: number | undefined
+    motorcycleLicence? : boolean | undefined
+    firstTimeRider?: boolean | undefined
 
 }
 
@@ -146,8 +145,7 @@ const formatOptions = (params: { options: Array<any>, type?: string }) => {
     }
 }
 
-
-export const CoApplicant: React.FC<Props> = ({data}: Props) => {
+export const Applicant: React.FC<Props> = ({data}: Props) => {
 
     const [lesseeForm] = Form.useForm();
 
@@ -171,8 +169,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
     const [zipMailValidateStatus, setZipMailValidateStatus] = useState<any | undefined>(undefined)
     const [zipMailErrorMessage, setZipMailErrorMessage] = useState<string | undefined>(undefined)
 
-    const [relationshipToLesseeOptions, setRelationshipToLesseeOptions] = useState<Array<OptionData>>([])
-    
     const [employerStateOptions, setEmployerStateOptions] = useState([])
     const [employmentStatusOptions, setEmploymentStatusOptions] = useState([])
 
@@ -210,6 +206,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         county:"",
         city:""
     })
+
 
     const submitApplication = async (values: any) => {
         try {
@@ -375,9 +372,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
-
-    
-
     useEffect(() => {
         getEmployerStatus()
         window.addEventListener('beforeunload', alertUser)
@@ -397,8 +391,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         setLesseeMailStateOptions(data?.colessee?.mailingAddress?.stateOptions)
         setLesseeMailCountyOptions(data?.colessee?.mailingAddress?.countyOptions)
         setLesseeMailCityOptions(data?.colessee?.mailingAddress?.cityOptions)
-
-        setRelationshipToLesseeOptions(data?.colessee?.relationshipToLesseeOptions)
     }, [data]);
 
 
@@ -463,24 +455,24 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         city: mailingAddress.city
     })
 
-
     return data ? (
         <>
               <ApplicationSteps 
-                stepType={`co-applicant`} 
+                stepType={`applicant`} 
                 leaseApplicationId={`${leaseApplicationId}`} 
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
             />
             <div className="title-container">
                 <div className="subtitle-container">
-                    <Title level={2}> Co-Applicant </Title>
+                    <Title level={2}> Applicant </Title>
                     <p> Enter information about yourself to apply for a lease. </p>
                 </div>
             <Form 
                     form={lesseeForm}
                     {...layout}  
                     onFinish={handleSubmit}
+                   
                     initialValues={{
                         colesseeAttributes: {
                             firstName: data?.colessee?.firstName,
@@ -502,8 +494,8 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                             timeAtEmployerYears: data?.colessee?.timeAtEmployerYears,
                             timeAtEmployerMonths: data?.colessee?.timeAtEmployerMonths,
                             grossMonthlyIncome: data?.colessee?.grossMonthlyIncome,
-                            relationshipToLesseeId: data?.colessee?.relationshipToLesseeId,
-                            isDriving: data?.colessee?.isDriving,
+                            motorcycleLicence: data?.colessee?.motorcycleLicence,
+                            firstTimeRider: data?.colessee?.firstTimeRider,
                             homeAddressAttributes: {
                                 state: data?.colessee?.homeAddress?.state,
                                 street1: data?.colessee?.homeAddress?.street1,
@@ -528,7 +520,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                         }
                     }}
                 >
-                    <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 50}}>
+                    <Content className="content-1">
 
                         <Row gutter={[16, 40]}>
                             <Col span={24} className="cca-center-text">
@@ -538,12 +530,13 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                         <Row gutter={[16, 16]}>
                             <Col {...formLayout.container.formCol}>
-                            <Card title="Personal" className="card">
+                                <Card title="Personal" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="First Name" 
                                                 name={['colesseeAttributes', 'firstName']}
+                                                rules={[{ required: true, message: 'First Name is required!' }]}
                                             >  
                                                 <Input placeholder="First Name" className="ant-input-comp"  />
                                             </Form.Item>
@@ -560,6 +553,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Last Name" 
                                                 name={['colesseeAttributes', 'lastName']}
+                                                rules={[{ required: true, message: 'Last Name is required!' }]}
                                             >  
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
@@ -620,7 +614,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                     </Row> 
                                 </Card>
                             </Col>
-                            
+
                             <Col {...formLayout.container.formCol}>
                                 <Card title="Home Address" className="card">
                                     <Row gutter={[16, 0]}>
@@ -629,6 +623,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['colesseeAttributes','homeAddressAttributes','street1']}
                                                 className="street-address"
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -647,6 +642,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['colesseeAttributes', 'homeAddressAttributes','zipcode']}
                                                 validateStatus={zipHomeValidateStatus}
                                                 help={zipHomeErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >  
                                                 <MaskedInput
                                                     mask="11111"
@@ -656,7 +652,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     className="ant-input-comp space-up"
                                                     name="zipcode"
                                                     onChange={handleChange}
-                                    
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -664,6 +659,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','state']}
+                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -685,6 +681,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item
                                                 label="County/Parish" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','county']}
+                                                rules={[{ required: true, message: 'County/Parish is required!' }]}
                                             >
                                                 <Select 
                                                     showSearch 
@@ -706,6 +703,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="City" 
                                                 name={['colesseeAttributes', 'homeAddressAttributes','cityId']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -727,12 +725,13 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Years at Current Address" 
                                                 name={['colesseeAttributes','atAddressYears']}
+                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
                                                 <InputNumber className="space-up" placeholder="Years at Current Address" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
-                                            <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
+                                            <Form.Item label="Months at Current Address" name={['colesseeAttributes','atAddressMonths']}>  
                                                 <InputNumber className="space-up" placeholder="Months at Current Address" />
                                             </Form.Item>
                                         </Col>
@@ -740,11 +739,13 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['colesseeAttributes','monthlyMortgage']}
+                                                rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
                                                 <InputNumber className="space-up" placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
                                             <Form.Item
                                                 name={['colesseeAttributes','homeOwnership']}
+                                                rules={[{ required: true, message: 'Ownership is required!' }]}
                                             >
                                                 <Radio.Group className="space-up">
                                                     <Radio value={1}>Own</Radio>
@@ -756,7 +757,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                 </Card>
                             </Col>
 
-                            <Col  {...formLayout.container.formCol}>
+                            <Col {...formLayout.container.formCol}>
                                 <Card title="Mailing Address" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
@@ -768,6 +769,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Street Address (no P.O. Boxes)"  
                                                 name="street1"
                                                 className="street-address"
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -783,14 +785,14 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 name="zipcode"
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >
                                                 <MaskedInput 
                                                     mask="11111"
                                                     placeholder="ZIP Code"
                                                     onPressEnter={handleLesseeMailZipcodeBlur}
                                                     onBlur={handleLesseeMailZipcodeBlur}
-                                                    className="ant-input-comp space-up"
-        
+                                                    className="ant-input-comp space-up" 
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -860,8 +862,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                     </Content>
 
-                
-                    <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 20}}>
+                    <Content className="content-1">
 
                         <Row gutter={[16, 16]}>
                             <Col span={24} className="cca-center-text">
@@ -881,8 +882,9 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     <Form.Item
                                                         style={{display: 'none'}}
                                                         name={['colesseeAttributes', 'employmentAddressAttributes','id']}
+
                                                     >
-                                                        <Input className="space-up"/>
+                                                        <Input className="space-up" />
                                                     </Form.Item>
                                                 </Col>
                                         }
@@ -890,6 +892,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Employer Name"
                                                 name={['colesseeAttributes', 'employerName']}
+                                                rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >  
                                                 <Input placeholder="Employer Name"  className="ant-input-comp space-up"  />
                                             </Form.Item>
@@ -898,6 +901,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Phone Number"
                                                 name={['colesseeAttributes', 'employerPhoneNumber']}
+                                                rules={[{ required: true, message: 'Phone Number is required!' }]}
                                             >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
@@ -910,6 +914,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="City"
                                                 name={['colesseeAttributes', 'employmentAddressAttributes', 'city']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Input placeholder="City" className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -918,6 +923,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['colesseeAttributes', 'employmentAddressAttributes','state']}
+                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select
                                                     showSearch
@@ -943,6 +949,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Employment Status"
                                                 name={['colesseeAttributes','employmentStatus']}
+                                                rules={[{ required: true, message: 'Status is required!' }]}
                                             >
                                                 <Select
                                                     showSearch 
@@ -963,8 +970,9 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Job Title"
                                                 name={['colesseeAttributes', 'jobTitle']}
+                                                rules={[{ required: true, message: 'Job Tile is required!' }]}
                                             >  
-                                                <Input placeholder="Job Title"  className="ant-input-comp space-up"  />
+                                                <Input placeholder="Job Title"  className="ant-input-comp space-up" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.colgroup[2]}>
@@ -973,6 +981,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                   <Form.Item 
                                                       label="Years Employed"
                                                       name={['colesseeAttributes', 'timeAtEmployerYears']}
+                                                      rules={[{ required: true, message: 'Years Employed is required!' }]}
                                                   >
                                                       <InputNumber className="space-up" placeholder="Years Employed" />
                                                   </Form.Item>
@@ -991,6 +1000,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Gross Monthly Income"
                                                 name={['colesseeAttributes', 'grossMonthlyIncome']}
+                                                rules={[{ required: true, message: 'Gross Monthly Income is required!' }]}
                                             >  
                                                 <InputNumber className="space-up" placeholder="Gross Monthly Income" />
                                             </Form.Item>
@@ -999,7 +1009,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                 </Card>
 
                                 <div className="button-container">
-                                    <Button className="button"  disabled={disableSubmitBtn} htmlType="submit" >
+                                    <Button className="button" disabled={disableSubmitBtn} htmlType="submit" >
                                         Save
                                         
                                     </Button>
@@ -1014,8 +1024,8 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
                         </Row>
                     </Content>
-   
-                    {/* 
+
+    {/* 
                     <Content className="content-2">
                         <Row >
                             <Col span={24} >
@@ -1045,4 +1055,4 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
     ) : null
 }
 
-export default CoApplicant
+export default Applicant

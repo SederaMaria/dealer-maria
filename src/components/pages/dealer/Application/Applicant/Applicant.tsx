@@ -538,6 +538,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="First Name" 
                                                 name={['lesseeAttributes', 'firstName']}
+                                                rules={[{ required: true, message: 'First Name is required!' }]}
                                             >  
                                                 <Input placeholder="First Name" className="ant-input-comp"  />
                                             </Form.Item>
@@ -554,6 +555,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Last Name" 
                                                 name={['lesseeAttributes', 'lastName']}
+                                                rules={[{ required: true, message: 'Last Name is required!' }]}
                                             >  
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
@@ -623,6 +625,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['lesseeAttributes','homeAddressAttributes','street1']}
                                                 className="street-address"
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -641,6 +644,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes', 'homeAddressAttributes','zipcode']}
                                                 validateStatus={zipHomeValidateStatus}
                                                 help={zipHomeErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >  
                                                 <MaskedInput
                                                     mask="11111"
@@ -657,6 +661,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','state']}
+                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -678,6 +683,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item
                                                 label="County/Parish" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','county']}
+                                                rules={[{ required: true, message: 'County/Parish is required!' }]}
                                             >
                                                 <Select 
                                                     showSearch 
@@ -699,6 +705,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="City" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','cityId']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -720,6 +727,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Years at Current Address" 
                                                 name={['lesseeAttributes','atAddressYears']}
+                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
                                             >  
                                                 <InputNumber className="space-up" placeholder="Years at Current Address" />
                                             </Form.Item>
@@ -733,11 +741,13 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['lesseeAttributes','monthlyMortgage']}
+                                                rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
                                                 <InputNumber className="space-up" placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
                                             <Form.Item
                                                 name={['lesseeAttributes','homeOwnership']}
+                                                rules={[{ required: true, message: 'Ownership is required!' }]}
                                             >
                                                 <Radio.Group className="space-up">
                                                     <Radio value={1}>Own</Radio>
@@ -761,6 +771,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Street Address (no P.O. Boxes)"  
                                                 name="street1"
                                                 className="street-address"
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
                                                 <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -776,13 +787,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name="zipcode"
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >
                                                 <MaskedInput 
                                                     mask="11111"
                                                     placeholder="ZIP Code"
                                                     onPressEnter={handleLesseeMailZipcodeBlur}
                                                     onBlur={handleLesseeMailZipcodeBlur}
-                                                    className="ant-input-comp space-up"
+                                                    className="ant-input-comp space-up" 
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -872,6 +884,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     <Form.Item
                                                         style={{display: 'none'}}
                                                         name={['lesseeAttributes', 'employmentAddressAttributes','id']}
+
                                                     >
                                                         <Input className="space-up" />
                                                     </Form.Item>
@@ -881,6 +894,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Employer Name"
                                                 name={['lesseeAttributes', 'employerName']}
+                                                rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >  
                                                 <Input placeholder="Employer Name"  className="ant-input-comp space-up"  />
                                             </Form.Item>
@@ -889,6 +903,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Phone Number"
                                                 name={['lesseeAttributes', 'employerPhoneNumber']}
+                                                rules={[{ required: true, message: 'Phone Number is required!' }]}
                                             >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
@@ -901,6 +916,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="City"
                                                 name={['lesseeAttributes', 'employmentAddressAttributes', 'city']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Input placeholder="City" className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -909,6 +925,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'employmentAddressAttributes','state']}
+                                                rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select
                                                     showSearch
@@ -934,6 +951,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Employment Status"
                                                 name={['lesseeAttributes','employmentStatus']}
+                                                rules={[{ required: true, message: 'Status is required!' }]}
                                             >
                                                 <Select
                                                     showSearch 
@@ -954,6 +972,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Job Title"
                                                 name={['lesseeAttributes', 'jobTitle']}
+                                                rules={[{ required: true, message: 'Job Tile is required!' }]}
                                             >  
                                                 <Input placeholder="Job Title"  className="ant-input-comp space-up" />
                                             </Form.Item>
@@ -964,6 +983,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                   <Form.Item 
                                                       label="Years Employed"
                                                       name={['lesseeAttributes', 'timeAtEmployerYears']}
+                                                      rules={[{ required: true, message: 'Years Employed is required!' }]}
                                                   >
                                                       <InputNumber className="space-up" placeholder="Years Employed" />
                                                   </Form.Item>
@@ -982,6 +1002,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label="Gross Monthly Income"
                                                 name={['lesseeAttributes', 'grossMonthlyIncome']}
+                                                rules={[{ required: true, message: 'Gross Monthly Income is required!' }]}
                                             >  
                                                 <InputNumber className="space-up" placeholder="Gross Monthly Income" />
                                             </Form.Item>
