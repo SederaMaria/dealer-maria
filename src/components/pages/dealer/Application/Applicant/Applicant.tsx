@@ -843,6 +843,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item
                                                 label="City"
                                                 name="city"
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >
                                                 <Select
                                                     showSearch
