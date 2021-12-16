@@ -10,6 +10,7 @@ import DobInput from './DobInput'
 import '../../styles/Applicant.css';
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Content } = Layout;
 const dateFormat = 'MM/DD/YYYY';
@@ -57,7 +58,7 @@ const layout = {
     atAddressMonths?: number | string | undefined
     atAddressYears?: number | string | undefined
 
-    atAddressMonthsYears?: number | string | undefined
+    monthYears?: number | string | undefined
 
     monthlyMortgage?: number | string | undefined
     homeOwnership?: number | undefined 
@@ -182,7 +183,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         city:""
     })
 
-    const monthFormat = "MM/YYYY"
+    const [monthYears, setMonthYear] = useState("")
 
     const submitApplication = async (values: any) => {
         try {
@@ -426,6 +427,11 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
             })
         }
     }
+    const handleMonthYear = (e:any, f:any) => {
+        const monthYearDiff = e[1].toDate()-e[0].toDate()
+        const toMonthYears = (monthYearDiff/(365)/(86400000)).toFixed(2)
+        setMonthYear(toMonthYears)
+    }
 
     lesseeForm.setFieldsValue({
         street1: mailingAddress.street1,
@@ -466,9 +472,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                             mobilePhoneNumber: data?.colessee?.mobilePhoneNumber,
                             atAddressMonths: data?.colessee?.atAddressMonths,
                             atAddressYears: data?.colessee?.atAddressYears,
-
-                            atAddressMonthsYears: data?.colessee?.atAddressMonthsYears,
-
+                            monthYears: data?.colessee?.monthYears,
                             monthlyMortgage: data?.colessee?.monthlyMortgage,
                             homeOwnership: data?.colessee?.homeOwnership,
                             employerName: data?.colessee?.employerName,
@@ -758,17 +762,17 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             </Form.Item>
                                         </Col> 
                                     </Row>
-
                                     <Row>
                                         <Col span={24}> 
                                         <Form.Item 
-                                                label="Months/Years at Current Address (mm/yyyy)" 
-                                                name={['lesseeAttributes','atAddressMonthsYears']}
-                                            >  
-                                                <Space direction="vertical" size={12}>
-                                                    <DatePicker placeholder="01/2015" format={monthFormat} picker="month" />
-                                                </Space>
-                                            </Form.Item>
+                                            label="Length of Stay at Current Address" 
+                                            name={['colesseeAttributes','monthYears']}
+                                        >  
+                                            <Space direction="horizontal">
+                                                <RangePicker picker="date" onChange={handleMonthYear} />                                                        
+                                                <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears)}/>                                                                                                    
+                                            </Space>
+                                        </Form.Item>
                                         </Col> 
                                     </Row>
 
