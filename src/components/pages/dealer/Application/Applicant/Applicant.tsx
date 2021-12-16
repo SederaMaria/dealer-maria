@@ -8,6 +8,7 @@ import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
+import { start } from 'repl';
 
 
 const { Option } = Select;
@@ -80,7 +81,8 @@ const formLayout = formLayouts.horizontal
 
   export interface MonthsYears{
       id?: number | undefined
-      monthyears? : string | undefined
+      startDate? : any
+      endDate? : any 
   }
 
 
@@ -97,9 +99,7 @@ export interface Lessee {
     mailingAddress?: Address
     atAddressMonths?: number | string | undefined
     atAddressYears?: number | string | undefined
-
-    atAddressMonthsYears?: MonthsYears
-
+    monthYears?: number | string | undefined
     monthlyMortgage?: number | string | undefined
     homeOwnership?: number | undefined 
     employerName?: string | undefined
@@ -221,12 +221,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         city:""
     })
 
-    const monthFormat = "MM/YYYY"
-
-    const [monthYear, setMonthYear] = useState({
-        monthyears: ""
-    })
-
+    const [monthYears, setMonthYear] = useState("")
 
     const submitApplication = async (values: any) => {
         try {
@@ -444,12 +439,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         setCityTarget(f.children)
     }
 
-    const handleMonthYear = (e:any) => {
-        const { name, value } = e.target
-        setMonthYear({
-            ...monthYear,
-            [name]: value 
-        });
+    const handleMonthYear = (e:any, f:any) => {
+        const monthYearDiff = e[1].toDate()-e[0].toDate()
+        const toMonthYears = (monthYearDiff/(365)/(86400000)).toFixed(2)
+        setMonthYear(toMonthYears)
     }
 
     const fillMailingAddress = (e:any)=>{
@@ -513,10 +506,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
                             atAddressMonths: data?.lessee?.atAddressMonths,
                             atAddressYears: data?.lessee?.atAddressYears,
-
-                            atAddressMonthsYears: {
-                                monthyears: data?.lessee?.atAddressMonthsYears?.monthyears
-                            },
+                            monthYears: data?.lessee?.monthYears,
+                            
 
                             monthlyMortgage: data?.lessee?.monthlyMortgage,
                             homeOwnership: data?.lessee?.homeOwnership,
@@ -743,41 +734,17 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 </Select>
                                             </Form.Item>
                                         </Col>
-                                        {/* <Col {...formLayout.field.col}>
-                                            <Form.Item 
-                                                label="Years at Current Address" 
-                                                name={['lesseeAttributes','atAddressYears']}
-                                            >  
-                                                <InputNumber placeholder="Years at Current Address" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber placeholder="Months at Current Address" />
-                                            </Form.Item>
-                                        </Col> */}
-
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                label="Months/Years at Current Address (mm/yyyy)" 
-                                                name={['lesseeAttributes','atAddressMonthsYears']}
+                                                label="Length of Stay at Current Address" 
+                                                name={['lesseeAttributes','monthYears']}
                                             >  
-                                                <Space direction="vertical" size={12}>
-                                                    <RangePicker picker="month" onCalendarChange={handleMonthYear}>
-                                                        <InputNumber placeholder="10"/>
-                                                    </RangePicker>
+                                                <Space direction="horizontal">
+                                                    <RangePicker picker="date" onChange={handleMonthYear} />                                                        
+                                                    <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears)}/>                                                                                                    
                                                 </Space>
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item 
-                                                label="Months/Years at Current Address (mm/yyyy)" 
-                                                name={['lesseeAttributes','atAddressMonthsYears']}
-                                            >  
-                                                <InputNumber placeholder="Months at Current Address" />
-                                            </Form.Item>
-                                        </Col>
-
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
