@@ -183,7 +183,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
         city:""
     })
 
-    const [monthYears, setMonthYear] = useState("")
+    const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
 
     const submitApplication = async (values: any) => {
         try {
@@ -744,24 +744,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 </Select>
                                             </Form.Item>
                                         </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                                label="Years at Current Address" 
-                                                name={['colesseeAttributes','atAddressYears']}
-                                            >  
-                                                <InputNumber placeholder="Years at Current Address" />
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Months at Current Address" name={['colesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber placeholder="Months at Current Address" />
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
+                                    </Row>                                    
                                     <Row>
                                         <Col span={24}> 
                                         <Form.Item 
@@ -769,8 +752,8 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             name={['colesseeAttributes','monthYears']}
                                         >  
                                             <Space direction="horizontal">
-                                                <RangePicker picker="date" onChange={handleMonthYear} />                                                        
-                                                <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears)}/>                                                                                                    
+                                                <RangePicker picker="date" onChange={handleMonthYear}/>                                                        
+                                                <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears!==0 ? monthYears : "")}/>                                                                                                    
                                             </Space>
                                         </Form.Item>
                                         </Col> 

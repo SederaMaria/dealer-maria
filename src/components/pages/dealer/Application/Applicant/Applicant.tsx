@@ -214,7 +214,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         city:""
     })
 
-    const [monthYears, setMonthYear] = useState("")
+    const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
 
     const submitApplication = async (values: any) => {
         try {
@@ -732,7 +732,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             >  
                                                 <Space direction="horizontal">
                                                     <RangePicker picker="date" onChange={handleMonthYear} />                                                        
-                                                    <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears)}/>                                                                                                    
+                                                    <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears!==0 ? monthYears : "")}/>                                                                                                    
                                                 </Space>
                                             </Form.Item>
                                         </Col>
