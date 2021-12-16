@@ -79,13 +79,6 @@ const formLayout = formLayouts.horizontal
       state? : string | undefined 
   }
 
-  export interface MonthsYears{
-      id?: number | undefined
-      startDate? : any
-      endDate? : any 
-  }
-
-
 export interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
@@ -506,9 +499,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
                             atAddressMonths: data?.lessee?.atAddressMonths,
                             atAddressYears: data?.lessee?.atAddressYears,
-                            monthYears: data?.lessee?.monthYears,
-                            
-
+                            monthYears: data?.lessee?.monthYears,                       
                             monthlyMortgage: data?.lessee?.monthlyMortgage,
                             homeOwnership: data?.lessee?.homeOwnership,
                             employerName: data?.lessee?.employerName,
