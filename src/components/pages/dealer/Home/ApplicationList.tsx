@@ -141,12 +141,6 @@ const menu = (actionPermission: ActionPermission, record: Applications) => {
         }
       </Menu.Item>
       {
-        !actionPermission.submitted &&
-          <Menu.Item>
-            <a href="#">Submit to Speed Leasing</a>
-          </Menu.Item>
-      }
-      {
         actionPermission.canSwapApplicants &&
           <Menu.Item>
             <a href="#">Swap Applicants</a>
