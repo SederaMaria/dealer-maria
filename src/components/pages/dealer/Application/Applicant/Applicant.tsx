@@ -215,6 +215,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     })
 
     const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
+    const [btnAttribute, setBtnAttribute] = useState(true);
+    const [btnClass, setBtnClass] = useState("button")
 
     const submitApplication = async (values: any) => {
         try {
@@ -222,6 +224,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
            setHasSubmitError(false)
            setDisableSubmitBtn(true)
            setSubmitSuccess(true)
+           setBtnAttribute(false)
+           setBtnClass("button")
            message.success("Save Successfully");
         } catch (e) {
           logger.error("Request Error", e);
@@ -420,6 +424,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         });
     }
 
+    const handleFormChange = () => {
+        setBtnClass("green-border")
+    }
+
     const handleStateTarget = (e:any, f:any)=> {
         setStateTarget(f.children)
     }
@@ -487,6 +495,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                     {...layout}  
                     onFinish={handleSubmit}
                     // scrollToFirstError={true}
+                    onChange={handleFormChange}
                     initialValues={{
                         lesseeAttributes: {
                             firstName: data?.lessee?.firstName,
@@ -619,6 +628,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no"
+                                                    onChange={handleFormChange}
                                                 />
                                             </Form.Item>
                                             <Radio.Group defaultValue={1}>
@@ -919,6 +929,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no space-up"
+                                                    onChange={handleFormChange}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -1021,18 +1032,17 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                 </Card>
 
                                 <div className="button-container">
-                                    <Button className="button" disabled={disableSubmitBtn} htmlType="submit" >
+                                    <Button className={btnClass} disabled={disableSubmitBtn} htmlType="submit" >
                                         Save
                                         
                                     </Button>
                                     <Button className="button" type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
                                     </Button>
-                                    <Button className="button" type="primary" >
+                                    <Button className="button" type="primary" disabled={btnAttribute}>
                                         <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>
                                     </Button>
                                 </div>
-
                             </Col>
                         </Row>
                     </Content>
