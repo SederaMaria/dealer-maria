@@ -72,6 +72,11 @@
   margin-right: 10px;
 }
 
+.green-border {
+  border: 2px solid green;
+  margin-right: 10px;
+}
+
 @media screen and (min-width: 768px) and (max-width: 904px) {
   .dob {
     margin-top: -3px;
