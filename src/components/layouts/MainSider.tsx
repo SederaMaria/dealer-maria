@@ -14,7 +14,7 @@ interface Props {
 
 export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
     return (
-        <Sider {...SiderProps as object} >
+        <Sider {...SiderProps as object}>
           <Menu
             defaultSelectedKeys={[`${activeKey}`]}
           >
