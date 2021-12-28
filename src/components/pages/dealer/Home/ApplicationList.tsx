@@ -57,6 +57,9 @@ const columns: ColumnsType<Applications> = [
     key: 'applicationIdentifier',
     title: 'Application Identifier',
     dataIndex: 'applicationIdentifier',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    },
     render(val, row) {
       return (
         <Link to={`/applications/${row.id}/summary`}> { val == null ? 'N/A' : val } </Link>
@@ -67,36 +70,57 @@ const columns: ColumnsType<Applications> = [
     key: 'applicant',
     title: 'Applicant',
     dataIndex: 'applicant',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     key: 'coApplicant',
     title: 'Co-Applicant',
     dataIndex: 'coApplicant',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     key: 'modelAndYear',
     title: 'Model and Year',
     dataIndex: 'modelAndYear',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     key: 'creditStatus',
     title: 'Credit Status',
     dataIndex: 'creditStatus',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     key: 'documentStatus',
     title: 'Document Status',
     dataIndex: 'documentStatus',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     key: 'daysSubmitted',
     title: 'Days Submitted',
     dataIndex: 'daysSubmitted',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     key: 'lastUpdated',
     title: 'Last Updated',
     dataIndex: 'lastUpdated',
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    }
   },
   {
     title: '',
@@ -221,7 +245,7 @@ function ApplicationList() {
 
   const [paginationProps, setPaginationProps] = useState<object>({ total: 0 })
   const [paginationData, setPaginationData] = useState<object>({})
-
+  
   const showDrawer = () => {
     setDrawerVisible(true);
   }

@@ -3,5 +3,5 @@ export const SiderProps = {
     collapsedWidth: "0",
     width: 200,
     id: "dealer-sider",
-    style: { background: '#fff' },
+    style: { background: '#fff', marginTop: 64}
   }
