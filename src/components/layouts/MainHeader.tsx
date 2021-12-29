@@ -20,7 +20,7 @@ function MainHeader() {
   const {fullName} = useContext(UserDataContext);
 
     return (
-        <Header className="main-header-layout" id='main-menu'>
+        <Header className="main-header-layout" style={{ position: 'fixed', zIndex: 1, width: '100%'}}>
         <Row>
           <Col flex='1 1 200px'>          
             <div className="logo" >
