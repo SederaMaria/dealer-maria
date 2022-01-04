@@ -10,6 +10,7 @@ import {
   HomeRenderer,
   NewApplicationRender,
   SavedCalculatorsRenderer,
+  ArchivedRenderer,
   ReferenceRenderer
 } from './components/pages/dealer';
 
@@ -83,6 +84,7 @@ function App() {
                   </Route>
                   <Route path="/logout" exact component={SignOut} />
                   <Route path="/home" exact component={HomeRenderer} />
+                  <Route path="/archived-applications" exact component={ArchivedRenderer} />
                   <Route path="/application" exact component={NewApplicationRender} />
                   <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId/bike" exact component={BikeInformationRenderer} />
                   <Route path="/applications/:leaseApplicationId/calculators/:LeaseCalculatorId/calculator" exact component={CalculatorRenderer} />
