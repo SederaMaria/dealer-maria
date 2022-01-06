@@ -40,11 +40,11 @@ export const Summary: React.FC<Props> = ({data}) => {
 
     const handleSubmit = async () => {        
         try {
-            await network.PUT(`/api/v1/dealers/submit_to_speedleasing?=${leaseApplicationId}`, data);
+            await network.POST(`/api/v1/dealers/applications/${leaseApplicationId}`, data);
             console.log("Submit Data", data)
             console.log(data?.lessee?.firstName)
+            message.success("Succesfully Submitted Application")
          } catch (e) {
-            console.log("fail")
            logger.error("Request Error", e);
            message.error("Error submitting application");
          }
