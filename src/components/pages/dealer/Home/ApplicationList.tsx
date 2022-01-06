@@ -7,6 +7,8 @@ import {
   Button,
   Form,
   Select,
+  Drawer,
+  Input
 } from 'antd';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
@@ -386,6 +388,58 @@ const columns: ColumnsType<Applications | any> = [
         scroll={{y:375}} 
         className='table-wrapper'
       />
+
+      <Drawer
+      title="Filters"
+        placement="right"
+        afterVisibleChange={onDrawerVisibleChange}
+        onClose={onDrawerClose}
+        visible={visibleDrawer}
+        width={400}
+      >
+        <Form
+          form={filterForm}
+          colon={false}
+          onFinish={onFilterSubmit}
+          {...filterFormLayout}
+        >
+          <Form.Item label="Name" name="name">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Credit Status" name="creditStatus">
+            <Select allowClear loading={filterOptionsLoading}>
+              {
+                creditStatusOptions && creditStatusOptions.map((item, index) => {
+                  return <Option key={index} value={item[1]}>{item[0]}</Option>
+                })
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item label="Document Status" name="documentStatus">
+            <Select allowClear loading={filterOptionsLoading}>
+              {
+                documentStatusOptions && documentStatusOptions.map((item, index) => {
+                  return <Option key={index} value={item[1]}>{item[0]}</Option>
+                })
+              }
+            </Select>
+          </Form.Item>
+          <Form.Item label="Can Change Bikes?" name="canChangeBikes">
+            <Select allowClear>
+              <Option value="true">Yes</Option>
+              <Option value="false">No</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item style={{marginTop: "15px"}}>
+            <Button type="primary" htmlType="submit" style={{marginRight: "5px"}}>
+              Filter
+            </Button>
+            <Button htmlType="button" onClick={onFilterReset}>
+              Clear Filters
+            </Button>
+          </Form.Item>
+        </Form>
+      </Drawer>
     </Spin>
   )
 }
