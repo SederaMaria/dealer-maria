@@ -33,7 +33,6 @@ const MotorSummary: React.FC<Props>  = ({label, children }) => {
 }
 
 export const Summary: React.FC<Props> = ({data}) => {
-    console.log(`data the calculator`, data)
     let leaseApplicationId: string | number | undefined = data?.id
     let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
 
