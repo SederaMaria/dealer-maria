@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider, message } from "antd";
 import 'antd/dist/antd.css';
 import { UserOutlined } from '@ant-design/icons';
@@ -34,19 +34,22 @@ const MotorSummary: React.FC<Props>  = ({label, children }) => {
 }
 
 export const Summary: React.FC<Props> = ({data}) => {
-    console.log(`data the calculator`, data)
     let leaseApplicationId: string | number | undefined = data?.id
     let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
+
+    const [hasSubmitError, setHasSubmitError] = useState(false)
+    const [submitSuccess, setSubmitSuccess] = useState(false)
 
     const handleSubmit = async () => {        
         try {
             await network.POST(`/api/v1/dealers/applications/${leaseApplicationId}`, data);
-            console.log("Submit Data", data)
-            console.log(data?.lessee?.firstName)
             message.success("Succesfully Submitted Application")
+            setHasSubmitError(false)
+            setSubmitSuccess(true)
          } catch (e) {
            logger.error("Request Error", e);
            message.error("Error submitting application");
+           setHasSubmitError(true)
          }
     }
 
