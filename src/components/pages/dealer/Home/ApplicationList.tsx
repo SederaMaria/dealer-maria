@@ -22,7 +22,6 @@ interface Applications {
   name: string;
   id: number;
   actionPermission: ActionPermission;
-  // lastUpdated: string;
 }
 
 interface Data {
