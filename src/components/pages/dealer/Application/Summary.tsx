@@ -1,11 +1,12 @@
 import React from 'react';
-import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider } from "antd";
+import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider, message } from "antd";
 import 'antd/dist/antd.css';
 import { UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ApplicationSteps from './ApplicationSteps';
 import { Lessee as SummaryLessee } from './Applicant/Applicant';
 import '../../../layouts/styles/Summary.css';
+import { logger, network } from '../../../../utils';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -36,6 +37,18 @@ export const Summary: React.FC<Props> = ({data}) => {
     console.log(`data the calculator`, data)
     let leaseApplicationId: string | number | undefined = data?.id
     let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
+
+    const handleSubmit = async () => {        
+        try {
+            await network.PUT(`/api/v1/dealers/submit_to_speedleasing?=${leaseApplicationId}`, data);
+            console.log("Submit Data", data)
+            console.log(data?.lessee?.firstName)
+         } catch (e) {
+            console.log("fail")
+           logger.error("Request Error", e);
+           message.error("Error submitting application");
+         }
+    }
 
     return (
         <>
@@ -181,8 +194,10 @@ export const Summary: React.FC<Props> = ({data}) => {
                 </div>
 
                 <div style={{ marginTop: 20, textAlign: `center`}}>
-                    <Button style={{ marginRight: 10 }} type="primary" >
-                    <Link to={`/applications/${leaseApplicationId}/co-applicant`}> prev </Link>
+                    <Button style={{ marginRight: 10 }} type="primary" 
+                        onClick={handleSubmit}
+                    >
+                        Submit to Speed Leasing
                     </Button>
                 </div>
             </div>
