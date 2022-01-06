@@ -8,7 +8,9 @@ import {
   Form,
   Select,
   Drawer,
-  Input
+  Input,
+  Row,
+  Col,
 } from 'antd';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
@@ -375,6 +377,19 @@ const columns: ColumnsType<Applications | any> = [
 
   return (
     <Spin spinning={loading}>
+      <Row>
+        <Col flex="auto"></Col>
+        <Col flex="none">
+          <Button
+            onClick={showDrawer}
+            icon={<FilterOutlined style={{margin: 0}} />}
+            style={{marginBottom: "0.5em"}}
+          >
+            Filter
+          </Button>
+        </Col>
+      </Row>
+      
       <Table
         columns={columns}
         dataSource={data}
