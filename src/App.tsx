@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import IdleTimer from 'react-idle-timer';
 import { 
   SignIn,
   SignOut, 
@@ -27,12 +28,21 @@ import { auth, network } from './utils';
 import './App.css';
 import './components/layouts/styles/MainLayout.css'
 
+// Configure IdleTimer timeout. Default: 60
+const ENV_TIMEOUT_MINUTE : string | undefined = process.env.REACT_APP_IDLE_TIMER_TIMEOUT_MINUTE
+const TIMEOUT_MINUTE = ENV_TIMEOUT_MINUTE ? parseInt(ENV_TIMEOUT_MINUTE) : 60
+
 function App() {
 
   const [authenticated] = useState<boolean>(auth.isAuth());
 
   const validateToken = async () => {
     network.POST(`/api/v1/validate-token`, {})
+  }
+
+  const handleOnIdle = (event: any) => {
+    auth.logout()
+    window.location.href = '/login'
   }
 
   useEffect(() => {
@@ -48,6 +58,20 @@ function App() {
               <Redirect to="/login" />
               <Route path="/login" exact component={SignIn} />
             </Route>
+          }
+
+          {
+            authenticated &&
+              // https://github.com/supremetechnopriest/react-idle-timer#documentation
+              <IdleTimer
+                events={['keydown', 'wheel', 'mousewheel', 'mousedown', 'touchstart', 'touchmove', 'visibilitychange']}
+                timeout={1000 * 60 * TIMEOUT_MINUTE}
+                onIdle={handleOnIdle}
+                debounce={500}
+                crossTab={{
+                  emitOnAllTabs: true
+                }}
+              />
           }
 
           {

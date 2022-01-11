@@ -424,7 +424,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                             <div style={{ marginTop: 20, textAlign: `right`}}>
                                 <Button style={{ marginRight: 10 }}> Save </Button>
                                 <Button style={{ marginRight: 10 }} type="primary" >
-                                    <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> Next </Link>
+                                <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
                                 </Button>
                             </div>
 

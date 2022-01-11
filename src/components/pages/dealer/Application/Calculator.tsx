@@ -1123,7 +1123,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                     
                                     <Row>
                                         <Col span={16}> 
-                                            Total Cash Out of Pocket
+                                            Put This Amount in Cash
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
                                             <Form.Item hasFeedback>  
@@ -1156,7 +1156,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                 
                                     <Row className={`bot-spacer-1`}>
                                         <Col span={16} style={{ fontWeight: 700}}> 
-                                        Put This Amount in Cash
+                                        Total Cash Out of Pocket
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`, fontWeight: 700}}> 
                                             <span>{calculatorData.cashIn}</span>
@@ -1352,10 +1352,10 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 
                                 </Card>
                                 <div style={{ marginTop: 20, textAlign: `right`}}>
-                                    <Button style={{ marginRight: 10 }} htmlType="submit" >Save</Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                    <Button style={{ marginRight: 10 }}>Save</Button>
+                                    {/* <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/bike`}> prev </Link>
-                                    </Button>
+                                    </Button> */}
                                     <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
                                     </Button>
