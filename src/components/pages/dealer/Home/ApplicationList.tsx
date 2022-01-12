@@ -56,6 +56,85 @@ interface ActionPermission {
 
 type StatesForSelect = [string, string]
 
+
+const menu = (actionPermission: ActionPermission, record: Applications) => {
+  let paymentCalcNode;
+  
+  if (actionPermission.canOpenPaymentCalculator) {
+    paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+  } else if (actionPermission.canChangeBikes) {
+    paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+  } else {
+    paymentCalcNode = <a className="view-payment-calculator" href="#">View Payment Calculator</a>;
+  }
+
+  return (
+    <Menu>
+      <Menu.Item>
+        {paymentCalcNode}
+      </Menu.Item>
+      <Menu.Item>
+        {
+          actionPermission.canOpenCreditApplication ?
+            <a className="open-credit-application" href="#">Open Credit Application</a>
+            :
+            <Link className="view-credit-application" to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
+        }
+      </Menu.Item>
+      {
+        actionPermission.canSwapApplicants &&
+          <Menu.Item>
+            <a className="swap-application" href="#">Swap Applicants</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canAddCoapplicant &&
+          <Menu.Item>
+            <Link className="add-coapplicant" to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
+          </Menu.Item>
+      }
+      {
+        !actionPermission.expired &&
+          <Menu.Item>
+            <Link className="add-attachment" to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canChangeBikes &&
+          <>
+            <Menu.Item>
+              <a className="bike-change" href="#">Bike Change</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a className="tax-Juridiction" href="#">Change Tax Jurisdiction</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a className="change-mileage" href="#">Change Mileage</a>
+            </Menu.Item>
+          </>
+      }
+      {
+        actionPermission.canRequestLeaseDocuments &&
+          <Menu.Item>
+            <a className="lease-documents" href="#">Request Lease Documents</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canRemoveCoapplicant &&
+          <Menu.Item>
+            <a className="remove-coapplicant" href="#">Remove Co-applicant</a>
+          </Menu.Item>
+      }
+      {
+        actionPermission.canSubmitBankInfo &&
+          <Menu.Item>
+            <Link className="submit-bank-information" to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
+          </Menu.Item>
+      }
+    </Menu>
+  )
+}
+
 const filterFormLayout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -419,9 +498,10 @@ const columns: ColumnsType<Applications | any> = [
         dataSource={data}
         rowKey={(val) => val.id}
         pagination={{
+          defaultPageSize: 20,
           onChange: onPaginationChange,
-          pageSizeOptions: ["10", "20", "50"],
-          ...paginationProps,
+          pageSizeOptions: ["20","50", "100"],
+           ...paginationProps
         }}
         size="small"
         scroll={{y:375}} 
