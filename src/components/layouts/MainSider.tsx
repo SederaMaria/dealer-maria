@@ -3,11 +3,10 @@ import { Layout, Menu, Button } from "antd";
 import { Link } from 'react-router-dom';
 import { SiderProps} from './props';
 import { CollapseProps } from './props/collapseProps';
+import Icon, { HomeOutlined, ProfileOutlined, CalculatorOutlined } from '@ant-design/icons';
+import { ArchiveSvg } from '../../utils/Svg';
 
 import { 
-  HomeOutlined, 
-  ProfileOutlined,
-  CalculatorOutlined,
   MenuOutlined
  }
 from '@ant-design/icons';
@@ -43,12 +42,19 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
             <Menu.Item key="home" icon={<HomeOutlined />}>
               <Link to={`/home`}> Home</Link>
             </Menu.Item>
+
             <Menu.Item key="application" icon={<ProfileOutlined />}>
               <Link to={`/application`}> New Application</Link>
             </Menu.Item>
+
             <Menu.Item key="saved-calculators" icon={<CalculatorOutlined />}>
               <Link to={`/saved-calculators`}> Saved Calculators</Link>
             </Menu.Item>
+
+            <Menu.Item key="archived-applications">
+              <Link to={`/archived-applications`}><Icon component={ArchiveSvg} /> Archived</Link>
+            </Menu.Item>
+            
           </Menu> 
         </Sider>
     )
