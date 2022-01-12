@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox } from "antd";
+import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox, DatePicker, Space } from "antd";
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -7,9 +8,11 @@ import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
+import { start } from 'repl';
 
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Content } = Layout;
 const dateFormat = 'MM/DD/YYYY';
@@ -76,7 +79,6 @@ const formLayout = formLayouts.horizontal
       state? : string | undefined 
   }
 
-
 export interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
@@ -90,6 +92,7 @@ export interface Lessee {
     mailingAddress?: Address
     atAddressMonths?: number | string | undefined
     atAddressYears?: number | string | undefined
+    monthYears?: number | string | undefined
     monthlyMortgage?: number | string | undefined
     homeOwnership?: number | undefined 
     employerName?: string | undefined
@@ -196,6 +199,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         zipcode: ""
     })
 
+    const [type, setType] = useState('month');
+
     const [stateTarget, setStateTarget] = useState("")
     const [countyTarget, setCountytarget] = useState("")
     const [cityTarget, setCityTarget] = useState("")
@@ -209,6 +214,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         city:""
     })
 
+    const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
     const [btnAttribute, setBtnAttribute] = useState(true);
     const [btnClass, setBtnClass] = useState("button")
 
@@ -434,6 +440,12 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         setCityTarget(f.children)
     }
 
+    const handleMonthYear = (e:any, f:any) => {
+        const monthYearDiff = e[1].toDate()-e[0].toDate()
+        const toMonthYears = (monthYearDiff/(365)/(86400000)).toFixed(2)
+        setMonthYear(toMonthYears)
+    }
+
     const fillMailingAddress = (e:any)=>{
         if(e.target.checked){
             setMailingAddress({
@@ -496,6 +508,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
                             atAddressMonths: data?.lessee?.atAddressMonths,
                             atAddressYears: data?.lessee?.atAddressYears,
+                            monthYears: data?.lessee?.monthYears,                       
                             monthlyMortgage: data?.lessee?.monthlyMortgage,
                             homeOwnership: data?.lessee?.homeOwnership,
                             employerName: data?.lessee?.employerName,
@@ -736,18 +749,13 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                label="Years at Current Address" 
-                                                name={['lesseeAttributes','atAddressYears']}
-                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
+                                                label="Length of Stay at Current Address" 
+                                                name={['lesseeAttributes','monthYears']}
                                             >  
-                                                <InputNumber className="space-up years-current-address" placeholder="Years at Current Address" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber className="space-up" placeholder="Months at Current Address" />
-                                            </Form.Item>
-                                        </Col>
+                                                <Space direction="horizontal">
+                                                    <RangePicker picker="date" onChange={handleMonthYear} />                                                        
+                                                    <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears!==0 ? monthYears : "")}/>                                                                                                    
+                                                </Space>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
