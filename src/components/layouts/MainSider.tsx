@@ -2,7 +2,8 @@ import React from 'react'
 import { Layout, Menu } from "antd";
 import { Link } from 'react-router-dom';
 import { SiderProps } from './props';
-import { HomeOutlined, ProfileOutlined, CalculatorOutlined } from '@ant-design/icons';
+import Icon, { HomeOutlined, ProfileOutlined, CalculatorOutlined } from '@ant-design/icons';
+import { ArchiveSvg } from '../../utils/Svg';
 
 import './styles/MainSider.css';
 
@@ -28,6 +29,10 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
 
             <Menu.Item key="saved-calculators">
                 <Link to={`/saved-calculators`}><CalculatorOutlined /> Saved Calculators</Link>
+            </Menu.Item>
+
+            <Menu.Item key="archived-applications">
+              <Link to={`/archived-applications`}><Icon component={ArchiveSvg} /> Archived</Link>
             </Menu.Item>
 
           </Menu>
