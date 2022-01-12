@@ -27,7 +27,6 @@ interface Applications {
   key: number;
   name: string;
   id: number;
-  actionPermission: ActionPermission;
 }
 
 interface Data {
@@ -40,21 +39,6 @@ interface Data {
   daysSubmitted: string;
   lastUpdated: string;
 }
-
-interface ActionPermission {
-  canAddCoapplicant: boolean;
-  canChangeBikes: boolean;
-  canOpenCreditApplication: boolean;
-  canOpenPaymentCalculator: boolean;
-  canRemoveCoapplicant: boolean;
-  canRequestLeaseDocuments: boolean;
-  canSubmitBankInfo: boolean;
-  canSwapApplicants: boolean;
-  expired: boolean;
-  submitted: boolean;
-}
-
-type StatesForSelect = [string, string]
 
 const columns: ColumnsType<Applications> = [
   {
@@ -103,84 +87,6 @@ const columns: ColumnsType<Applications> = [
     dataIndex: 'lastUpdated',
   },
 ]
-
-const menu = (actionPermission: ActionPermission, record: Applications) => {
-  let paymentCalcNode;
-
-  if (actionPermission.canOpenPaymentCalculator) {
-    paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
-  } else if (actionPermission.canChangeBikes) {
-    paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
-  } else {
-    paymentCalcNode = <a href="#">View Payment Calculator</a>;
-  }
-
-  return (
-    <Menu>
-      <Menu.Item>
-        {paymentCalcNode}
-      </Menu.Item>
-      <Menu.Item>
-        {
-          actionPermission.canOpenCreditApplication ?
-            <a href="#">Open Credit Application</a>
-            :
-            <Link to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
-        }
-      </Menu.Item>
-      {
-        actionPermission.canSwapApplicants &&
-          <Menu.Item>
-            <a href="#">Swap Applicants</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canAddCoapplicant &&
-          <Menu.Item>
-            <Link to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
-          </Menu.Item>
-      }
-      {
-        !actionPermission.expired &&
-          <Menu.Item>
-            <Link to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canChangeBikes &&
-          <>
-            <Menu.Item>
-              <a href="#">Bike Change</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a href="#">Change Tax Jurisdiction</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a href="#">Change Mileage</a>
-            </Menu.Item>
-          </>
-      }
-      {
-        actionPermission.canRequestLeaseDocuments &&
-          <Menu.Item>
-            <a href="#">Request Lease Documents</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canRemoveCoapplicant &&
-          <Menu.Item>
-            <a href="#">Remove Co-applicant</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canSubmitBankInfo &&
-          <Menu.Item>
-            <Link to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
-          </Menu.Item>
-      }
-    </Menu>
-  )
-}
 
 function ArchivedApplicationList() {
 
