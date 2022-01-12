@@ -756,6 +756,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     <RangePicker picker="date" onChange={handleMonthYear} />                                                        
                                                     <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears!==0 ? monthYears : "")}/>                                                                                                    
                                                 </Space>
+                                            </Form.Item>
+                                        </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
