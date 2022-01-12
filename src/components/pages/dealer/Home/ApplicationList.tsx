@@ -59,11 +59,11 @@ const menu = (actionPermission: ActionPermission, record: Applications) => {
   let paymentCalcNode;
   
   if (actionPermission.canOpenPaymentCalculator) {
-    paymentCalcNode = <Link style={{color:`#CA965C`}} to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+    paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
   } else if (actionPermission.canChangeBikes) {
-    paymentCalcNode = <Link style={{color:`#FF87CA`}} to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+    paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
   } else {
-    paymentCalcNode = <a style={{color:`#876445`}} href="#">View Payment Calculator</a>;
+    paymentCalcNode = <a className="view-payment-calculator" href="#">View Payment Calculator</a>;
   }
 
   return (
@@ -74,59 +74,59 @@ const menu = (actionPermission: ActionPermission, record: Applications) => {
       <Menu.Item>
         {
           actionPermission.canOpenCreditApplication ?
-            <a style={{color:`#6867AC`}} href="#">Open Credit Application</a>
+            <a className="open-credit-application" href="#">Open Credit Application</a>
             :
-            <Link style={{color:`#79B4B7`}} to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
+            <Link className="view-credit-application" to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
         }
       </Menu.Item>
       {
         actionPermission.canSwapApplicants &&
           <Menu.Item>
-            <a style={{color:`#A267AC`}} href="#">Swap Applicants</a>
+            <a className="swap-application" href="#">Swap Applicants</a>
           </Menu.Item>
       }
       {
         actionPermission.canAddCoapplicant &&
           <Menu.Item>
-            <Link style={{color: `#CE7BB0`}} to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
+            <Link className="add-coapplicant" to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
           </Menu.Item>
       }
       {
         !actionPermission.expired &&
           <Menu.Item>
-            <Link style={{color: `#B983FF`}} to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
+            <Link className="add-attachment" to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
           </Menu.Item>
       }
       {
         actionPermission.canChangeBikes &&
           <>
             <Menu.Item>
-              <a style={{color: `#C37B89`}} href="#">Bike Change</a>
+              <a className="bike-change" href="#">Bike Change</a>
             </Menu.Item>
             <Menu.Item>
-              <a style={{color: `#99A799`}} href="#">Change Tax Jurisdiction</a>
+              <a className="tax-Juridiction" href="#">Change Tax Jurisdiction</a>
             </Menu.Item>
             <Menu.Item>
-              <a style={{color: `#8CA1A5`}} href="#">Change Mileage</a>
+              <a className="change-mileage" href="#">Change Mileage</a>
             </Menu.Item>
           </>
       }
       {
         actionPermission.canRequestLeaseDocuments &&
           <Menu.Item>
-            <a style={{color: `#986D8E`}} href="#">Request Lease Documents</a>
+            <a className="lease-documents" href="#">Request Lease Documents</a>
           </Menu.Item>
       }
       {
         actionPermission.canRemoveCoapplicant &&
           <Menu.Item>
-            <a style={{color: `red`}} href="#">Remove Co-applicant</a>
+            <a className="remove-coapplicant" href="#">Remove Co-applicant</a>
           </Menu.Item>
       }
       {
         actionPermission.canSubmitBankInfo &&
           <Menu.Item>
-            <Link style={{color: `#92A9BD`}} to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
+            <Link className="submit-bank-information" to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
           </Menu.Item>
       }
     </Menu>
