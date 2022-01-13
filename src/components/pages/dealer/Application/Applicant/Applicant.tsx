@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox } from "antd";
+import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox, DatePicker, Space } from "antd";
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -7,9 +8,11 @@ import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
+import { start } from 'repl';
 
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Content } = Layout;
 const dateFormat = 'MM/DD/YYYY';
@@ -29,9 +32,9 @@ const formLayouts = {
       formCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
     },
     field: {
-      col: { xs: 24, sm: 24, md: 8, lg: 8, xl: 6 },
-      colgroup: {
-        2: { xs: 24, sm: 24, md: 8, lg: 8, xl: 6 },
+        col: { xs: 24, sm: 24, md: 8, lg: 9, xl: 8 },
+        colgroup: {
+        2: { xs: 24, sm: 24, md: 16, lg: 10, xl: 8 },
       },
       colmem: {
         2: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
@@ -76,7 +79,6 @@ const formLayout = formLayouts.horizontal
       state? : string | undefined 
   }
 
-
 export interface Lessee {
     firstName?: string | undefined
     middleName?: string | undefined
@@ -90,6 +92,7 @@ export interface Lessee {
     mailingAddress?: Address
     atAddressMonths?: number | string | undefined
     atAddressYears?: number | string | undefined
+    monthYears?: number | string | undefined
     monthlyMortgage?: number | string | undefined
     homeOwnership?: number | undefined 
     employerName?: string | undefined
@@ -196,6 +199,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         zipcode: ""
     })
 
+    const [type, setType] = useState('month');
+
     const [stateTarget, setStateTarget] = useState("")
     const [countyTarget, setCountytarget] = useState("")
     const [cityTarget, setCityTarget] = useState("")
@@ -209,6 +214,9 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         city:""
     })
 
+    const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
+    const [btnAttribute, setBtnAttribute] = useState(true);
+    const [btnClass, setBtnClass] = useState("button")
 
     const submitApplication = async (values: any) => {
         try {
@@ -216,6 +224,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
            setHasSubmitError(false)
            setDisableSubmitBtn(true)
            setSubmitSuccess(true)
+           setBtnAttribute(false)
+           setBtnClass("button")
            message.success("Save Successfully");
         } catch (e) {
           logger.error("Request Error", e);
@@ -414,6 +424,10 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         });
     }
 
+    const handleFormChange = () => {
+        setBtnClass("green-border")
+    }
+
     const handleStateTarget = (e:any, f:any)=> {
         setStateTarget(f.children)
     }
@@ -424,6 +438,12 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
     const handleCityTarget = (e:any, f:any)=> {
         setCityTarget(f.children)
+    }
+
+    const handleMonthYear = (e:any, f:any) => {
+        const monthYearDiff = e[1].toDate()-e[0].toDate()
+        const toMonthYears = (monthYearDiff/(365)/(86400000)).toFixed(2)
+        setMonthYear(toMonthYears)
     }
 
     const fillMailingAddress = (e:any)=>{
@@ -527,8 +547,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
             />
-            <div style={{ margin: `20px 100px` }}>
-                <div style={{ textAlign: `center`,  marginBottom: 20}}>
+            <div className="title-container">
+                <div className="subtitle-container">
                     <Title level={2}> Applicant </Title>
                     <p> Enter information about yourself to apply for a lease. </p>
                 </div>
@@ -537,6 +557,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                     {...layout}  
                     onFinish={handleSubmit}
                     // scrollToFirstError={true}
+                    onChange={handleFormChange}
                     initialValues={{
                         lesseeAttributes: {
                             firstName: data?.lessee?.firstName,
@@ -549,6 +570,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
                             atAddressMonths: data?.lessee?.atAddressMonths,
                             atAddressYears: data?.lessee?.atAddressYears,
+                            monthYears: data?.lessee?.monthYears,                       
                             monthlyMortgage: data?.lessee?.monthlyMortgage,
                             homeOwnership: data?.lessee?.homeOwnership,
                             employerName: data?.lessee?.employerName,
@@ -584,7 +606,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         }
                     }}
                 >
-                    <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 50}}>
+                    <Content className="content-1">
 
                         <Row gutter={[16, 40]}>
                             <Col span={24} className="cca-center-text">
@@ -594,7 +616,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                         <Row gutter={[16, 16]}>
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Personal">
+                                <Card title="Personal" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
@@ -622,13 +644,14 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
                                         </Col>
-                                        <Col {...formLayout.field.col}>
+                                        <Col {...formLayout.field.col} className="space-up dob">
                                             <DobInput dateFormat={dateFormat} form={lesseeForm} />
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Social Security Number"
                                                 name={['lesseeAttributes', 'ssn']}
+                                                className="space-down"
                                             >
                                                 <Input type="hidden" />
                                             </Form.Item>
@@ -667,6 +690,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no"
+                                                    onChange={handleFormChange}
                                                 />
                                             </Form.Item>
                                             <Radio.Group defaultValue={1}>
@@ -680,15 +704,16 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
 
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Home Address">
+                                <Card title="Home Address" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['lesseeAttributes','homeAddressAttributes','street1']}
+                                                className="street-address"
                                                 rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp"  />
+                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp space-up" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -696,7 +721,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Appartment / Unit"
                                                 name={['lesseeAttributes', 'homeAddressAttributes','street2']}
                                             >
-                                                <Input placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp"  />
+                                                <Input placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp space-up"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -712,7 +737,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="ZIP Code"
                                                     onPressEnter={handleLesseeHomeZipcodeBlur}
                                                     onBlur={handleLesseeHomeZipcodeBlur}
-                                                    className="ant-input-comp"
+                                                    className="ant-input-comp space-up"
                                                     name="zipcode"
                                                     onChange={handleChange}
                                                 />
@@ -730,6 +755,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeState} 
                                                     onSelect={handleHomeStateChange}
                                                     onChange={handleStateTarget}
+                                                    className="space-up"
                                                 >
                                                     {
                                                         lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
@@ -751,6 +777,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeCountyState} 
                                                     onSelect={handleHomeCountyStateChange}
                                                     onChange={handleCountyTarget}
+                                                    className="space-up"
                                                 >
                                                     {
                                                         lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
@@ -772,6 +799,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     {...showHomeCityState} 
                                                     onSelect={handleHomeCityStateChange}
                                                     onChange={handleCityTarget}
+                                                    className="space-up"
                                                 >
                                                     {
                                                         lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
@@ -783,16 +811,13 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                label="Years at Current Address" 
-                                                name={['lesseeAttributes','atAddressYears']}
-                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
+                                                label="Length of Stay at Current Address" 
+                                                name={['lesseeAttributes','monthYears']}
                                             >  
-                                                <InputNumber placeholder="Years at Current Address" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber placeholder="Months at Current Address" />
+                                                <Space direction="horizontal">
+                                                    <RangePicker picker="date" onChange={handleMonthYear} />                                                        
+                                                    <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears!==0 ? monthYears : "")}/>                                                                                                    
+                                                </Space>
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -801,13 +826,13 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes','monthlyMortgage']}
                                                 rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
-                                                <InputNumber placeholder="Monthly Mortgage or Rent" />
+                                                <InputNumber className="space-up monthly-mortgage" placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
                                             <Form.Item
                                                 name={['lesseeAttributes','homeOwnership']}
                                                 rules={[{ required: true, message: 'Ownership is required!' }]}
                                             >
-                                                <Radio.Group>
+                                                <Radio.Group className="space-up">
                                                     <Radio value={1}>Own</Radio>
                                                     <Radio value={2}>Rent</Radio>
                                                 </Radio.Group>
@@ -818,22 +843,25 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
 
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Mailing Address">
+                                <Card title="Mailing Address" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
-                                            <Checkbox style={{fontSize: `13px`, position: `relative`, top:`-45px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                            <Checkbox style={{fontSize: `13px`, marginTop: `5px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                        </Col>
+
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)"  
                                                 name="street1"
-                                                style={{marginTop: `-22.5px`}}
+                                                className="street-address"
                                                 rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
+                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item label="Appartment / Unit" name="street2">  
-                                                <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
+                                                <Input placeholder="Appartment / Unit" className="ant-input-comp space-up"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -849,7 +877,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="ZIP Code"
                                                     onPressEnter={handleLesseeMailZipcodeBlur}
                                                     onBlur={handleLesseeMailZipcodeBlur}
-                                                    className="ant-input-comp"
+                                                    className="ant-input-comp space-up" 
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -863,6 +891,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="State"
                                                     {...showMailingState}
                                                     onSelect={handleMailingStateChange}
+                                                    className="space-up"
                                                 >
                                                     {
                                                         lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
@@ -882,6 +911,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="County/Parish" 
                                                     {...showMailingCountyState} 
                                                     onSelect={handleMailingCountyStateChange}
+                                                    className="space-up"
                                                 >
                                                     {
                                                         lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
@@ -902,6 +932,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="City"
                                                     {...showMailingCityState}
                                                     onSelect={handleMailingCityStateChange}
+                                                    className="space-up"
                                                 >
                                                     {
                                                         lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
@@ -917,7 +948,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                     </Content>
 
-                    <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 20}}>
+                    <Content className="content-1">
 
                         <Row gutter={[16, 16]}>
                             <Col span={24} className="cca-center-text">
@@ -929,7 +960,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         <Row gutter={[16, 16]}>
                             <Col {...formLayout.container.placeholderCol}></Col>
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Employer">
+                                <Card title="Employer" className="card">
                                     <Row gutter={[16, 0]}>
                                         {
                                             lessee?.employmentAddress &&
@@ -937,8 +968,9 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     <Form.Item
                                                         style={{display: 'none'}}
                                                         name={['lesseeAttributes', 'employmentAddressAttributes','id']}
+
                                                     >
-                                                        <Input />
+                                                        <Input className="space-up" />
                                                     </Form.Item>
                                                 </Col>
                                         }
@@ -948,7 +980,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes', 'employerName']}
                                                 rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >  
-                                                <Input placeholder="Employer Name"  className="ant-input-comp"  />
+                                                <Input placeholder="Employer Name"  className="ant-input-comp space-up"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -960,7 +992,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
-                                                    className="credit-app-phone-no"
+                                                    className="credit-app-phone-no space-up"
+                                                    onChange={handleFormChange}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -970,7 +1003,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes', 'employmentAddressAttributes', 'city']}
                                                 rules={[{ required: true, message: 'City is required!' }]}
                                             >  
-                                                <Input placeholder="City" className="ant-input-comp"  />
+                                                <Input placeholder="City" className="ant-input-comp space-up" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -982,6 +1015,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 <Select
                                                     showSearch
                                                     placeholder="State"
+                                                    className="space-up"
                                                 >
                                                     {
                                                         usStates && usStates.map(({name, abbreviation}, index) => {
@@ -996,7 +1030,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
 
                             <Col {...formLayout.container.formCol}>
-                                <Card title="Employment Details">
+                                <Card title="Employment Details" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
@@ -1009,6 +1043,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="Employment Status"
                                                     onChange={handleEmploymentStatus}
                                                     optionFilterProp="children"
+                                                    className="space-up"
                                                 >
                                                     {
                                                         employmentStatusOptions && employmentStatusOptions.map(({value, label}, index) => {
@@ -1024,7 +1059,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes', 'jobTitle']}
                                                 rules={[{ required: true, message: 'Job Tile is required!' }]}
                                             >  
-                                                <Input placeholder="Job Title"  className="ant-input-comp"  />
+                                                <Input placeholder="Job Title"  className="ant-input-comp space-up" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.colgroup[2]}>
@@ -1035,7 +1070,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                       name={['lesseeAttributes', 'timeAtEmployerYears']}
                                                       rules={[{ required: true, message: 'Years Employed is required!' }]}
                                                   >
-                                                      <InputNumber placeholder="Years Employed" />
+                                                      <InputNumber className="space-up" placeholder="Years Employed" />
                                                   </Form.Item>
                                                 </Col>
                                                 <Col {...formLayout.field.colmem[2]}>
@@ -1043,7 +1078,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                       label="Months Employed"
                                                       name={['lesseeAttributes', 'timeAtEmployerMonths']}
                                                   >
-                                                      <InputNumber placeholder="Months Employed" />
+                                                      <InputNumber className="space-up" placeholder="Months Employed" />
                                                   </Form.Item>
                                                 </Col>
                                             </Row>
@@ -1054,31 +1089,27 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                 name={['lesseeAttributes', 'grossMonthlyIncome']}
                                                 rules={[{ required: true, message: 'Gross Monthly Income is required!' }]}
                                             >  
-                                                <InputNumber placeholder="Gross Monthly Income" />
+                                                <InputNumber className="space-up" placeholder="Gross Monthly Income" />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
 
-                                <div style={{ marginTop: 20, textAlign: `right`}}>
-                                    <Button style={{ marginRight: 10 }}  disabled={disableSubmitBtn} htmlType="submit" >
+                                <div className="button-container">
+                                    <Button className={btnClass} disabled={disableSubmitBtn} htmlType="submit" >
                                         Save
                                         
                                     </Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                    <Button className="button" type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
                                     </Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                    <Button className="button" type="primary" disabled={btnAttribute}>
                                         <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>
                                     </Button>
                                 </div>
-
                             </Col>
                         </Row>
                     </Content>
-
-
-
 
     {/* 
                     <Content className="content-2">
