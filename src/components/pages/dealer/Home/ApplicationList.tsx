@@ -57,84 +57,6 @@ interface ActionPermission {
 type StatesForSelect = [string, string]
 
 
-const menu = (actionPermission: ActionPermission, record: Applications) => {
-  let paymentCalcNode;
-  
-  if (actionPermission.canOpenPaymentCalculator) {
-    paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
-  } else if (actionPermission.canChangeBikes) {
-    paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
-  } else {
-    paymentCalcNode = <a className="view-payment-calculator" href="#">View Payment Calculator</a>;
-  }
-
-  return (
-    <Menu>
-      <Menu.Item>
-        {paymentCalcNode}
-      </Menu.Item>
-      <Menu.Item>
-        {
-          actionPermission.canOpenCreditApplication ?
-            <a className="open-credit-application" href="#">Open Credit Application</a>
-            :
-            <Link className="view-credit-application" to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
-        }
-      </Menu.Item>
-      {
-        actionPermission.canSwapApplicants &&
-          <Menu.Item>
-            <a className="swap-application" href="#">Swap Applicants</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canAddCoapplicant &&
-          <Menu.Item>
-            <Link className="add-coapplicant" to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
-          </Menu.Item>
-      }
-      {
-        !actionPermission.expired &&
-          <Menu.Item>
-            <Link className="add-attachment" to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canChangeBikes &&
-          <>
-            <Menu.Item>
-              <a className="bike-change" href="#">Bike Change</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a className="tax-Juridiction" href="#">Change Tax Jurisdiction</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a className="change-mileage" href="#">Change Mileage</a>
-            </Menu.Item>
-          </>
-      }
-      {
-        actionPermission.canRequestLeaseDocuments &&
-          <Menu.Item>
-            <a className="lease-documents" href="#">Request Lease Documents</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canRemoveCoapplicant &&
-          <Menu.Item>
-            <a className="remove-coapplicant" href="#">Remove Co-applicant</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canSubmitBankInfo &&
-          <Menu.Item>
-            <Link className="submit-bank-information" to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
-          </Menu.Item>
-      }
-    </Menu>
-  )
-}
-
 const filterFormLayout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
@@ -157,15 +79,16 @@ function ApplicationList() {
   const [paginationProps, setPaginationProps] = useState<object>({ total: 0 })
   const [paginationData, setPaginationData] = useState<object>({})
 
+
   const menu = (actionPermission: ActionPermission, record: Applications) => {
     let paymentCalcNode;
 
     if (actionPermission.canOpenPaymentCalculator) {
-      paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+      paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
     } else if (actionPermission.canChangeBikes) {
-      paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+      paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
     } else {
-      paymentCalcNode = <a href="#">View Payment Calculator</a>;
+      paymentCalcNode = <a className="view-payment-calculator" href="#">View Payment Calculator</a>;
     }
 
     return (
@@ -176,71 +99,72 @@ function ApplicationList() {
         <Menu.Item>
           {
             actionPermission.canOpenCreditApplication ?
-              <a href="#">Open Credit Application</a>
+              <a className="open-credit-application"  href="#">Open Credit Application</a>
               :
-              <Link to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
+              <Link className="view-credit-application" to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
           }
         </Menu.Item>
         {
           actionPermission.canSwapApplicants &&
             <Menu.Item>
-              <a href="#">Swap Applicants</a>
+              <a className="swap-application" href="#">Swap Applicants</a>
             </Menu.Item>
         }
         {
           actionPermission.canAddCoapplicant &&
             <Menu.Item>
-              <Link to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
+              <Link className="add-coapplicant" to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
             </Menu.Item>
         }
         {
           !actionPermission.expired &&
             <Menu.Item>
-              <Link to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
+              <Link className="add-attachment" to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
             </Menu.Item>
         }
         {
           actionPermission.canChangeBikes &&
             <>
               <Menu.Item>
-                <a href="#">Bike Change</a>
+                <a className="bike-change" href="#">Bike Change</a>
               </Menu.Item>
               <Menu.Item>
-                <a href="#">Change Tax Jurisdiction</a>
+                <a className="tax-Juridiction" href="#">Change Tax Jurisdiction</a>
               </Menu.Item>
               <Menu.Item>
-                <a href="#">Change Mileage</a>
+                <a className="change-mileage" href="#">Change Mileage</a>
               </Menu.Item>
             </>
         }
         {
           actionPermission.canRequestLeaseDocuments &&
             <Menu.Item>
-              <a href="#">Request Lease Documents</a>
+              <a className="lease-documents" href="#">Request Lease Documents</a>
             </Menu.Item>
         }
         {
           actionPermission.canRemoveCoapplicant &&
             <Menu.Item>
-              <a href="#">Remove Co-applicant</a>
+              <a className="remove-coapplicant" href="#">Remove Co-applicant</a>
             </Menu.Item>
         }
         {
           actionPermission.canSubmitBankInfo &&
             <Menu.Item>
-              <Link to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
+              <Link className="submit-bank-information" to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
             </Menu.Item>
         }
         {
-          actionPermission.canArchive &&
+          actionPermission.canArchive && 
             <Menu.Item>
-              <a href="#" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
+              <a href="#" className="archive-application" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
             </Menu.Item>
         }
       </Menu>
     )
   }
 
+  
   const showDrawer = () => {
     setDrawerVisible(true);
   }
@@ -354,129 +278,129 @@ function ApplicationList() {
   },[filterData, paginationData]);
 
 
-const getUniqueBy = (arr:Array<Object>, prop:any) => {
-  return arr.reduce((a:any, d:any) => {
-  if (!a.includes(d[prop])) { a.push(d[prop]); }
-     return a;
-  }, []);
-}
+  const getUniqueBy = (arr:Array<Object>, prop:any) => {
+    return arr.reduce((a:any, d:any) => {
+    if (!a.includes(d[prop])) { a.push(d[prop]); }
+       return a;
+    }, []);
+  }
 
-const convertToObj = (prop:String) => {
-  return data ? getUniqueBy(data, prop).map( (val:any) =>  { return val ? { text: val, value: val } : null } ).filter( (val:any) => { return val !== null; } ) : []
-}
+  const convertToObj = (prop:String) => {
+    return data ? getUniqueBy(data, prop).map( (val:any) =>  { return val ? { text: val, value: val } : null } ).filter( (val:any) => { return val !== null; } ) : []
+  }
 
-const columns: ColumnsType<Applications | any> = [
-  {
-    key: 'applicationIdentifier',
-    title: 'Application Identifier',
-    dataIndex: 'applicationIdentifier',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
+  const columns: ColumnsType<Applications | any> = [
+    {
+      key: 'applicationIdentifier',
+      title: 'Application Identifier',
+      dataIndex: 'applicationIdentifier',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      render(val, row) {
+        return (
+          <Link to={`/applications/${row.id}/summary`}> { val == null ? 'N/A' : val } </Link>
+        )
+      },
+      responsive: ['lg'],
+      onFilter: (value, record) => record.applicationIdentifier && record.applicationIdentifier.includes(value),
+      filters: convertToObj('applicationIdentifier'),
+      filterSearch: true,
     },
-    render(val, row) {
-      return (
-        <Link to={`/applications/${row.id}/summary`}> { val == null ? 'N/A' : val } </Link>
-      )
+    {
+      key: 'applicant',
+      title: 'Applicant',
+      dataIndex: 'applicant',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.applicant && record.applicant.includes(value),
+      filters: convertToObj('applicant'),
+      filterSearch: true,
     },
-    responsive: ['lg'],
-    onFilter: (value, record) => record.applicationIdentifier && record.applicationIdentifier.includes(value),
-    filters: convertToObj('applicationIdentifier'),
-    filterSearch: true,
-  },
-  {
-    key: 'applicant',
-    title: 'Applicant',
-    dataIndex: 'applicant',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
+    {
+      key: 'coApplicant',
+      title: 'Co-Applicant',
+      dataIndex: 'coApplicant',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.coApplicant && record.coApplicant.includes(value),
+      filters: convertToObj('coApplicant'),
+      filterSearch: true,
     },
-    onFilter: (value, record) => record.applicant && record.applicant.includes(value),
-    filters: convertToObj('applicant'),
-    filterSearch: true,
-  },
-  {
-    key: 'coApplicant',
-    title: 'Co-Applicant',
-    dataIndex: 'coApplicant',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
+    {
+      key: 'modelAndYear',
+      title: 'Model and Year',
+      dataIndex: 'modelAndYear',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.modelAndYear && record.modelAndYear.includes(value),
+      filters: convertToObj('modelAndYear'),
+      filterSearch: true,
     },
-    onFilter: (value, record) => record.coApplicant && record.coApplicant.includes(value),
-    filters: convertToObj('coApplicant'),
-    filterSearch: true,
-  },
-  {
-    key: 'modelAndYear',
-    title: 'Model and Year',
-    dataIndex: 'modelAndYear',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
+    {
+      key: 'creditStatus',
+      title: 'Credit Status',
+      dataIndex: 'creditStatus',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.creditStatus && record.creditStatus.includes(value),
+      filters: convertToObj('creditStatus'),
+      filterSearch: true,
     },
-    onFilter: (value, record) => record.modelAndYear && record.modelAndYear.includes(value),
-    filters: convertToObj('modelAndYear'),
-    filterSearch: true,
-  },
-  {
-    key: 'creditStatus',
-    title: 'Credit Status',
-    dataIndex: 'creditStatus',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
+    {
+      key: 'documentStatus',
+      title: 'Document Status',
+      dataIndex: 'documentStatus',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.documentStatus && record.documentStatus.includes(value),
+      filters: convertToObj('documentStatus'),
+      filterSearch: true,
     },
-    onFilter: (value, record) => record.creditStatus && record.creditStatus.includes(value),
-    filters: convertToObj('creditStatus'),
-    filterSearch: true,
-  },
-  {
-    key: 'documentStatus',
-    title: 'Document Status',
-    dataIndex: 'documentStatus',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
+    {
+      key: 'daysSubmitted',
+      title: 'Days Submitted',
+      dataIndex: 'daysSubmitted',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      }, 
+      responsive: ['lg'],
+      onFilter: (value, record) => record.daysSubmitted && record.daysSubmitted.includes(value),
+      filters: convertToObj('daysSubmitted'),
+      filterSearch: true,
     },
-    onFilter: (value, record) => record.documentStatus && record.documentStatus.includes(value),
-    filters: convertToObj('documentStatus'),
-    filterSearch: true,
-  },
-  {
-    key: 'daysSubmitted',
-    title: 'Days Submitted',
-    dataIndex: 'daysSubmitted',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
-    }, 
-    responsive: ['lg'],
-    onFilter: (value, record) => record.daysSubmitted && record.daysSubmitted.includes(value),
-    filters: convertToObj('daysSubmitted'),
-    filterSearch: true,
-  },
-  {
-    key: 'lastUpdated',
-    title: 'Last Updated',
-    dataIndex: 'lastUpdated',
-    sorter: {
-      compare: (a, b) => a.id - b.id,
-    }, 
-    responsive: ['lg'],
-    onFilter: (value: any, record: any) => record.lastUpdated && record.lastUpdated.includes(value),
-    filters: convertToObj('lastUpdated'),
-    filterSearch: true,
-  },
-  {
-    title: '',
-    dataIndex: '',
-    key: 'x',
-    render(text, record, index) {
-      return (
-        <Dropdown overlay={menu(record.actionPermission, record)} trigger={['click']} >
-          <a className="ant-dropdown-link" href="#">
-            <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
-          </a>
-        </Dropdown>
-      )
-    }
-  },
-]
+    {
+      key: 'lastUpdated',
+      title: 'Last Updated',
+      dataIndex: 'lastUpdated',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      }, 
+      responsive: ['lg'],
+      onFilter: (value: any, record: any) => record.lastUpdated && record.lastUpdated.includes(value),
+      filters: convertToObj('lastUpdated'),
+      filterSearch: true,
+    },
+    {
+      title: '',
+      dataIndex: '',
+      key: 'x',
+      render(text, record, index) {
+        return (
+          <Dropdown overlay={menu(record.actionPermission, record)} trigger={['click']} >
+            <a className="ant-dropdown-link" href="#">
+              <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
+            </a>
+          </Dropdown>
+        )
+      }
+    },
+  ]
 
   return (
     <Spin spinning={loading}>
@@ -507,7 +431,6 @@ const columns: ColumnsType<Applications | any> = [
         scroll={{y:375}} 
         className='table-wrapper'
       />
-
       <Drawer
       title="Filters"
         placement="right"
