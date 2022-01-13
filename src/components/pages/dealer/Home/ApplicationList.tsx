@@ -57,6 +57,29 @@ interface ActionPermission {
 type StatesForSelect = [string, string]
 
 
+const filterFormLayout = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 },
+}
+
+function ApplicationList() {
+
+  const [loading, setLoading] = useState<boolean>(true)
+  const [data, setData] = useState<Data[] | any>([])
+
+  const [visibleDrawer, setDrawerVisible] = useState<boolean>(false)
+
+  const [filterForm] = Form.useForm()
+  const [filterOptionsLoading, setFilterOptionsLoading] = useState<boolean>(true)
+  const [filterData, setFilterData] = useState<object>({})
+
+  const [creditStatusOptions, setCreditStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
+  const [documentStatusOptions, setDocumentStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
+
+  const [paginationProps, setPaginationProps] = useState<object>({ total: 0 })
+  const [paginationData, setPaginationData] = useState<object>({})
+
+
 const menu = (actionPermission: ActionPermission, record: Applications) => {
   let paymentCalcNode;
   
@@ -134,28 +157,6 @@ const menu = (actionPermission: ActionPermission, record: Applications) => {
     </Menu>
   )
 }
-
-const filterFormLayout = {
-  labelCol: { span: 24 },
-  wrapperCol: { span: 24 },
-}
-
-function ApplicationList() {
-
-  const [loading, setLoading] = useState<boolean>(true)
-  const [data, setData] = useState<Data[] | any>([])
-
-  const [visibleDrawer, setDrawerVisible] = useState<boolean>(false)
-
-  const [filterForm] = Form.useForm()
-  const [filterOptionsLoading, setFilterOptionsLoading] = useState<boolean>(true)
-  const [filterData, setFilterData] = useState<object>({})
-
-  const [creditStatusOptions, setCreditStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
-  const [documentStatusOptions, setDocumentStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
-
-  const [paginationProps, setPaginationProps] = useState<object>({ total: 0 })
-  const [paginationData, setPaginationData] = useState<object>({})
 
   
   const showDrawer = () => {
