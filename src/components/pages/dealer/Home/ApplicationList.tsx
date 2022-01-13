@@ -155,10 +155,10 @@ function ApplicationList() {
             </Menu.Item>
         }
         {
-         actionPermission.canArchive && 
-           <Menu.Item>
-             <a href="#" className="archive-application" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
-           </Menu.Item>
+          actionPermission.canArchive && 
+            <Menu.Item>
+              <a href="#" className="archive-application" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
+            </Menu.Item>
         }
       </Menu>
     )
