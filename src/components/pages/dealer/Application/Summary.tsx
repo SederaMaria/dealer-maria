@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider, message } from "antd";
+import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider, message, Alert } from "antd";
 import 'antd/dist/antd.css';
 import { UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -40,16 +40,24 @@ export const Summary: React.FC<Props> = ({data}) => {
     const [hasSubmitError, setHasSubmitError] = useState(false)
     const [submitSuccess, setSubmitSuccess] = useState(false)
 
+    const [showSubmitterMessage, setShowSubmitterMessage] = useState<boolean>(false)
+    const [submitterMessage, setSubmitterMessage] = useState<string | undefined>("")
+
     const handleSubmit = async () => {        
         try {
-            await network.POST(`/api/v1/dealers/applications/${leaseApplicationId}`, data);
+            const response = await network.GET(`/api/v1/dealers/applications/${leaseApplicationId}`);
             message.success("Succesfully Submitted Application")
+            console.log(response)
             setHasSubmitError(false)
             setSubmitSuccess(true)
-         } catch (e) {
+            setShowSubmitterMessage(false)
+            setSubmitterMessage("Succesfully Submitted Application")
+         } catch (e:any) {
            logger.error("Request Error", e);
-           message.error("Error submitting application");
-           setHasSubmitError(true)
+           setSubmitterMessage(e.response.data.message)
+           setShowSubmitterMessage(true)
+           console.log(e.response)
+           console.log(e.response.data.message)
          }
     }
 
@@ -61,6 +69,7 @@ export const Summary: React.FC<Props> = ({data}) => {
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
             />
+            { showSubmitterMessage &&  <Alert message={submitterMessage} type="warning" showIcon closable/>}
             <div style={{ margin: `20px 100px` }}>
                 <div style={{ textAlign: `center`,  marginBottom: 20}}>
                     <Title level={2}> Summary </Title>
