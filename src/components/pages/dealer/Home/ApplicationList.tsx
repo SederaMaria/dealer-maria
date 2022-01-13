@@ -428,7 +428,7 @@ function ApplicationList() {
            ...paginationProps
         }}
         size="small"
-        scroll={{y:375}} 
+        scroll={{y:685}} 
         className='table-wrapper'
       />
       <Drawer

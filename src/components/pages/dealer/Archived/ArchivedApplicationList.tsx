@@ -149,12 +149,13 @@ function ArchivedApplicationList() {
         dataSource={data}
         rowKey={(val) => val.id}
         pagination={{
+          defaultPageSize: 20,
           onChange: onPaginationChange,
-          pageSizeOptions: ["10", "20", "50"],
+          pageSizeOptions: ["20", "50", "100"],
           ...paginationProps,
         }}
         size='small'
-        scroll={{ y: 375 }}
+        scroll={{y:725}}
         className='table-wrapper'
       />
     </Spin>
