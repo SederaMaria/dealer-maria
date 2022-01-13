@@ -1,11 +1,12 @@
-import React from 'react';
-import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider } from "antd";
+import React, { useState } from 'react';
+import { Row, Col, Button, Typography, Layout, Avatar, Collapse, Tag, Card, Divider, message, Alert } from "antd";
 import 'antd/dist/antd.css';
 import { UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ApplicationSteps from './ApplicationSteps';
 import { Lessee as SummaryLessee } from './Applicant/Applicant';
 import '../../../layouts/styles/Summary.css';
+import { logger, network } from '../../../../utils';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -36,6 +37,30 @@ export const Summary: React.FC<Props> = ({data}) => {
     let leaseApplicationId: string | number | undefined = data?.id
     let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
 
+    const [hasSubmitError, setHasSubmitError] = useState(false)
+    const [submitSuccess, setSubmitSuccess] = useState(false)
+
+    const [showSubmitterMessage, setShowSubmitterMessage] = useState<boolean>(false)
+    const [submitterMessage, setSubmitterMessage] = useState<string | undefined>("")
+
+    const handleSubmit = async () => {        
+        try {
+            const response = await network.GET(`/api/v1/dealers/applications/${leaseApplicationId}`);
+            message.success("Succesfully Submitted Application")
+            console.log(response)
+            setHasSubmitError(false)
+            setSubmitSuccess(true)
+            setShowSubmitterMessage(false)
+            setSubmitterMessage("Succesfully Submitted Application")
+         } catch (e:any) {
+           logger.error("Request Error", e);
+           setSubmitterMessage(e.response.data.message)
+           setShowSubmitterMessage(true)
+           console.log(e.response)
+           console.log(e.response.data.message)
+         }
+    }
+
     return (
         <>
             <ApplicationSteps 
@@ -44,6 +69,7 @@ export const Summary: React.FC<Props> = ({data}) => {
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
             />
+            { showSubmitterMessage &&  <Alert message={submitterMessage} type="warning" showIcon closable/>}
             <div style={{ margin: `20px 100px` }}>
                 <div style={{ textAlign: `center`,  marginBottom: 20}}>
                     <Title level={2}> Summary </Title>
@@ -180,8 +206,10 @@ export const Summary: React.FC<Props> = ({data}) => {
                 </div>
 
                 <div style={{ marginTop: 20, textAlign: `center`}}>
-                    <Button style={{ marginRight: 10 }} type="primary" >
-                    <Link to={`/applications/${leaseApplicationId}/co-applicant`}> prev </Link>
+                    <Button style={{ marginRight: 10 }} type="primary" 
+                        onClick={handleSubmit}
+                    >
+                        Submit to Speed Leasing
                     </Button>
                 </div>
             </div>
