@@ -5,17 +5,20 @@ import {
   Menu,
   Dropdown,
   Button,
+  Form,
+  Select,
   Drawer,
+  Input,
   Row,
   Col,
-  Form,
-  Input,
-  Select
+  message,
 } from 'antd';
 import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
+import '../styles/ApplicationList.css';
+
 
 const { Option } = Select;
 
@@ -48,158 +51,11 @@ interface ActionPermission {
   canSwapApplicants: boolean;
   expired: boolean;
   submitted: boolean;
+  canArchive: boolean;
 }
 
 type StatesForSelect = [string, string]
 
-const columns: ColumnsType<Applications> = [
-  {
-    key: 'applicationIdentifier',
-    title: 'Application Identifier',
-    dataIndex: 'applicationIdentifier',
-    render(val, row) {
-      return (
-        <Link to={`/applications/${row.id}/summary`}>{val}</Link>
-      )
-    }
-  },
-  {
-    key: 'applicant',
-    title: 'Applicant',
-    dataIndex: 'applicant',
-  },
-  {
-    key: 'coApplicant',
-    title: 'Co-Applicant',
-    dataIndex: 'coApplicant',
-  },
-  {
-    key: 'modelAndYear',
-    title: 'Model and Year',
-    dataIndex: 'modelAndYear',
-  },
-  {
-    key: 'creditStatus',
-    title: 'Credit Status',
-    dataIndex: 'creditStatus',
-  },
-  {
-    key: 'documentStatus',
-    title: 'Document Status',
-    dataIndex: 'documentStatus',
-  },
-  {
-    key: 'daysSubmitted',
-    title: 'Days Submitted',
-    dataIndex: 'daysSubmitted',
-  },
-  {
-    key: 'lastUpdated',
-    title: 'Last Updated',
-    dataIndex: 'lastUpdated',
-  },
-  {
-    title: '',
-    dataIndex: '',
-    key: 'x',
-    render(text, record, index) {
-      return (
-        <Dropdown overlay={menu(record.actionPermission)} trigger={['click']}>
-          <a className="ant-dropdown-link" href="#">
-            <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
-          </a>
-        </Dropdown>
-      )
-    }
-  },
-]
-
-const menu = (actionPermission: ActionPermission) => {
-  let paymentCalcNode;
-
-  if (actionPermission.canOpenPaymentCalculator) {
-    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
-  } else if (actionPermission.canChangeBikes) {
-    paymentCalcNode = <a href="#">Open Payment Calculator</a>;
-  } else {
-    paymentCalcNode = <a href="#">View Payment Calculator</a>;
-  }
-
-  return (
-    <Menu>
-      <Menu.Item>
-        {paymentCalcNode}
-      </Menu.Item>
-      <Menu.Item>
-        {
-          actionPermission.canOpenCreditApplication ?
-            <a href="#">Open Credit Application</a>
-            :
-            <a href="#">View Credit Application</a>
-        }
-      </Menu.Item>
-      {
-        !actionPermission.submitted &&
-          <Menu.Item>
-            <a href="#">Submit to Speed Leasing</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canSwapApplicants &&
-          <Menu.Item>
-            <a href="#">Swap Applicants</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canAddCoapplicant &&
-          <Menu.Item>
-            <a href="#">Add Co-applicant</a>
-          </Menu.Item>
-      }
-      <Menu.Item>
-        <a href="#">View / Add References</a>
-      </Menu.Item>
-      {
-        !actionPermission.expired &&
-          <Menu.Item>
-            <a href="#">Add Attachment</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canChangeBikes &&
-          <>
-            <Menu.Item>
-              <a href="#">Bike Change</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a href="#">Change Tax Jurisdiction</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a href="#">Change Mileage</a>
-            </Menu.Item>
-          </>
-      }
-      {
-        actionPermission.canRequestLeaseDocuments &&
-          <Menu.Item>
-            <a href="#">Request Lease Documents</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canRemoveCoapplicant &&
-          <Menu.Item>
-            <a href="#">Remove Co-applicant</a>
-          </Menu.Item>
-      }
-      {
-        actionPermission.canSubmitBankInfo &&
-          <Menu.Item>
-            <a href="#">Submit Bank Information</a>
-          </Menu.Item>
-      }
-    </Menu>
-  )
-}
 
 const filterFormLayout = {
   labelCol: { span: 24 },
@@ -215,10 +71,100 @@ function ApplicationList() {
 
   const [filterForm] = Form.useForm()
   const [filterOptionsLoading, setFilterOptionsLoading] = useState<boolean>(true)
+  const [filterData, setFilterData] = useState<object>({})
 
   const [creditStatusOptions, setCreditStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
   const [documentStatusOptions, setDocumentStatusOptions] = useState<Array<StatesForSelect> | Array<any>>([])
 
+  const [paginationProps, setPaginationProps] = useState<object>({ total: 0 })
+  const [paginationData, setPaginationData] = useState<object>({})
+
+
+  const menu = (actionPermission: ActionPermission, record: Applications) => {
+    let paymentCalcNode;
+
+    if (actionPermission.canOpenPaymentCalculator) {
+      paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+    } else if (actionPermission.canChangeBikes) {
+      paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+    } else {
+      paymentCalcNode = <a className="view-payment-calculator" href="#">View Payment Calculator</a>;
+    }
+
+    return (
+      <Menu>
+        <Menu.Item>
+          {paymentCalcNode}
+        </Menu.Item>
+        <Menu.Item>
+          {
+            actionPermission.canOpenCreditApplication ?
+              <a className="open-credit-application"  href="#">Open Credit Application</a>
+              :
+              <Link className="view-credit-application" to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
+          }
+        </Menu.Item>
+        {
+          actionPermission.canSwapApplicants &&
+            <Menu.Item>
+              <a className="swap-application" href="#">Swap Applicants</a>
+            </Menu.Item>
+        }
+        {
+          actionPermission.canAddCoapplicant &&
+            <Menu.Item>
+              <Link className="add-coapplicant" to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
+            </Menu.Item>
+        }
+        {
+          !actionPermission.expired &&
+            <Menu.Item>
+              <Link className="add-attachment" to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
+            </Menu.Item>
+        }
+        {
+          actionPermission.canChangeBikes &&
+            <>
+              <Menu.Item>
+                <a className="bike-change" href="#">Bike Change</a>
+              </Menu.Item>
+              <Menu.Item>
+                <a className="tax-Juridiction" href="#">Change Tax Jurisdiction</a>
+              </Menu.Item>
+              <Menu.Item>
+                <a className="change-mileage" href="#">Change Mileage</a>
+              </Menu.Item>
+            </>
+        }
+        {
+          actionPermission.canRequestLeaseDocuments &&
+            <Menu.Item>
+              <a className="lease-documents" href="#">Request Lease Documents</a>
+            </Menu.Item>
+        }
+        {
+          actionPermission.canRemoveCoapplicant &&
+            <Menu.Item>
+              <a className="remove-coapplicant" href="#">Remove Co-applicant</a>
+            </Menu.Item>
+        }
+        {
+          actionPermission.canSubmitBankInfo &&
+            <Menu.Item>
+              <Link className="submit-bank-information" to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
+            </Menu.Item>
+        }
+        {
+          actionPermission.canArchive && 
+            <Menu.Item>
+              <a href="#" className="archive-application" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
+            </Menu.Item>
+        }
+      </Menu>
+    )
+  }
+
+  
   const showDrawer = () => {
     setDrawerVisible(true);
   }
@@ -239,39 +185,50 @@ function ApplicationList() {
   const onFilterReset = () => {
     filterForm.resetFields()
     setDrawerVisible(false)
-    getApplications()
+    setFilterData({})
   }
 
   const onFilterSubmit = (values: any) => {
     setDrawerVisible(false)
-    getApplications(values)
+    setFilterData(values)
   }
 
-  const objectToQueryString = (obj: object | undefined) => {
-    if (obj) {
-      let str = []
-      for (const [key, value] of Object.entries(obj)) {
-        if (value) {
-          str.push(`filter[${encodeURIComponent(key)}]` + "=" + encodeURIComponent(value))
-        }
-      }
+  const onPaginationChange = (page: any, pageSize: any) => {
+    setPaginationData({
+      page: page,
+      pageSize: pageSize,
+    })
+  }
 
-      if (str.length > 0) {
-        return `?${str.join("&")}`
-      } else {
-        return ''
-      }
+  const filterParams = () => {
+    if (filterData && Object.keys(filterData).length > 0) {
+      return { filter: { ...filterData } }
     } else {
-      return ''
+      return {}
     }
   }
 
-  const getApplications = async (filter?: object | undefined) => {
+  const paginationParams = () => {
+    if (paginationData && Object.keys(paginationData).length > 0) {
+      return { pagination: { ...paginationData } }
+    } else {
+      return {}
+    }
+  }
+
+  const getApplications = async () => {
     if (!loading) { setLoading(true) }
 
     try {
-      await network.GET(`/api/v1/dealers/applications${objectToQueryString(filter)}`).then(response => {
-        setData(response.data.leaseApplication)
+      await network.POST(`/api/v1/dealers/applications`, {
+        ...filterParams(),
+        ...paginationParams(),
+      }).then(response => {
+        setData(response.data.data.leaseApplications)
+        setPaginationProps({
+          ...paginationProps,
+          total: response.data.pagination.total
+        })
       }).catch(error => {
         logger.error("Error fetching Applications", error)
       })
@@ -299,9 +256,151 @@ function ApplicationList() {
     setFilterOptionsLoading(false)
   }
 
+  const archiveApplication = async (event: any, id: number) => {
+    if (!loading) { setLoading(true) }
+
+    try {
+      await network.POST(`/api/v1/dealers/applications/${id}/archive`, {}).then(response => {
+        message.success(response.data.message)
+        getApplications()
+      }).catch(error => {
+        logger.error("Error fetching filter options", error)
+      })
+    } catch (e) {
+      logger.error("Error fetching filter options", e)
+    }
+
+    setLoading(false)
+  }
+
   useEffect(() => {
     getApplications()
-  },[]);
+  },[filterData, paginationData]);
+
+
+  const getUniqueBy = (arr:Array<Object>, prop:any) => {
+    return arr.reduce((a:any, d:any) => {
+    if (!a.includes(d[prop])) { a.push(d[prop]); }
+       return a;
+    }, []);
+  }
+
+  const convertToObj = (prop:String) => {
+    return data ? getUniqueBy(data, prop).map( (val:any) =>  { return val ? { text: val, value: val } : null } ).filter( (val:any) => { return val !== null; } ) : []
+  }
+
+  const columns: ColumnsType<Applications | any> = [
+    {
+      key: 'applicationIdentifier',
+      title: 'Application Identifier',
+      dataIndex: 'applicationIdentifier',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      render(val, row) {
+        return (
+          <Link to={`/applications/${row.id}/summary`}> { val == null ? 'N/A' : val } </Link>
+        )
+      },
+      responsive: ['lg'],
+      onFilter: (value, record) => record.applicationIdentifier && record.applicationIdentifier.includes(value),
+      filters: convertToObj('applicationIdentifier'),
+      filterSearch: true,
+    },
+    {
+      key: 'applicant',
+      title: 'Applicant',
+      dataIndex: 'applicant',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.applicant && record.applicant.includes(value),
+      filters: convertToObj('applicant'),
+      filterSearch: true,
+    },
+    {
+      key: 'coApplicant',
+      title: 'Co-Applicant',
+      dataIndex: 'coApplicant',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.coApplicant && record.coApplicant.includes(value),
+      filters: convertToObj('coApplicant'),
+      filterSearch: true,
+    },
+    {
+      key: 'modelAndYear',
+      title: 'Model and Year',
+      dataIndex: 'modelAndYear',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.modelAndYear && record.modelAndYear.includes(value),
+      filters: convertToObj('modelAndYear'),
+      filterSearch: true,
+    },
+    {
+      key: 'creditStatus',
+      title: 'Credit Status',
+      dataIndex: 'creditStatus',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.creditStatus && record.creditStatus.includes(value),
+      filters: convertToObj('creditStatus'),
+      filterSearch: true,
+    },
+    {
+      key: 'documentStatus',
+      title: 'Document Status',
+      dataIndex: 'documentStatus',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      },
+      onFilter: (value, record) => record.documentStatus && record.documentStatus.includes(value),
+      filters: convertToObj('documentStatus'),
+      filterSearch: true,
+    },
+    {
+      key: 'daysSubmitted',
+      title: 'Days Submitted',
+      dataIndex: 'daysSubmitted',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      }, 
+      responsive: ['lg'],
+      onFilter: (value, record) => record.daysSubmitted && record.daysSubmitted.includes(value),
+      filters: convertToObj('daysSubmitted'),
+      filterSearch: true,
+    },
+    {
+      key: 'lastUpdated',
+      title: 'Last Updated',
+      dataIndex: 'lastUpdated',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+      }, 
+      responsive: ['lg'],
+      onFilter: (value: any, record: any) => record.lastUpdated && record.lastUpdated.includes(value),
+      filters: convertToObj('lastUpdated'),
+      filterSearch: true,
+    },
+    {
+      title: '',
+      dataIndex: '',
+      key: 'x',
+      render(text, record, index) {
+        return (
+          <Dropdown overlay={menu(record.actionPermission, record)} trigger={['click']} >
+            <a className="ant-dropdown-link" href="#">
+              <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
+            </a>
+          </Dropdown>
+        )
+      }
+    },
+  ]
 
   return (
     <Spin spinning={loading}>
@@ -317,11 +416,23 @@ function ApplicationList() {
           </Button>
         </Col>
       </Row>
-
-      <Table columns={columns} dataSource={data} rowKey={(val) => val.id} />
-
+      
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey={(val) => val.id}
+        pagination={{
+          defaultPageSize: 20,
+          onChange: onPaginationChange,
+          pageSizeOptions: ["20","50", "100"],
+           ...paginationProps
+        }}
+        size="small"
+        scroll={{y:685}} 
+        className='table-wrapper'
+      />
       <Drawer
-        title="Filters"
+      title="Filters"
         placement="right"
         afterVisibleChange={onDrawerVisibleChange}
         onClose={onDrawerClose}
@@ -337,7 +448,6 @@ function ApplicationList() {
           <Form.Item label="Name" name="name">
             <Input />
           </Form.Item>
-
           <Form.Item label="Credit Status" name="creditStatus">
             <Select allowClear loading={filterOptionsLoading}>
               {
@@ -347,7 +457,6 @@ function ApplicationList() {
               }
             </Select>
           </Form.Item>
-
           <Form.Item label="Document Status" name="documentStatus">
             <Select allowClear loading={filterOptionsLoading}>
               {
@@ -357,14 +466,12 @@ function ApplicationList() {
               }
             </Select>
           </Form.Item>
-
           <Form.Item label="Can Change Bikes?" name="canChangeBikes">
             <Select allowClear>
               <Option value="true">Yes</Option>
               <Option value="false">No</Option>
             </Select>
           </Form.Item>
-
           <Form.Item style={{marginTop: "15px"}}>
             <Button type="primary" htmlType="submit" style={{marginRight: "5px"}}>
               Filter

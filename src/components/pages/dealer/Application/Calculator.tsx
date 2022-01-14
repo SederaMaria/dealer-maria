@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout } from "antd";
+import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout, InputNumber } from "antd";
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
@@ -24,6 +24,26 @@ interface Lessee {
 
 interface LeaseCalculator {
     id?: string | number | undefined
+    usState?: number | undefined
+    taxJurisdiction?: number | undefined
+    newUsed?: number | undefined
+    assetMake?: number | undefined
+    assetYear?: number | undefined
+    assetModel?: number | undefined
+    mileageTier?: number | undefined
+    creditTierId?: number | undefined
+    term?: number | undefined
+    dealerSalesPrice?: number | undefined
+    dealerFreightAndSetup?: number | undefined
+    titleLicenseAndLienFee?: number | undefined
+    dealerDocumentationFee?: number | undefined
+    guaranteedAutoProtectionCost?: number | undefined
+    prepaidMaintenanceCost?: number | undefined
+    extendedServiceContractCost?: number | undefined
+    tireAndWheelContractCost?: number | undefined
+    grossTradeInAllowance?: number | undefined
+    tradeInPayoff?: number | undefined
+    cashDownPayment?: number | undefined
 }
 
 interface RootLeaseCalculator {
@@ -34,13 +54,13 @@ interface Props {
     data?: {
         id: string | number,
         lessee: Lessee,
-        leaseCalculator: RootLeaseCalculator
+        leaseCalculator?: LeaseCalculator
     }
 }
 
 export const Calculator: React.FC<Props> = ({data}: Props) => {
 
-
+    
     interface CalculatorDataProps {
         nadaRental?: string,
         purchaseOption?: string,
@@ -89,7 +109,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
     const [lesseeForm] = Form.useForm();
 
     let leaseApplicationId: string | number | undefined = data?.id
-    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.leaseCalculator?.id
+    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
       
     const [calculatorData, setCalculatorData] = useState<CalculatorDataProps>({})
 
@@ -263,7 +283,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 
 
       const handleCalculation = () => {
-        setCalculatorRandom()
+        // setCalculatorRandom()
     }
 
     const generateRandomNDigits = (n: number) => {
@@ -333,6 +353,33 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
         return myArray[(Math.random() * myArray.length) | 0]
     }
 
+
+    const submitApplication = async (values: any) => {
+        try {
+           let calculate = await network.POST(`/api/v1/dealers/calculator/calculate`, values);
+            console.log(calculate)
+        //    setHasSubmitError(false)
+        //    setDisableSubmitBtn(true)
+        //    setSubmitSuccess(true)
+        //    message.success("Save Successfully");
+        } catch (e) {
+          logger.error("Request Error", e);
+        //   message.error("Error saving details");
+        //   setHasSubmitError(true)
+        //   setDisableSubmitBtn(false)
+        }
+        // setDisableSubmitBtn(false)
+      }
+
+
+
+    const handleSubmit = async (values: any) => {
+        console.log("save")
+        values = { ...values };
+        submitApplication(values)
+    }
+
+
     return (
         <>
             <ApplicationSteps 
@@ -351,12 +398,40 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                     form={lesseeForm} 
                     {...layout}  
                     // colon={false}
-                    // onFinish={handleSubmit}
+                    onFinish={handleSubmit}
                     // scrollToFirstError={true}
-                    // initialValues={{
-                    //     applicationDisclosureAgreement: 'unchecked'
-                    // }}
+                    initialValues={{
+                        leaseCalculatorAttributes: {
+                            id: data?.leaseCalculator?.id,
+                            usState: data?.leaseCalculator?.usState,
+                            taxJurisdiction: data?.leaseCalculator?.taxJurisdiction, 
+                            newUsed: data?.leaseCalculator?.newUsed, 
+                            assetMake: data?.leaseCalculator?.assetMake, 
+                            assetYear: data?.leaseCalculator?.assetYear, 
+                            assetModel: data?.leaseCalculator?.assetModel, 
+                            mileageTier: data?.leaseCalculator?.mileageTier, 
+                            creditTierId: data?.leaseCalculator?.creditTierId, 
+                            term: data?.leaseCalculator?.term, 
+                            dealerSalesPrice: data?.leaseCalculator?.dealerSalesPrice, 
+                            dealerFreightAndSetup: data?.leaseCalculator?.dealerFreightAndSetup, 
+                            titleLicenseAndLienFee: data?.leaseCalculator?.titleLicenseAndLienFee, 
+                            dealerDocumentationFee: data?.leaseCalculator?.dealerDocumentationFee, 
+                            guaranteedAutoProtectionCost: data?.leaseCalculator?.guaranteedAutoProtectionCost, 
+                            prepaidMaintenanceCost: data?.leaseCalculator?.prepaidMaintenanceCost, 
+                            extendedServiceContractCost: data?.leaseCalculator?.extendedServiceContractCost, 
+                            tireAndWheelContractCost: data?.leaseCalculator?.tireAndWheelContractCost, 
+                            grossTradeInAllowance: data?.leaseCalculator?.grossTradeInAllowance, 
+                            tradeInPayoff: data?.leaseCalculator?.tradeInPayoff, 
+                            cashDownPayment: data?.leaseCalculator?.cashDownPayment, 
+                        }
+                    }}
                 >
+
+
+                    { 
+                          data?.leaseCalculator?.id && <Form.Item style={{display: 'none'}} name={['leaseCalculatorAttributes','id']} > <Input /> </Form.Item>
+                        }
+
                     <Content className="content-1">
 
                         <Row gutter={[16, 16]}>
@@ -366,6 +441,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                                 label="Dealership's State" 
+                                                name={['leaseCalculatorAttributes', 'usState']} 
                                                 hasFeedback
                                                 rules={[{ required: true, message: `Dealership's State is required` }]}
                                             >  
@@ -391,6 +467,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             <Form.Item 
                                                 label={`${taxJurisdictionLabel}`}
                                                 hasFeedback
+                                                name={['leaseCalculatorAttributes', 'taxJurisdiction']} 
                                                 rules={[{ required: true, message: `${taxJurisdictionLabel} is required` }]}
                                             >  
                                                 <Select showSearch onSelect={handleCalculation} >
@@ -565,7 +642,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                             label="Credit Tier" 
-                                            name={['leaseCalculatorAttributes', 'creditTier']} 
+                                            name={['leaseCalculatorAttributes', 'creditTierId']} 
                                             rules={[{ required: true, message: 'Credit Tier is required!' }]}
                                             >  
                                                 <Select 
@@ -589,6 +666,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                         <Col span={24}> 
                                             <Form.Item 
                                                 label="Lessee Term" 
+                                                name={['leaseCalculatorAttributes', 'term']} 
                                                 hasFeedback
                                                 rules={[{ required: true, message: ` is required` }]}
                                             >  
@@ -633,8 +711,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Purchase Option (Residual)
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                name={['leaseCalculatorAttributes', 'dealerSalesPrice']} 
+                                            >  
+                                                {/* <Input style={{textAlign: `right`}} ></Input> */}
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={value => `${value}`.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -644,8 +730,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Dealer Freight and Setup Cost
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'dealerFreightAndSetup']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -679,8 +773,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Title, License, and Lien Fee
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'titleLicenseAndLienFee']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -690,8 +792,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Dealer Documentation Fee
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'dealerDocumentationFee']} 
+                                            > 
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -702,8 +812,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             GAP
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'guaranteedAutoProtectionCost']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -715,8 +833,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Pre-Paid Maintenance
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'prepaidMaintenanceCost']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -727,8 +853,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Service Contract
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'extendedServiceContractCost']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -739,8 +873,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Tire and Wheel
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'tireAndWheelContractCost']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -776,8 +918,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Gross Trade Allowance
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'grossTradeInAllowance']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -788,8 +938,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Trade-in Payoff
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'tradeInPayoff']} 
+                                            >  
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -810,8 +968,16 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             Cash
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
-                                            <Form.Item hasFeedback>  
-                                                <Input style={{textAlign: `right`}} ></Input>
+                                            <Form.Item 
+                                                hasFeedback
+                                                name={['leaseCalculatorAttributes', 'cashDownPayment']} 
+                                            > 
+                                                <InputNumber   
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: `right`}}
+                                                />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
@@ -957,7 +1123,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                     
                                     <Row>
                                         <Col span={16}> 
-                                            Total Cash Out of Pocket
+                                            Put This Amount in Cash
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
                                             <Form.Item hasFeedback>  
@@ -990,7 +1156,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                 
                                     <Row className={`bot-spacer-1`}>
                                         <Col span={16} style={{ fontWeight: 700}}> 
-                                        Put This Amount in Cash
+                                        Total Cash Out of Pocket
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`, fontWeight: 700}}> 
                                             <span>{calculatorData.cashIn}</span>
@@ -1187,9 +1353,9 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                 </Card>
                                 <div style={{ marginTop: 20, textAlign: `right`}}>
                                     <Button style={{ marginRight: 10 }}>Save</Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                    {/* <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/bike`}> prev </Link>
-                                    </Button>
+                                    </Button> */}
                                     <Button style={{ marginRight: 10 }} type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
                                     </Button>
@@ -1205,3 +1371,4 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 }
 
 export default Calculator
+// 

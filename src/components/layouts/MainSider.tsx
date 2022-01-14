@@ -1,9 +1,15 @@
-import React from 'react'
-import { Layout, Menu } from "antd";
+import React, {useState} from 'react'
+import { Layout, Menu, Button } from "antd";
 import { Link } from 'react-router-dom';
-import { SiderProps } from './props';
+import { SiderProps} from './props';
+import { CollapseProps } from './props/collapseProps';
 import { HomeOutlined, ProfileOutlined, CalculatorOutlined } from '@ant-design/icons';
+import { ArchiveSvg } from '../../utils/Svg';
 
+import { 
+  MenuOutlined
+ }
+from '@ant-design/icons';
 import './styles/MainSider.css';
 
 const { Sider } = Layout;
@@ -13,24 +19,43 @@ interface Props {
   }
 
 export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
+  
+  const [collapsed, setCollapsed]= useState(CollapseProps);
+ 
+  const handleClick = () => {
+    if(collapsed == CollapseProps) {
+      setCollapsed(SiderProps)
+    }else if(collapsed == SiderProps) {
+      setCollapsed(CollapseProps)
+    } 
+  }
+
     return (
-        <Sider {...SiderProps as object} >
+        <Sider {...collapsed as object}>
+          <Button onClick={handleClick} className='collapseButton'>
+            <MenuOutlined />
+          </Button>
           <Menu
             defaultSelectedKeys={[`${activeKey}`]}
+            mode="inline"
           >
-            <Menu.Item key="home">
-            <Link to={`/home`}><HomeOutlined /> Home</Link>
+            <Menu.Item key="home" icon={<HomeOutlined />}>
+              <Link to={`/home`}> Home</Link>
             </Menu.Item>
 
-            <Menu.Item key="application">
-                <Link to={`/application`}><ProfileOutlined /> New Application</Link>
+            <Menu.Item key="application" icon={<ProfileOutlined />}>
+              <Link to={`/application`}> New Application</Link>
             </Menu.Item>
 
-            <Menu.Item key="saved-calculators">
-                <Link to={`/saved-calculators`}><CalculatorOutlined /> Saved Calculators</Link>
+            <Menu.Item key="saved-calculators" icon={<CalculatorOutlined />}>
+              <Link to={`/saved-calculators`}> Saved Calculators</Link>
             </Menu.Item>
 
-          </Menu>
+            <Menu.Item key="archived-applications" icon={<ArchiveSvg/>}>
+              <Link className="lastMenu" to={`/archived-applications`}> Archived</Link>
+            </Menu.Item>
+            
+          </Menu> 
         </Sider>
     )
 }

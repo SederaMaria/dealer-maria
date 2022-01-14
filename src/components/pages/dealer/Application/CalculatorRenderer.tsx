@@ -29,7 +29,7 @@ function CalculatorRenderer(props: any) {
       }
 
 
-    return (
+    return data ? (
         <Spin 
         spinning={loading}
         size='large'
@@ -37,7 +37,7 @@ function CalculatorRenderer(props: any) {
         >
             <Calculator data={data}/>
         </Spin>
-    )
+    ) : null ;
 }
 
 export default CalculatorRenderer

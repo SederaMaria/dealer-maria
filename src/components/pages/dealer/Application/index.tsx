@@ -10,5 +10,9 @@ import Calculator from "./Calculator"
 import Applicant from "./Applicant/Applicant"
 import CoApplicant from "./Applicant/CoApplicant"
 import Summary from "./Summary"
+import BankingInformation from "./BankingInformation";
+import BankingInformationRenderer from "./BankingInformationRenderer";
+import Attachments from "./Attachment";
+import AttachmentRenderer from "./AttachmentRenderer";
 
-export { NewApplication, BikeInformation, BikeInformationRenderer, CalculatorRenderer, ApplicantRenderer, CoApplicantRenderer, SummaryRenderer, Calculator , Applicant, CoApplicant, Summary};
+export { NewApplication, BikeInformation, BikeInformationRenderer, CalculatorRenderer, ApplicantRenderer, CoApplicantRenderer, SummaryRenderer, Calculator , Applicant, CoApplicant, Summary, BankingInformation, BankingInformationRenderer, Attachments, AttachmentRenderer};

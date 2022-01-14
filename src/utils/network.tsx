@@ -29,6 +29,15 @@ export const GET = (url: string) => {
     })
 }
 
+export const GET_WOPTS = (url: string, opts: object | undefined) => {
+    return Axios.get(`${LOS_API}${url}`, {
+        ...opts,
+        headers: {
+            Authorization: ` Token ${auth_token}`,
+            Accept: "application/json"
+        }
+    })
+}
 
 export const DELETE = (url: string) => {
     return Axios.delete(`${LOS_API}${url}`, {

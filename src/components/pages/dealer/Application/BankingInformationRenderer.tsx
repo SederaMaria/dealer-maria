@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Spin } from "antd";
-import { BikeInformation } from '.'
+import BankingInformation from './BankingInformation';
 import { logger, network } from '../../../../utils';
 
-function BikeInformationRenderer(props: any)  {
+const BankingInformationRenderer = (props:any) => {
     const leaseApplicationId: string = `${props.match.params.leaseApplicationId}`
     const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -18,9 +18,8 @@ function BikeInformationRenderer(props: any)  {
           setLoading(true)
         }
         try {
-            let data = await network.GET(`/api/v1/dealers/get-details?id=${leaseApplicationId}`)
-            console.log(data.data.data.leaseApplication)
-            setData(data.data.data.leaseApplication)
+            let data = await network.GET(`/api/v1/dealers/${leaseApplicationId}/banking-information`)
+            setData(data.data)
         } catch (e) {
             setLoading(false)
             logger.error("Error fetching Applicatins", e);
@@ -28,15 +27,15 @@ function BikeInformationRenderer(props: any)  {
         setLoading(false)
       }
 
-    return (
+
+    return data ? (
         <Spin 
         spinning={loading}
         size='large'
         tip='Loading...'
         >
-            <BikeInformation data={data}/>
+            <BankingInformation leaseApplicationId={leaseApplicationId} data={data} />
         </Spin>
-    )
+    ) : null
 }
-
-export default BikeInformationRenderer
+export default BankingInformationRenderer

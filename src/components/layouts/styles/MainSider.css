@@ -61,3 +61,15 @@ span.anticon {
 *::after {
   box-sizing: border-box;
 }
+
+.collapseButton {
+  margin-bottom: 16px;
+  margin-left: 8px;
+  width: 1px;
+  border: none;
+  box-shadow: none;
+}
+
+.lastMenu {
+  margin-left: 20px;
+}

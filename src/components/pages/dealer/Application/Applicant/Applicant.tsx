@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout } from "antd";
+import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox, DatePicker, Space } from "antd";
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../../utils';
 import MaskedInput from 'antd-mask-input'
@@ -7,8 +8,11 @@ import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import '../../styles/Applicant.css';
+import { start } from 'repl';
+
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Content } = Layout;
 const dateFormat = 'MM/DD/YYYY';
@@ -21,42 +25,138 @@ const layout = {
     },
   };
   
+const formLayouts = {
+  horizontal: {
+    container: {
+      placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      formCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+    },
+    field: {
+        col: { xs: 24, sm: 24, md: 8, lg: 9, xl: 8 },
+        colgroup: {
+        2: { xs: 24, sm: 24, md: 16, lg: 10, xl: 8 },
+      },
+      colmem: {
+        2: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
+      },
+    },
+  },
+  vertical: {
+    container: {
+      placeholderCol: { xs: 24, sm: 24, md: 24, lg: 24, xl: 4 },
+      formCol: { xs: 24, sm: 24, md: 24, lg: 12, xl: 8 },
+    },
+    field: {
+      col: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      colgroup: {
+        2: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 },
+      },
+      colmem: {
+        2: { xs: 24, sm: 24, md: 24, lg: 12, xl: 12 },
+      },
+    },
+  },
+}
 
-  interface Lessee {
+const formLayout = formLayouts.horizontal
+
+  export interface Address {
+    id?: number | undefined
+    state? : string | undefined
+    street1? : string | undefined
+    street2? : string | undefined
+    zipcode? : string | undefined
+    county? : string | undefined
+    cityId? : string | undefined
+    cityOptions? : OptionData | any
+    countyOptions? : OptionData | any
+    stateOptions? : OptionData | any
+  }
+
+ export interface employmentAddress {
+      id?: number | undefined
+      city? : string | undefined
+      state? : string | undefined 
+  }
+
+export interface Lessee {
+    firstName?: string | undefined
+    middleName?: string | undefined
+    lastName?: string | undefined
+    dateOfBirth?: string | undefined
     ssn?: string | undefined
+    driversLicenseIdNumber?: string | undefined
+    homePhoneNumber?: string | undefined
+    mobilePhoneNumber?: string | undefined
+    homeAddress?: Address
+    mailingAddress?: Address
+    atAddressMonths?: number | string | undefined
+    atAddressYears?: number | string | undefined
+    monthYears?: number | string | undefined
+    monthlyMortgage?: number | string | undefined
+    homeOwnership?: number | undefined 
+    employerName?: string | undefined
+    employerPhoneNumber?: string | undefined
+    employmentAddress?: employmentAddress
+    employmentStatus?: string | undefined
+    jobTitle?: string | undefined
+    timeAtEmployerYears?: number | string | undefined
+    timeAtEmployerMonths?: number | string | undefined
+    grossMonthlyIncome?: number | string | undefined
+    motorcycleLicence? : boolean | undefined
+    firstTimeRider?: boolean | undefined
+
 }
 
 interface LeaseCalculator {
     id?: string | number | undefined
 }
 
-interface RootLeaseCalculator {
-    leaseCalculator?: LeaseCalculator
-}
-
 interface Props {
     data?: {
         id: string | number,
         lessee: Lessee,
-        leaseCalculator: RootLeaseCalculator
+        leaseCalculator: LeaseCalculator
     }
 }
 
 interface OptionData {
-    value: string | number,
-    label: string,
+    value?: string | number,
+    label?: string,
     parentId?: number
 }
 
-export const Applicant: React.FC<Props> = ({data}: Props) => {
+const formatOptions = (params: { options: Array<any>, type?: string }) => {
+    switch (params.type) {
+        case 'city': {
+            return params.options.map((value: any) => {
+                return {
+                    value: value['id'],
+                    label: value['name'],
+                    parentId: value['countyId']
+                }
+            })
+        }
+        default: {
+            return params.options.map((value: any) => {
+                return {
+                    value: value['id'],
+                    label: value['abbreviation'] ? value['abbreviation'] : value['name']
+                }
+            })
+        }
+    }
+}
 
+export const Applicant: React.FC<Props> = ({data}: Props) => {
 
     const { lessee } = data || {};
 
     const [lesseeForm] = Form.useForm();
 
     let leaseApplicationId: string | number | undefined = data?.id
-    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.leaseCalculator?.id
+    let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.id
+
 
     const [lesseeHomeStateOptions, setLesseeHomeStateOptions] = useState<Array<OptionData>>([])
     const [lesseeHomeCountyOptions, setLesseeHomeCountyOptions] = useState<Array<OptionData>>([])
@@ -91,21 +191,58 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     const [hasSubmitError, setHasSubmitError] = useState(false)
     const [submitSuccess, setSubmitSuccess] = useState(false)
 
-    const [disableSubmitBtn, setDisableSubmitBtn] = useState(true)
+    const [disableSubmitBtn, setDisableSubmitBtn] = useState(false)
+
+    const [homeAddress, setHomeAddress] = useState({
+        street1: "",
+        street2: "",
+        zipcode: ""
+    })
+
+    const [type, setType] = useState('month');
+
+    const [stateTarget, setStateTarget] = useState("")
+    const [countyTarget, setCountytarget] = useState("")
+    const [cityTarget, setCityTarget] = useState("")
+
+    const [mailingAddress, setMailingAddress] = useState<any>({
+        street1: "",
+        street2: "",
+        zipcode: "",
+        state:"",
+        county:"",
+        city:""
+    })
+
+    const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
+    const [btnAttribute, setBtnAttribute] = useState(true);
+    const [btnClass, setBtnClass] = useState("button")
+
+    const submitApplication = async (values: any) => {
+        try {
+           await network.PUT(`/api/v1/dealers/update-details?id=${leaseApplicationId}`, values);
+           setHasSubmitError(false)
+           setDisableSubmitBtn(true)
+           setSubmitSuccess(true)
+           setBtnAttribute(false)
+           setBtnClass("button")
+           message.success("Save Successfully");
+        } catch (e) {
+          logger.error("Request Error", e);
+          message.error("Error saving details");
+          setHasSubmitError(true)
+          setDisableSubmitBtn(false)
+        }
+        setDisableSubmitBtn(false)
+      }
 
 
-    const [makesOptions, setMakesOptions] = useState([])
-    const [yearsOptions, setYearsOptions] = useState([])
-    const [modelsOptions, setModelsOptions] = useState([])
-    const [mileageRangeOptions, setMileageRangeOptions] = useState([])
-    const [creditTierOptions, setCreditTierOptions] = useState([])
-    
+    const handleSubmit = async (values: any) => {
+        values = { ...values };
+        setDisableSubmitBtn(true)
+        submitApplication(values)
+    }
 
-    const [showMakeState, setShowMakeState] = useState(null)
-    const [showYearState, setShowYearState] = useState(null)
-    const [showModelState, setShowModelState] = useState(null)
-    const [showMileageRangeState, setShowMileageRangeState] = useState(null)
-    const [showCreditTierState, setShowCreditTierState] = useState(null)
 
     const handleLesseeHomeZipcodeBlur = async () => {
         let zipcode = lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode'])
@@ -181,27 +318,6 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         }
     }
 
-    const formatOptions = (params: { options: Array<any>, type?: string }) => {
-        switch (params.type) {
-            case 'city': {
-                return params.options.map((value: any) => {
-                    return {
-                        value: value['id'],
-                        label: value['name'],
-                        parentId: value['countyId']
-                    }
-                })
-            }
-            default: {
-                return params.options.map((value: any) => {
-                    return {
-                        value: value['id'],
-                        label: value['abbreviation'] ? value['abbreviation'] : value['name']
-                    }
-                })
-            }
-        }
-    }
 
     const handleHomeStateChange = () => {
         setShowHomeState(null)
@@ -270,9 +386,160 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
     useEffect(() => {
         getEmployerStatus()
+        window.addEventListener('beforeunload', alertUser)
+        window.addEventListener('unload', handleTabClosing)
+        return () => {
+            window.removeEventListener('beforeunload', alertUser)
+            window.removeEventListener('unload', handleTabClosing)
+        }
     }, []);
 
-    return (
+
+    useEffect(() => {
+        setLesseeHomeStateOptions(data?.lessee?.homeAddress?.stateOptions)
+        setLesseeHomeCountyOptions(data?.lessee?.homeAddress?.countyOptions)
+        setLesseeHomeCityOptions(data?.lessee?.homeAddress?.cityOptions)
+
+        setLesseeMailStateOptions(data?.lessee?.mailingAddress?.stateOptions)
+        setLesseeMailCountyOptions(data?.lessee?.mailingAddress?.countyOptions)
+        setLesseeMailCityOptions(data?.lessee?.mailingAddress?.cityOptions)
+    }, [data]);
+
+
+    const handleTabClosing = () => {
+        // lesseeForm.submit()
+    }
+    
+    const alertUser = (event:any) => {
+        // lesseeForm.submit()
+        event.preventDefault()
+        event.returnValue = ''
+    }
+
+    const handleChange = (e:any)=> {
+        const { name, value } = e.target
+       setHomeAddress({
+            ...homeAddress,
+            [name]: value
+        });
+    }
+
+    const handleFormChange = () => {
+        setBtnClass("green-border")
+    }
+
+    const handleStateTarget = (e:any, f:any)=> {
+        setStateTarget(f.children)
+    }
+
+    const handleCountyTarget = (e:any, f:any)=> {
+        setCountytarget(f.children)
+    }
+
+    const handleCityTarget = (e:any, f:any)=> {
+        setCityTarget(f.children)
+    }
+
+    const handleMonthYear = (e:any, f:any) => {
+        const monthYearDiff = e[1].toDate()-e[0].toDate()
+        const toMonthYears = (monthYearDiff/(365)/(86400000)).toFixed(2)
+        setMonthYear(toMonthYears)
+    }
+
+    const fillMailingAddress = (e:any)=>{
+        if(e.target.checked){
+            setMailingAddress({
+              street1: homeAddress.street1 ? homeAddress.street1 : data?.lessee?.homeAddress?.street1,
+              street2: homeAddress.street2 ? homeAddress.street2 : data?.lessee?.homeAddress?.street2, 
+              zipcode: homeAddress.zipcode ? homeAddress.zipcode : data?.lessee?.homeAddress?.zipcode,
+              state: stateTarget ? stateTarget : data?.lessee?.homeAddress?.state, 
+              county: countyTarget ? countyTarget : data?.lessee?.homeAddress?.county, 
+              city:cityTarget ? cityTarget : data?.lessee?.homeAddress?.cityId
+            })
+        }else {
+            setMailingAddress({
+                street1: "",
+                street2: "",
+                zipcode: "",
+                state:"",
+                county: "",
+                city:""
+            })
+        }
+    }
+
+    lesseeForm.setFieldsValue({
+        street1: mailingAddress.street1,
+        street2: mailingAddress.street2,
+        zipcode: mailingAddress.zipcode,
+        state:   mailingAddress.state,
+        county:  mailingAddress.county,
+        city: mailingAddress.city
+    })
+
+    const usStates = [
+        { name: 'ALABAMA', abbreviation: 'AL'},
+        { name: 'ALASKA', abbreviation: 'AK'},
+        { name: 'AMERICAN SAMOA', abbreviation: 'AS'},
+        { name: 'ARIZONA', abbreviation: 'AZ'},
+        { name: 'ARKANSAS', abbreviation: 'AR'},
+        { name: 'CALIFORNIA', abbreviation: 'CA'},
+        { name: 'COLORADO', abbreviation: 'CO'},
+        { name: 'CONNECTICUT', abbreviation: 'CT'},
+        { name: 'DELAWARE', abbreviation: 'DE'},
+        { name: 'DISTRICT OF COLUMBIA', abbreviation: 'DC'},
+        { name: 'FEDERATED STATES OF MICRONESIA', abbreviation: 'FM'},
+        { name: 'FLORIDA', abbreviation: 'FL'},
+        { name: 'GEORGIA', abbreviation: 'GA'},
+        { name: 'GUAM', abbreviation: 'GU'},
+        { name: 'HAWAII', abbreviation: 'HI'},
+        { name: 'IDAHO', abbreviation: 'ID'},
+        { name: 'ILLINOIS', abbreviation: 'IL'},
+        { name: 'INDIANA', abbreviation: 'IN'},
+        { name: 'IOWA', abbreviation: 'IA'},
+        { name: 'KANSAS', abbreviation: 'KS'},
+        { name: 'KENTUCKY', abbreviation: 'KY'},
+        { name: 'LOUISIANA', abbreviation: 'LA'},
+        { name: 'MAINE', abbreviation: 'ME'},
+        { name: 'MARSHALL ISLANDS', abbreviation: 'MH'},
+        { name: 'MARYLAND', abbreviation: 'MD'},
+        { name: 'MASSACHUSETTS', abbreviation: 'MA'},
+        { name: 'MICHIGAN', abbreviation: 'MI'},
+        { name: 'MINNESOTA', abbreviation: 'MN'},
+        { name: 'MISSISSIPPI', abbreviation: 'MS'},
+        { name: 'MISSOURI', abbreviation: 'MO'},
+        { name: 'MONTANA', abbreviation: 'MT'},
+        { name: 'NEBRASKA', abbreviation: 'NE'},
+        { name: 'NEVADA', abbreviation: 'NV'},
+        { name: 'NEW HAMPSHIRE', abbreviation: 'NH'},
+        { name: 'NEW JERSEY', abbreviation: 'NJ'},
+        { name: 'NEW MEXICO', abbreviation: 'NM'},
+        { name: 'NEW YORK', abbreviation: 'NY'},
+        { name: 'NORTH CAROLINA', abbreviation: 'NC'},
+        { name: 'NORTH DAKOTA', abbreviation: 'ND'},
+        { name: 'NORTHERN MARIANA ISLANDS', abbreviation: 'MP'},
+        { name: 'OHIO', abbreviation: 'OH'},
+        { name: 'OKLAHOMA', abbreviation: 'OK'},
+        { name: 'OREGON', abbreviation: 'OR'},
+        { name: 'PALAU', abbreviation: 'PW'},
+        { name: 'PENNSYLVANIA', abbreviation: 'PA'},
+        { name: 'PUERTO RICO', abbreviation: 'PR'},
+        { name: 'RHODE ISLAND', abbreviation: 'RI'},
+        { name: 'SOUTH CAROLINA', abbreviation: 'SC'},
+        { name: 'SOUTH DAKOTA', abbreviation: 'SD'},
+        { name: 'TENNESSEE', abbreviation: 'TN'},
+        { name: 'TEXAS', abbreviation: 'TX'},
+        { name: 'UTAH', abbreviation: 'UT'},
+        { name: 'VERMONT', abbreviation: 'VT'},
+        { name: 'VIRGIN ISLANDS', abbreviation: 'VI'},
+        { name: 'VIRGINIA', abbreviation: 'VA'},
+        { name: 'WASHINGTON', abbreviation: 'WA'},
+        { name: 'WEST VIRGINIA', abbreviation: 'WV'},
+        { name: 'WISCONSIN', abbreviation: 'WI'},
+        { name: 'WYOMING', abbreviation: 'WY' }
+    ]
+
+    return data ? (
         <>
               <ApplicationSteps 
                 stepType={`applicant`} 
@@ -280,22 +547,66 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
             />
-            <div style={{ margin: `20px 100px` }}>
-                <div style={{ textAlign: `center`,  marginBottom: 20}}>
+            <div className="title-container">
+                <div className="subtitle-container">
                     <Title level={2}> Applicant </Title>
                     <p> Enter information about yourself to apply for a lease. </p>
                 </div>
             <Form 
                     form={lesseeForm}
                     {...layout}  
-                    // colon={false}
-                    // onFinish={handleSubmit}
+                    onFinish={handleSubmit}
                     // scrollToFirstError={true}
-                    // initialValues={{
-                    //     applicationDisclosureAgreement: 'unchecked'
-                    // }}
+                    onChange={handleFormChange}
+                    initialValues={{
+                        lesseeAttributes: {
+                            firstName: data?.lessee?.firstName,
+                            middleName: data?.lessee?.middleName,
+                            lastName: data?.lessee?.lastName,
+                            dateOfBirth: data?.lessee?.dateOfBirth,
+                            ssn: data?.lessee?.ssn,
+                            driversLicenseIdNumber: data?.lessee?.driversLicenseIdNumber,
+                            homePhoneNumber: data?.lessee?.homePhoneNumber,
+                            mobilePhoneNumber: data?.lessee?.mobilePhoneNumber,
+                            atAddressMonths: data?.lessee?.atAddressMonths,
+                            atAddressYears: data?.lessee?.atAddressYears,
+                            monthYears: data?.lessee?.monthYears,                       
+                            monthlyMortgage: data?.lessee?.monthlyMortgage,
+                            homeOwnership: data?.lessee?.homeOwnership,
+                            employerName: data?.lessee?.employerName,
+                            employerPhoneNumber: data?.lessee?.employerPhoneNumber,
+                            employmentStatus: data?.lessee?.employmentStatus,
+                            jobTitle: data?.lessee?.jobTitle,
+                            timeAtEmployerYears: data?.lessee?.timeAtEmployerYears,
+                            timeAtEmployerMonths: data?.lessee?.timeAtEmployerMonths,
+                            grossMonthlyIncome: data?.lessee?.grossMonthlyIncome,
+                            motorcycleLicence: data?.lessee?.motorcycleLicence,
+                            firstTimeRider: data?.lessee?.firstTimeRider,
+                            homeAddressAttributes: {
+                                state: data?.lessee?.homeAddress?.state,
+                                street1: data?.lessee?.homeAddress?.street1,
+                                street2: data?.lessee?.homeAddress?.street2,
+                                zipcode : data?.lessee?.homeAddress?.zipcode,
+                                county: data?.lessee?.homeAddress?.county,
+                                cityId: data?.lessee?.homeAddress?.cityId
+                            },
+                            mailingAddressAttributes: {
+                                state: data?.lessee?.mailingAddress?.state,
+                                street1: data?.lessee?.mailingAddress?.street1,
+                                street2: data?.lessee?.mailingAddress?.street2,
+                                zipcode : data?.lessee?.mailingAddress?.zipcode,
+                                county: data?.lessee?.mailingAddress?.county,
+                                cityId: data?.lessee?.mailingAddress?.cityId
+                            },
+                            employmentAddressAttributes: {
+                                id: lessee?.employmentAddress?.id,
+                                city: lessee?.employmentAddress?.city,
+                                state: lessee?.employmentAddress?.state,
+                              }
+                        }
+                    }}
                 >
-                    <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 50}}>
+                    <Content className="content-1">
 
                         <Row gutter={[16, 40]}>
                             <Col span={24} className="cca-center-text">
@@ -304,140 +615,138 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                             </Col>
                         </Row>
                         <Row gutter={[16, 16]}>
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Personal">
-                                    <Row>
-                                        <Col span={24}> 
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Personal" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="First Name" 
                                                 name={['lesseeAttributes', 'firstName']}
-                                                hasFeedback
                                                 rules={[{ required: true, message: 'First Name is required!' }]}
                                             >  
                                                 <Input placeholder="First Name" className="ant-input-comp"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Middle Name" 
-                                                name={['lesseeAttributes', 'middleName']}>  
-                                                    <Input placeholder="Middle Name" className="ant-input-comp" />
+                                                name={['lesseeAttributes', 'middleName']}
+                                            >
+                                                <Input placeholder="Middle Name" className="ant-input-comp" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Last Name" 
                                                 name={['lesseeAttributes', 'lastName']}
-                                                hasFeedback
                                                 rules={[{ required: true, message: 'Last Name is required!' }]}
                                             >  
                                                 <Input placeholder="Last Name"  className="ant-input-comp" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col} className="space-up dob">
                                             <DobInput dateFormat={dateFormat} form={lesseeForm} />
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                    label="Social Security Number" 
-                                                    name={['lesseeAttributes', 'ssn']}
-                                                    rules={[{ required: true, message: 'Social Security Number is required!' }]}
-                                                >  
+                                                label="Social Security Number"
+                                                name={['lesseeAttributes', 'ssn']}
+                                                className="space-down"
+                                            >
                                                 <Input type="hidden" />
-                                                <SsnInput defaultValue="" form={lesseeForm} lesseeType="lessee"/>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Driver's License Number" name={['lesseeAttributes', 'driversLicenseIdNumber']}>  
-                                                <InputNumber placeholder="Driver's License Number"/>
+                                            <Form.Item>
+                                                <SsnInput defaultValue={(data?.lessee && data?.lessee?.ssn?.replace(/-/g, "")) || "" } form={lesseeForm} lesseeType="lessee"/>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="First Time Rider ?"
+                                                name={['lesseeAttributes','firstTimeRider']}
+                                            >
+                                                <Radio.Group defaultValue={true}>
+                                                    <Radio value={true}>YES</Radio>
+                                                    <Radio value={false}>NO</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item 
+                                                label="Motorcycle Licence ?"
+                                                name={['lesseeAttributes','motorcycleLicence']}
+                                            >
+                                                <Radio.Group defaultValue={false}>
+                                                    <Radio value={true}>Yes</Radio>
+                                                    <Radio value={false}>No</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Phone Number" 
                                                 name={['lesseeAttributes', `${ phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber' }`]}
-                                                rules={[{ required: true, message: 'Phone Number is required!' }]}
-                                                >
+                                            >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
                                                     className="credit-app-phone-no"
-                                                    />
+                                                    onChange={handleFormChange}
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-
-                                    <Row>
-                                        <Col span={24}> 
                                             <Radio.Group defaultValue={1}>
                                             {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
                                                 <Radio value={1}>Mobile</Radio>
                                                 <Radio value={2}>Home</Radio>
                                             </Radio.Group> 
                                         </Col> 
-                                    </Row>
+                                    </Row> 
                                 </Card>
                             </Col>
-                            
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Home Address">
-                                    <Row>
-                                        <Col span={24}> 
+
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Home Address" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
-                                                name={['lesseeAttributes', 'homeAddressAttributes','street1']}
-                                                hasFeedback
+                                                name={['lesseeAttributes','homeAddressAttributes','street1']}
+                                                className="street-address"
                                                 rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp"  />
+                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp space-up" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Appartment / Unit" name={['lesseeAttributes', 'homeAddressAttributes','street2']}>  
-                                                <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="Appartment / Unit"
+                                                name={['lesseeAttributes', 'homeAddressAttributes','street2']}
+                                            >
+                                                <Input placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp space-up"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="ZIP Code" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','zipcode']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                                 validateStatus={zipHomeValidateStatus}
                                                 help={zipHomeErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >  
-                                                <MaskedInput mask="11111" placeholder="ZIP Code" 
-                                                onPressEnter={handleLesseeHomeZipcodeBlur}
-                                                onBlur={handleLesseeHomeZipcodeBlur}
-                                                className="ant-input-comp" />
+                                                <MaskedInput
+                                                    mask="11111"
+                                                    placeholder="ZIP Code"
+                                                    onPressEnter={handleLesseeHomeZipcodeBlur}
+                                                    onBlur={handleLesseeHomeZipcodeBlur}
+                                                    className="ant-input-comp space-up"
+                                                    name="zipcode"
+                                                    onChange={handleChange}
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','state']}
-                                                hasFeedback
                                                 rules={[{ required: true, message: 'State is required!' }]}
                                             >  
                                                 <Select 
@@ -445,45 +754,43 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="State" 
                                                     {...showHomeState} 
                                                     onSelect={handleHomeStateChange}
-                                                    >
-                                                {
-                                                    lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    onChange={handleStateTarget}
+                                                    className="space-up"
+                                                >
+                                                    {
+                                                        lesseeHomeStateOptions && lesseeHomeStateOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
                                                 label="County/Parish" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','county']}
-                                                hasFeedback
                                                 rules={[{ required: true, message: 'County/Parish is required!' }]}
-                                            >  
+                                            >
                                                 <Select 
                                                     showSearch 
                                                     placeholder="County/Parish" 
                                                     {...showHomeCountyState} 
                                                     onSelect={handleHomeCountyStateChange}
-                                                    >
-                                                {
-                                                    lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    onChange={handleCountyTarget}
+                                                    className="space-up"
+                                                >
+                                                    {
+                                                        lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="City" 
                                                 name={['lesseeAttributes', 'homeAddressAttributes','cityId']}
-                                                hasFeedback
                                                 rules={[{ required: true, message: 'City is required!' }]}
                                             >  
                                                 <Select 
@@ -491,164 +798,149 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                                     placeholder="City" 
                                                     {...showHomeCityState} 
                                                     onSelect={handleHomeCityStateChange}
+                                                    onChange={handleCityTarget}
+                                                    className="space-up"
                                                 >
-                                                {
-                                                    lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    {
+                                                        lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${(value)}`} name="city">{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                label="Years at Current Address" 
-                                                name={['lesseeAttributes','atAddressYears']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
+                                                label="Length of Stay at Current Address" 
+                                                name={['lesseeAttributes','monthYears']}
                                             >  
-                                                <InputNumber placeholder="Years at Current Address" />
+                                                <Space direction="horizontal">
+                                                    <RangePicker picker="date" onChange={handleMonthYear} />                                                        
+                                                    <InputNumber placeholder="Length of Stay at Current Address" value={(monthYears!==0 ? monthYears : "")}/>                                                                                                    
+                                                </Space>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Months at Current Address" name={['lesseeAttributes','atAddressMonths']}>  
-                                                <InputNumber placeholder="Months at Current Address" />
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Monthly Mortgage or Rent" 
                                                 name={['lesseeAttributes','monthlyMortgage']}
-                                                hasFeedback
-                                                rules={[{ required: true, message: 'Years at Current Address is required!' }]}
+                                                rules={[{ required: true, message: 'Monthly Mortgage or Rent is required!' }]}
                                             >  
-                                                <InputNumber placeholder="Monthly Mortgage or Rent" />
+                                                <InputNumber className="space-up monthly-mortgage" placeholder="Monthly Mortgage or Rent" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                        <Form.Item 
-                                            name={['lesseeAttributes','homeOwnership']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Home Owenership is required!' }]}
-                                        >                      
-                                            <Radio.Group>
-                                            <Radio value={1}>Own</Radio>
-                                            <Radio value={2}>Rent</Radio>
-                                            </Radio.Group> 
-                                        </Form.Item>
+                                            <Form.Item
+                                                name={['lesseeAttributes','homeOwnership']}
+                                                rules={[{ required: true, message: 'Ownership is required!' }]}
+                                            >
+                                                <Radio.Group className="space-up">
+                                                    <Radio value={1}>Own</Radio>
+                                                    <Radio value={2}>Rent</Radio>
+                                                </Radio.Group>
+                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
                             </Col>
 
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Mailing Address" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
+                                            <Checkbox style={{fontSize: `13px`, marginTop: `5px`}} onChange={fillMailingAddress}>Is Home Address Same as Mailing Address?</Checkbox> 
+                                        </Col>
 
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Mailing Address">
-                                    <Row>
-                                        <Col span={24}> 
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                                label="Street Address (no P.O. Boxes)" 
-                                                name={['lesseeAttributes', 'mailingAddressAttributes','street1']}
-                                                hasFeedback
+                                                label="Street Address (no P.O. Boxes)"  
+                                                name="street1"
+                                                className="street-address"
+                                                rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp" />
+                                                <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item label="Appartment / Unit" name={['lesseeAttributes', 'mailingAddressAttributes','street2']}>  
-                                                <Input placeholder="Appartment / Unit" className="ant-input-comp"  />
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item label="Appartment / Unit" name="street2">  
+                                                <Input placeholder="Appartment / Unit" className="ant-input-comp space-up"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
                                                 label="ZIP Code" 
-                                                name={['lesseeAttributes', 'mailingAddressAttributes','zipcode']}
-                                                hasFeedback
+                                                name="zipcode"
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
-                                            >  
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
+                                            >
                                                 <MaskedInput 
-                                                mask="11111" 
-                                                placeholder="ZIP Code" 
-                                                onPressEnter={handleLesseeMailZipcodeBlur}
-                                                onBlur={handleLesseeMailZipcodeBlur}
-                                                className="ant-input-comp" />
+                                                    mask="11111"
+                                                    placeholder="ZIP Code"
+                                                    onPressEnter={handleLesseeMailZipcodeBlur}
+                                                    onBlur={handleLesseeMailZipcodeBlur}
+                                                    className="ant-input-comp space-up" 
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
                                                 label="State" 
-                                                name={['lesseeAttributes', 'mailingAddressAttributes','state']}
-                                                hasFeedback
-                                            >  
-                                                <Select showSearch placeholder="State" {...showMailingState} 
-                                                onSelect={handleMailingStateChange}
+                                                name="state"
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="State"
+                                                    {...showMailingState}
+                                                    onSelect={handleMailingStateChange}
+                                                    className="space-up"
                                                 >
-                                                {
-                                                    lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
-                                                </Select>
+                                                    {
+                                                        lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                  </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="County/Parish" 
-                                                name={['lesseeAttributes', 'mailingAddressAttributes','county']}
-                                                hasFeedback
+                                                name="county"
                                             >  
                                                 <Select 
                                                     showSearch 
                                                     placeholder="County/Parish" 
                                                     {...showMailingCountyState} 
                                                     onSelect={handleMailingCountyStateChange}
+                                                    className="space-up"
                                                 >
-                                                {
-                                                    lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
-                                                    return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
-                                                }
+                                                    {
+                                                        lesseeMailCountyOptions && lesseeMailCountyOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
                                                 </Select>
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                        <Form.Item 
-                                            label="City" 
-                                            name={['lesseeAttributes', 'mailingAddressAttributes','cityId']}
-                                            hasFeedback
-                                        >  
-                                            <Select 
-                                                showSearch 
-                                                placeholder="City" 
-                                                {...showMailingCityState} 
-                                                onSelect={handleMailingCityStateChange}
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="City"
+                                                name="city"
+                                                rules={[{ required: true, message: 'City is required!' }]}
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="City"
+                                                    {...showMailingCityState}
+                                                    onSelect={handleMailingCityStateChange}
+                                                    className="space-up"
                                                 >
-                                            {
-                                                lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
-                                                return <Option key={index} value={`${value}`}>{label}</Option>
-                                                })
-                                            }
-                                            </Select>
-                                        </Form.Item>
+                                                    {
+                                                        lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                </Select>
+                                            </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
@@ -656,8 +948,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
                     </Content>
 
-                
-                    <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 20}}>
+                    <Content className="content-1">
 
                         <Row gutter={[16, 16]}>
                             <Col span={24} className="cca-center-text">
@@ -667,163 +958,158 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                         </Row>
 
                         <Row gutter={[16, 16]}>
-                            <Col xs={24} sm={24} md={24} lg={24} xl={4}></Col>
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Employer">
-                                    <Row>
-                                        <Col span={24}> 
+                            <Col {...formLayout.container.placeholderCol}></Col>
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Employer" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        {
+                                            lessee?.employmentAddress &&
+                                                <Col {...formLayout.field.col}>
+                                                    <Form.Item
+                                                        style={{display: 'none'}}
+                                                        name={['lesseeAttributes', 'employmentAddressAttributes','id']}
+
+                                                    >
+                                                        <Input className="space-up" />
+                                                    </Form.Item>
+                                                </Col>
+                                        }
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Employer Name" 
-                                            name={['lesseeAttributes', 'employerName']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Employer Name is required!' }]}
+                                                label="Employer Name"
+                                                name={['lesseeAttributes', 'employerName']}
+                                                rules={[{ required: true, message: 'Employer Name is required!' }]}
                                             >  
-                                                <Input placeholder="Employer Name"  className="ant-input-comp"  />
+                                                <Input placeholder="Employer Name"  className="ant-input-comp space-up"  />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Phone Number" 
-                                            name={['lesseeAttributes', 'employerPhoneNumber']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Employer Name is required!' }]}
+                                                label="Phone Number"
+                                                name={['lesseeAttributes', 'employerPhoneNumber']}
+                                                rules={[{ required: true, message: 'Phone Number is required!' }]}
                                             >
                                                 <MaskedInput
                                                     mask="(111) 111-1111"
                                                     placeholder="Phone Number"
-                                                    className="credit-app-phone-no"
-                                                    />
+                                                    className="credit-app-phone-no space-up"
+                                                    onChange={handleFormChange}
+                                                />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="City" 
-                                            name={['lesseeAttributes', 'employmentAddressAttributes', 'city']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'City is required!' }]}
+                                                label="City"
+                                                name={['lesseeAttributes', 'employmentAddressAttributes', 'city']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >  
-                                                <Input placeholder="City" className="ant-input-comp"  />
+                                                <Input placeholder="City" className="ant-input-comp space-up" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="State" 
                                                 name={['lesseeAttributes', 'employmentAddressAttributes','state']}
-                                                hasFeedback
                                                 rules={[{ required: true, message: 'State is required!' }]}
                                             >  
-                                                    <Select 
-                                                        showSearch 
-                                                        placeholder="State"
-                                                    >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="State"
+                                                    className="space-up"
+                                                >
                                                     {
-                                                        employerStateOptions && employerStateOptions.map(({value, label}, index) => {
-                                                        return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        usStates && usStates.map(({name, abbreviation}, index) => {
+                                                            return <Option key={index} value={`${name}`}>{abbreviation}</Option>
                                                         })
-                                                    }
-                                                    </Select>
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                </Card>
-                            </Col>
-
-                            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Employment Details">
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="Employment Status" 
-                                            name={['lesseeAttributes','employmentStatus']}
-                                            hasFeedback
-                                            rules={[{ required: true, message: 'Employment Status is required!' }]}
-                                            >  
-                                                <Select 
-                                                    showSearch 
-                                                    placeholder="Employment Status" 
-                                                    onChange={handleEmploymentStatus}
-                                                    optionFilterProp="children"
-                                                    >
-                                                    {
-                                                    employmentStatusOptions && employmentStatusOptions.map(({value, label}, index) => {
-                                                        return <Option key={index} value={`${value}`}>{label}</Option>
-                                                    })
                                                     }
                                                 </Select>
                                             </Form.Item>
                                         </Col> 
                                     </Row>
-                                    <Row>
-                                        <Col span={24}> 
-                                            <Form.Item 
-                                            label="Job Title" 
-                                            name={['lesseeAttributes', 'jobTitle']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Job Title is required!' }]}
-                                            >  
-                                                <Input placeholder="Job Title"  className="ant-input-comp"  />
-                                            </Form.Item>
-                                        </Col> 
-                                    </Row>
+                                </Card>
+                            </Col>
 
-                                    <Row gutter={[16, 16]}>
-                                        <Col span={12}> 
+                            <Col {...formLayout.container.formCol}>
+                                <Card title="Employment Details" className="card">
+                                    <Row gutter={[16, 0]}>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Years Employed" 
-                                            name={['lesseeAttributes', 'timeAtEmployerYears']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Years Employed is required!' }]}
-                                            >  
-                                                <InputNumber placeholder="Years Employed" />
+                                                label="Employment Status"
+                                                name={['lesseeAttributes','employmentStatus']}
+                                                rules={[{ required: true, message: 'Status is required!' }]}
+                                            >
+                                                <Select
+                                                    showSearch 
+                                                    placeholder="Employment Status"
+                                                    onChange={handleEmploymentStatus}
+                                                    optionFilterProp="children"
+                                                    className="space-up"
+                                                >
+                                                    {
+                                                        employmentStatusOptions && employmentStatusOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                </Select>
                                             </Form.Item>
-                                        </Col> 
-                                        <Col span={12}> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Months Employed" 
-                                            name={['lesseeAttributes', 'timeAtEmployerMonths']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Months Employed is required!' }]}
+                                                label="Job Title"
+                                                name={['lesseeAttributes', 'jobTitle']}
+                                                rules={[{ required: true, message: 'Job Tile is required!' }]}
                                             >  
-                                                <InputNumber placeholder="Months Employed" />
+                                                <Input placeholder="Job Title"  className="ant-input-comp space-up" />
                                             </Form.Item>
-                                        </Col> 
-                                    </Row>
-                                    <Row>
-                                        <Col span={24}> 
+                                        </Col>
+                                        <Col {...formLayout.field.colgroup[2]}>
+                                            <Row gutter={[16, 0]}>
+                                                <Col {...formLayout.field.colmem[2]}>
+                                                  <Form.Item 
+                                                      label="Years Employed"
+                                                      name={['lesseeAttributes', 'timeAtEmployerYears']}
+                                                      rules={[{ required: true, message: 'Years Employed is required!' }]}
+                                                  >
+                                                      <InputNumber className="space-up" placeholder="Years Employed" />
+                                                  </Form.Item>
+                                                </Col>
+                                                <Col {...formLayout.field.colmem[2]}>
+                                                  <Form.Item 
+                                                      label="Months Employed"
+                                                      name={['lesseeAttributes', 'timeAtEmployerMonths']}
+                                                  >
+                                                      <InputNumber className="space-up" placeholder="Months Employed" />
+                                                  </Form.Item>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
-                                            label="Gross Monthly Income" 
-                                            name={['lesseeAttributes', 'grossMonthlyIncome']}
-                                            hasFeedback
-                                            rules={[{ required: requireEmploymentFields, message: 'Gross Monthly Income is required!' }]}
+                                                label="Gross Monthly Income"
+                                                name={['lesseeAttributes', 'grossMonthlyIncome']}
+                                                rules={[{ required: true, message: 'Gross Monthly Income is required!' }]}
                                             >  
-                                                <InputNumber placeholder="Gross Monthly Income" />
+                                                <InputNumber className="space-up" placeholder="Gross Monthly Income" />
                                             </Form.Item>
                                         </Col> 
                                     </Row>
                                 </Card>
 
-                                <div style={{ marginTop: 20, textAlign: `right`}}>
-                                    <Button style={{ marginRight: 10 }}>Save</Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                <div className="button-container">
+                                    <Button className={btnClass} disabled={disableSubmitBtn} htmlType="submit" >
+                                        Save
+                                        
+                                    </Button>
+                                    <Button className="button" type="primary" >
                                         <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
                                     </Button>
-                                    <Button style={{ marginRight: 10 }} type="primary" >
+                                    <Button className="button" type="primary" disabled={btnAttribute}>
                                         <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>
                                     </Button>
                                 </div>
-
                             </Col>
                         </Row>
                     </Content>
-
-
-
 
     {/* 
                     <Content className="content-2">
@@ -852,7 +1138,7 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
 
             </div>
         </>
-    )
+    ) : null
 }
 
 export default Applicant
