@@ -84,80 +84,81 @@ function ApplicationList() {
     let paymentCalcNode;
 
     if (actionPermission.canOpenPaymentCalculator) {
-      paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+      paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
     } else if (actionPermission.canChangeBikes) {
-      paymentCalcNode = <Link className="open-payment-calculator" to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
+      paymentCalcNode = <Link to={`/applications/${record.id}/calculators/:calculatorID/calculator`}>Open Payment Calculator</Link>;
     } else {
-      paymentCalcNode = <a className="view-payment-calculator" href="#">View Payment Calculator</a>;
+      paymentCalcNode = <a href="#">View Payment Calculator</a>;
     }
 
     return (
       <Menu>
-        <Menu.Item>
+        <Menu.Item className='hovering'>
           {paymentCalcNode}
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item className='hovering'>
           {
             actionPermission.canOpenCreditApplication ?
-              <a className="open-credit-application"  href="#">Open Credit Application</a>
+              <a href="#">Open Credit Application</a>
               :
-              <Link className="view-credit-application" to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
+              <Link to={`/applications/${record.id}/applicant`}>View Credit Application</Link>
           }
         </Menu.Item>
         {
           actionPermission.canSwapApplicants &&
-            <Menu.Item>
-              <a className="swap-application" href="#">Swap Applicants</a>
+            <Menu.Item className='hovering'>
+              <a href="#">Swap Applicants</a>
             </Menu.Item>
         }
         {
           actionPermission.canAddCoapplicant &&
-            <Menu.Item>
-              <Link className="add-coapplicant" to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
+            <Menu.Item className='hovering'>
+              <Link to={`/applications/${record.id}/co-applicant`}>Add Co-applicant</Link>
             </Menu.Item>
         }
         {
           !actionPermission.expired &&
-            <Menu.Item>
-              <Link className="add-attachment" to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
+            <Menu.Item className='hovering'>
+              <Link to={`/applications/${record.id}/attachments`}>Add Attachment</Link>
             </Menu.Item>
         }
         {
           actionPermission.canChangeBikes &&
             <>
-              <Menu.Item>
-                <a className="bike-change" href="#">Bike Change</a>
+              <Menu.Item className='hovering'>
+                <a href="#">Bike Change</a>
               </Menu.Item>
-              <Menu.Item>
-                <a className="tax-Juridiction" href="#">Change Tax Jurisdiction</a>
+
+              <Menu.Item className='hovering'>
+                <a href="#">Change Tax Jurisdiction</a>
               </Menu.Item>
-              <Menu.Item>
-                <a className="change-mileage" href="#">Change Mileage</a>
+              <Menu.Item className='hovering'>
+                <a href="#">Change Mileage</a>
               </Menu.Item>
             </>
         }
         {
           actionPermission.canRequestLeaseDocuments &&
-            <Menu.Item>
-              <a className="lease-documents" href="#">Request Lease Documents</a>
+            <Menu.Item className='hovering'>
+              <a href="#">Request Lease Documents</a>
             </Menu.Item>
         }
         {
           actionPermission.canRemoveCoapplicant &&
-            <Menu.Item>
-              <a className="remove-coapplicant" href="#">Remove Co-applicant</a>
+            <Menu.Item className='hovering'>
+              <a href="#">Remove Co-applicant</a>
             </Menu.Item>
         }
         {
           actionPermission.canSubmitBankInfo &&
-            <Menu.Item>
-              <Link className="submit-bank-information" to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
+            <Menu.Item className='hovering'>
+              <Link to={`/applications/${record.id}/banking-information`}>Submit Bank Information</Link>
             </Menu.Item>
         }
         {
           actionPermission.canArchive && 
-            <Menu.Item>
-              <a href="#" className="archive-application" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
+            <Menu.Item className='hovering'>
+              <a href="#" onClick={(event: any) => archiveApplication(event, record.id)}>Archive Application</a>
             </Menu.Item>
         }
       </Menu>
@@ -306,6 +307,7 @@ function ApplicationList() {
       onFilter: (value, record) => record.applicationIdentifier && record.applicationIdentifier.includes(value),
       filters: convertToObj('applicationIdentifier'),
       filterSearch: true,
+      className:'identifier'
     },
     {
       key: 'applicant',
@@ -392,7 +394,7 @@ function ApplicationList() {
       key: 'x',
       render(text, record, index) {
         return (
-          <Dropdown overlay={menu(record.actionPermission, record)} trigger={['click']} >
+          <Dropdown className='dropdown-field' overlay={menu(record.actionPermission, record)} trigger={['click']} >
             <a className="ant-dropdown-link" href="#">
               <Button>Action <DownOutlined style={{marginLeft: 5, marginRight: -8, padding: 0}} /></Button>
             </a>

@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent } from 'react'
-import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input } from "antd";
+import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input, message } from "antd";
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
@@ -208,7 +208,23 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
         return newOptions
       }
 
+      const submitApplication = async (values: any) => {
+        try {
+           await network.PUT(`/api/v1/dealers/update-details?id=${leaseApplicationId}`, values);
+           message.success("Save Successfully");
+        } catch (e) {
+          logger.error("Request Error", e);
+          message.error("Error saving details");
+        }
+      }
+    
+    const [btnAttribute, setBtnAttribute] = useState(true);
 
+    const handleSubmit = async (values: any) => {
+        values = { ...values };
+        submitApplication(values);
+        setBtnAttribute(false);
+    }
 
     return (
         <div>
@@ -222,7 +238,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                 form={lesseeForm} 
                 {...layout}  
                 // colon={false}
-                // onFinish={handleSubmit}
+                onFinish={handleSubmit}
                 scrollToFirstError={true}
                 // initialValues={{
                 //     applicationDisclosureAgreement: 'unchecked'
@@ -256,7 +272,6 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                         </Form.Item>
                                     </Col> 
                                 </Row>
-
 
                                 { showBikeForm && 
                                     <div>
@@ -422,9 +437,9 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                             </Card>
 
                             <div style={{ marginTop: 20, textAlign: `right`}}>
-                                <Button style={{ marginRight: 10 }}> Save </Button>
-                                <Button style={{ marginRight: 10 }} type="primary" >
-                                <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
+                                <Button style={{ marginRight: 10 }}  htmlType="submit"> Save </Button>
+                                <Button style={{ marginRight: 10 }} type="primary" disabled={btnAttribute}>
+                                    <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
                                 </Button>
                             </div>
 

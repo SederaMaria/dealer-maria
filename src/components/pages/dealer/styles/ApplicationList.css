@@ -3,58 +3,11 @@
   font-size: 0.85em;
 }
 
-.open-payment-calculator {
-  color: #CA965C !important;
+.table-wrapper th:hover {
+  color: #1890ff;
+  border:1px solid #1890ff ;
 }
 
-.view-payment-calculator {
-  color:#876445 !important;
-}
-
-.open-credit-application {
-  color: #6867AC !important;
-}
-
-.view-credit-application {
- color: #79B4B7 !important;
-}
-
-.swap-application {
-  color: #A267AC !important;
-}
-
-.add-coapplicant {
-  color: #CE7BB0 !important;
-}
-
-.add-attachment {
-  color: #B983FF !important;
-}
-
-.bike-change {
-  color: #C37B89 !important;
-}
-
-.tax-Juridiction {
-  color: #99A799 !important;
-}
-
-.change-mileage {
-  color: #8CA1A5 !important;
-}
-
-.lease-documents {
-  color: #986D8E !important;
-}
-
-.remove-coapplicant {
-  color: red !important;
-}
-
-.submit-bank-information {
-  color: #92A9BD !important;
-}
-
-.archive-application {
-  color: #ECDFC8 !important;
+.hovering:hover {
+  background-color: #92A9BD;
 }
