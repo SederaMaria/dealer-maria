@@ -914,33 +914,59 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
-                                            <Form.Item 
-                                                label="ZIP Code" 
-                                                name={['lesseeAttributes', 'homeAddressAttributes','zipcode']}
-                                                validateStatus={zipHomeValidateStatus}
-                                                help={zipHomeErrorMessage}
-                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
-                                            >  
-                                                <MaskedInput
-                                                    mask="11111"
-                                                    placeholder="ZIP Code"
-                                                    onPressEnter={handleLesseeHomeZipcodeBlur}
-                                                    onBlur={handleLesseeHomeZipcodeBlur}
-                                                    className="ant-input-comp space-up"
-                                                    onChange={handleChange}
-                                                />
+                                            <Form.Item
+                                                label="City"
+                                                name={['lesseeAttributes', 'homeAddressAttributes','cityId']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="City"
+                                                    {...showHomeCityState}
+                                                    onSelect={handleHomeCityStateChange}
+                                                    onChange={handleCityTarget}
+                                                    className="space-up"
+                                                >
+                                                    {
+                                                        lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                </Select>
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
-                                            <Form.Item 
-                                                label="State" 
+                                            <Form.Item
+                                                label="County/Parish"
+                                                name={['lesseeAttributes', 'homeAddressAttributes','county']}
+                                                rules={[{ required: true, message: 'County/Parish is required!' }]}
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="County/Parish"
+                                                    {...showHomeCountyState}
+                                                    onSelect={handleHomeCountyStateChange}
+                                                    onChange={handleCountyTarget}
+                                                    className="space-up"
+                                                >
+                                                    {
+                                                        lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
+                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="State"
                                                 name={['lesseeAttributes', 'homeAddressAttributes','state']}
                                                 rules={[{ required: true, message: 'State is required!' }]}
-                                            >  
-                                                <Select 
-                                                    showSearch 
-                                                    placeholder="State" 
-                                                    {...showHomeState} 
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    placeholder="State"
+                                                    {...showHomeState}
                                                     onSelect={handleHomeStateChange}
                                                     onChange={handleStateTarget}
                                                     className="space-up"
@@ -955,46 +981,20 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item
-                                                label="County/Parish" 
-                                                name={['lesseeAttributes', 'homeAddressAttributes','county']}
-                                                rules={[{ required: true, message: 'County/Parish is required!' }]}
+                                                label="ZIP Code"
+                                                name={['lesseeAttributes', 'homeAddressAttributes','zipcode']}
+                                                validateStatus={zipHomeValidateStatus}
+                                                help={zipHomeErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
                                             >
-                                                <Select 
-                                                    showSearch 
-                                                    placeholder="County/Parish" 
-                                                    {...showHomeCountyState} 
-                                                    onSelect={handleHomeCountyStateChange}
-                                                    onChange={handleCountyTarget}
-                                                    className="space-up"
-                                                >
-                                                    {
-                                                        lesseeHomeCountyOptions && lesseeHomeCountyOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
-                                                        })
-                                                    }
-                                                </Select>
-                                            </Form.Item>
-                                        </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item 
-                                                label="City" 
-                                                name={['lesseeAttributes', 'homeAddressAttributes','cityId']}
-                                                rules={[{ required: true, message: 'City is required!' }]}
-                                            >  
-                                                <Select 
-                                                    showSearch 
-                                                    placeholder="City" 
-                                                    {...showHomeCityState} 
-                                                    onSelect={handleHomeCityStateChange}
-                                                    onChange={handleCityTarget}
-                                                    className="space-up"
-                                                >
-                                                    {
-                                                        lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
-                                                        })
-                                                    }
-                                                </Select>
+                                                <MaskedInput
+                                                    mask="11111"
+                                                    placeholder="ZIP Code"
+                                                    onPressEnter={handleLesseeHomeZipcodeBlur}
+                                                    onBlur={handleLesseeHomeZipcodeBlur}
+                                                    className="ant-input-comp space-up"
+                                                    onChange={handleChange}
+                                                />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -1065,39 +1065,23 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item
-                                                label="ZIP Code" 
-                                                name={['lesseeAttributes','mailingAddressAttributes','zipcode']}
-                                                validateStatus={zipMailValidateStatus}
-                                                help={zipMailErrorMessage}
-                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
-                                            >
-                                                <MaskedInput 
-                                                    mask="11111"
-                                                    placeholder="ZIP Code"
-                                                    onPressEnter={handleLesseeMailZipcodeBlur}
-                                                    onBlur={handleLesseeMailZipcodeBlur}
-                                                    className="ant-input-comp space-up" 
-                                                />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col {...formLayout.field.col}>
-                                            <Form.Item
-                                                label="State" 
-                                                name={['lesseeAttributes','mailingAddressAttributes','state']}
+                                                label="City"
+                                                name={['lesseeAttributes','mailingAddressAttributes','cityId']}
+                                                rules={[{ required: true, message: 'City is required!' }]}
                                             >
                                                 <Select
                                                     showSearch
-                                                    placeholder="State"
-                                                    {...showMailingState}
-                                                    onSelect={handleMailingStateChange}
+                                                    placeholder="City"
+                                                    {...showMailingCityState}
+                                                    onSelect={handleMailingCityStateChange}
                                                     className="space-up"
                                                 >
                                                     {
-                                                        lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
+                                                        lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
                                                             return <Option key={index} value={`${value}`}>{label}</Option>
                                                         })
                                                     }
-                                                  </Select>
+                                                </Select>
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -1122,25 +1106,41 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item
-                                                label="City"
-                                                name={['lesseeAttributes','mailingAddressAttributes','cityId']}
-                                                rules={[{ required: true, message: 'City is required!' }]}
+                                                label="State"
+                                                name={['lesseeAttributes','mailingAddressAttributes','state']}
                                             >
                                                 <Select
                                                     showSearch
-                                                    placeholder="City"
-                                                    {...showMailingCityState}
-                                                    onSelect={handleMailingCityStateChange}
+                                                    placeholder="State"
+                                                    {...showMailingState}
+                                                    onSelect={handleMailingStateChange}
                                                     className="space-up"
                                                 >
                                                     {
-                                                        lesseeMailCityOptions && lesseeMailCityOptions.map(({value, label}, index) => {
+                                                        lesseeMailStateOptions && lesseeMailStateOptions.map(({value, label}, index) => {
                                                             return <Option key={index} value={`${value}`}>{label}</Option>
                                                         })
                                                     }
-                                                </Select>
+                                                  </Select>
                                             </Form.Item>
-                                        </Col> 
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
+                                            <Form.Item
+                                                label="ZIP Code"
+                                                name={['lesseeAttributes','mailingAddressAttributes','zipcode']}
+                                                validateStatus={zipMailValidateStatus}
+                                                help={zipMailErrorMessage}
+                                                rules={[{ required: true, message: 'ZIP Code is required!' }]}
+                                            >
+                                                <MaskedInput
+                                                    mask="11111"
+                                                    placeholder="ZIP Code"
+                                                    onPressEnter={handleLesseeMailZipcodeBlur}
+                                                    onBlur={handleLesseeMailZipcodeBlur}
+                                                    className="ant-input-comp space-up"
+                                                />
+                                            </Form.Item>
+                                        </Col>
                                     </Row>
                                 </Card>
                             </Col>
