@@ -7,6 +7,7 @@ import MaskedInput from 'antd-mask-input'
 import ApplicationSteps from '../ApplicationSteps';
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
+import { AutoCompleteAddress } from './AutoCompleteAddress'
 import '../../styles/Applicant.css';
 
 
@@ -356,6 +357,186 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
 
     const handleMailingCityStateChange = () => {
         setShowMailingCityState(null)
+    }
+
+    const autoCompleteLesseeHomeBeforePlacesGetDetails = (value: any, option: any) => {
+      lesseeForm.setFieldsValue({ colesseeAttributes: { homeAddressAttributes: { street1: option.data.structured_formatting.main_text }}})
+    }
+
+    const autoCompleteLesseeHomeOnPlacesGetDetailsResult = (placeResult: any, placeServiceStatus: any) => {
+      if (placeServiceStatus == "OK") {
+        placeResult.address_components.map((component: any) => {
+          if (component.types.includes('postal_code')) {
+            lesseeForm.setFieldsValue({ colesseeAttributes: { homeAddressAttributes: { zipcode: component.long_name }}})
+            autoCompleteLesseeHomeZipcodeStateCountyCity(placeResult.address_components)
+          }
+        })
+      }
+    }
+
+    const autoCompleteLesseeHomeZipcodeStateCountyCity = async (addressComponents: any) => {
+        let zipcode = lesseeForm.getFieldValue(['colesseeAttributes', 'homeAddressAttributes', 'zipcode'])
+
+        try {
+            lesseeForm.setFieldsValue({
+                colesseeAttributes: {
+                    homeAddressAttributes: {
+                        state: null,
+                        county: null,
+                        cityId: null
+                    }
+                }
+            })
+
+            await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
+                if (response.data.is_state_active_on_calculator) {
+                    setLesseeHomeStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
+                    let countyParishOptions: any = formatOptions({ options: (response.data.county || []), type: 'county' })
+                    setLesseeHomeCountyOptions(countyParishOptions)
+                    let cityOptions: any = formatOptions({ options: (response.data.city || []), type: 'city' })
+                    setLesseeHomeCityOptionsData(cityOptions)
+
+                    setShowHomeState(null)
+                    setShowHomeCountyState(null)
+                    setShowHomeCityState(null)
+
+                    // Try to autocomplete state
+                    addressComponents.map((component: any) => {
+                        if (component.types.includes("administrative_area_level_1")) {
+                            lesseeForm.setFieldsValue({ colesseeAttributes: { homeAddressAttributes: { state: component.short_name }}})
+                        }
+                    })
+
+                    // Try to autocomplete county
+                    addressComponents.map((component: any) => {
+                        if (component.types.includes("administrative_area_level_2")) {
+                            let countyName: string = component.short_name.toLowerCase().replace(' county', '').toUpperCase()
+                            lesseeForm.setFieldsValue({ colesseeAttributes: { homeAddressAttributes: { county: countyName }}})
+
+                            // Find state id from countyParishOptions using countyName
+                            countyParishOptions.map((option: any) => {
+                                if (option.label == countyName) {
+                                    setLesseeHomeCityOptions(cityOptions.filter((obj: OptionData) => obj.parentId === parseInt(option.value)))
+                                }
+                            })
+                        }
+                    })
+
+                    // Try to autocomplete city
+                    addressComponents.map((component: any) => {
+                        if (component.types.includes("locality")) {
+                          cityOptions.map((option: any) => {
+                            if (option.label == component.long_name.toUpperCase()) {
+                              lesseeForm.setFieldsValue({ colesseeAttributes: { homeAddressAttributes: { cityId: option.label }}})
+                            }
+                          })
+                        }
+                    })
+                }
+                if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
+                    setZipHomeValidateStatus("error")
+                    setZipHomeErrorMessage("Speed Leasing currently does not lease to residents of this state.")
+                    setShowHomeState(null)
+                } else {
+                    setZipHomeValidateStatus(undefined)
+                    setZipHomeErrorMessage(undefined)
+                }
+            }).catch(error => {
+                logger.error("autoCompleteLesseeHomeZipcodeStateCountyCity.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("autoCompleteLesseeHomeZipcodeStateCountyCity Error", e);
+        }
+    }
+
+    const autoCompleteLesseeMailingBeforePlacesGetDetails = (value: any, option: any) => {
+      lesseeForm.setFieldsValue({ colesseeAttributes: { mailingAddressAttributes: { street1: option.data.structured_formatting.main_text }}})
+    }
+
+    const autoCompleteLesseeMailingOnPlacesGetDetailsResult = (placeResult: any, placeServiceStatus: any) => {
+      if (placeServiceStatus == "OK") {
+        placeResult.address_components.map((component: any) => {
+          if (component.types.includes('postal_code')) {
+            lesseeForm.setFieldsValue({ colesseeAttributes: { mailingAddressAttributes: { zipcode: component.long_name }}})
+            autoCompleteLesseeMailingZipcodeStateCountyCity(placeResult.address_components)
+          }
+        })
+      }
+    }
+
+    const autoCompleteLesseeMailingZipcodeStateCountyCity = async (addressComponents: any) => {
+        let zipcode = lesseeForm.getFieldValue(['colesseeAttributes', 'mailingAddressAttributes', 'zipcode'])
+
+        try {
+            lesseeForm.setFieldsValue({
+                colesseeAttributes: {
+                    mailingAddressAttributes: {
+                        state: null,
+                        county: null,
+                        cityId: null
+                    }
+                }
+            })
+
+            await network.GET(`/api/v1/address/city-details?zipcode=${zipcode}`).then(response => {
+                if (response.data.is_state_active_on_calculator) {
+                    setLesseeMailStateOptions(formatOptions({ options: (response.data.state || []), type: 'state' }))
+                    let countyParishOptions: any = formatOptions({ options: (response.data.county || []), type: 'county' })
+                    setLesseeMailCountyOptions(countyParishOptions)
+                    let cityOptions: any = formatOptions({ options: (response.data.city || []), type: 'city' })
+                    setLesseeMailCityOptionsData(cityOptions)
+
+                    setShowMailingState(null)
+                    setShowMailingCountyState(null)
+                    setShowMailingCityState(null)
+
+                    // Try to autocomplete state
+                    addressComponents.map((component: any) => {
+                        if (component.types.includes("administrative_area_level_1")) {
+                            lesseeForm.setFieldsValue({ colesseeAttributes: { mailingAddressAttributes: { state: component.short_name }}})
+                        }
+                    })
+
+                    // Try to autocomplete county
+                    addressComponents.map((component: any) => {
+                        if (component.types.includes("administrative_area_level_2")) {
+                            let countyName: string = component.short_name.toLowerCase().replace(' county', '').toUpperCase()
+                            lesseeForm.setFieldsValue({ colesseeAttributes: { mailingAddressAttributes: { county: countyName }}})
+
+                            // Find state id from countyParishOptions using countyName
+                            countyParishOptions.map((option: any) => {
+                                if (option.label == countyName) {
+                                    setLesseeMailCityOptions(cityOptions.filter((obj: OptionData) => obj.parentId === parseInt(option.value)))
+                                }
+                            })
+                        }
+                    })
+
+                    // Try to autocomplete city
+                    addressComponents.map((component: any) => {
+                        if (component.types.includes("locality")) {
+                          cityOptions.map((option: any) => {
+                            if (option.label == component.long_name.toUpperCase()) {
+                              lesseeForm.setFieldsValue({ colesseeAttributes: { mailingAddressAttributes: { cityId: option.label }}})
+                            }
+                          })
+                        }
+                    })
+                }
+                if (!response.data.is_state_active_on_calculator || (response.data.city.length < 1 || response.data.city === undefined)) {
+                    setZipMailValidateStatus("error")
+                    setZipMailErrorMessage("Speed Leasing currently does not lease to residents of this state.")
+                    setShowMailingState(null)
+                } else {
+                    setZipMailValidateStatus(undefined)
+                    setZipMailErrorMessage(undefined)
+                }
+            }).catch(error => {
+                logger.error("autoCompleteLesseeMailingZipcodeStateCountyCity.Request Error", error);
+            });
+        } catch (e) {
+            logger.error("autoCompleteLesseeMailingZipcodeStateCountyCity Error", e);
+        }
     }
 
     const getEmployerStatus = async () => {
@@ -717,13 +898,21 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                 <Card title="Home Address" className="card">
                                     <Row gutter={[16, 0]}>
                                         <Col {...formLayout.field.col}>
+                                            <Form.Item label="Search Address">
+                                                <AutoCompleteAddress
+                                                  beforePlacesGetDetails={autoCompleteLesseeHomeBeforePlacesGetDetails}
+                                                  onPlacesGetDetailsResult={autoCompleteLesseeHomeOnPlacesGetDetailsResult}
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)" 
                                                 name={['colesseeAttributes','homeAddressAttributes','street1']}
                                                 className="street-address"
                                                 rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
-                                                <Input placeholder="Street Address (no P.O. Boxes)" name="street1" onChange={handleChange} className="ant-input-comp space-up" />
+                                                <Input placeholder="Street Address (no P.O. Boxes)" onChange={handleChange} className="ant-input-comp space-up" />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -731,7 +920,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 label="Appartment / Unit"
                                                 name={['colesseeAttributes', 'homeAddressAttributes','street2']}
                                             >
-                                                <Input placeholder="Appartment / Unit" name="street2"  onChange={handleChange} className="ant-input-comp space-up"  />
+                                                <Input placeholder="Appartment / Unit" onChange={handleChange} className="ant-input-comp space-up"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
@@ -748,7 +937,6 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                     onPressEnter={handleLesseeHomeZipcodeBlur}
                                                     onBlur={handleLesseeHomeZipcodeBlur}
                                                     className="ant-input-comp space-up"
-                                                    name="zipcode"
                                                     onChange={handleChange}
                                                 />
                                             </Form.Item>
@@ -813,7 +1001,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                                 >
                                                     {
                                                         lesseeHomeCityOptions && lesseeHomeCityOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${(value)}`} name="city">{label}</Option>
+                                                            return <Option key={index} value={`${(value)}`}>{label}</Option>
                                                         })
                                                     }
                                                 </Select>
@@ -864,9 +1052,17 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         </Col>
 
                                         <Col {...formLayout.field.col}>
+                                            <Form.Item label="Search Address">
+                                                <AutoCompleteAddress
+                                                  beforePlacesGetDetails={autoCompleteLesseeMailingBeforePlacesGetDetails}
+                                                  onPlacesGetDetailsResult={autoCompleteLesseeMailingOnPlacesGetDetailsResult}
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="Street Address (no P.O. Boxes)"  
-                                                name="street1"
+                                                name={['colesseeAttributes', 'mailingAddressAttributes', 'street1']}
                                                 className="street-address"
                                                 rules={[{ required: true, message: 'Street Address (no P.O. Boxes) is required!' }]}
                                             >  
@@ -874,14 +1070,17 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
-                                            <Form.Item label="Appartment / Unit" name="street2">  
+                                            <Form.Item
+                                                label="Appartment / Unit"
+                                                name={['colesseeAttributes', 'mailingAddressAttributes', 'street2']}
+                                            >
                                                 <Input placeholder="Appartment / Unit" className="ant-input-comp space-up"  />
                                             </Form.Item>
                                         </Col>
                                         <Col {...formLayout.field.col}>
                                             <Form.Item
                                                 label="ZIP Code" 
-                                                name="zipcode"
+                                                name={['colesseeAttributes', 'mailingAddressAttributes', 'zipcode']}
                                                 validateStatus={zipMailValidateStatus}
                                                 help={zipMailErrorMessage}
                                                 rules={[{ required: true, message: 'ZIP Code is required!' }]}
@@ -898,7 +1097,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col {...formLayout.field.col}>
                                             <Form.Item
                                                 label="State" 
-                                                name="state"
+                                                name={['colesseeAttributes', 'mailingAddressAttributes', 'state']}
                                             >
                                                 <Select
                                                     showSearch
@@ -918,7 +1117,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col {...formLayout.field.col}>
                                             <Form.Item 
                                                 label="County/Parish" 
-                                                name="county"
+                                                name={['colesseeAttributes', 'mailingAddressAttributes', 'county']}
                                             >  
                                                 <Select 
                                                     showSearch 
@@ -938,7 +1137,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                                         <Col {...formLayout.field.col}>
                                             <Form.Item
                                                 label="City"
-                                                name="city"
+                                                name={['colesseeAttributes', 'mailingAddressAttributes', 'cityId']}
                                             >
                                                 <Select
                                                     showSearch
