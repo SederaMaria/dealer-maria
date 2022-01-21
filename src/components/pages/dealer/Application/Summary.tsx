@@ -13,7 +13,12 @@ const { Content } = Layout;
 const { Panel } = Collapse;
 
 interface LeaseCalculator {
-    id?: string | number | undefined
+    id?: string | number | undefined,
+    assetMake?: string,
+    assetModel?: string,
+    assetYear?: number,
+    term?: number,
+    totalSalesPriceCents?: number
 }
 
 interface Props {
@@ -30,6 +35,13 @@ const MotorSummary: React.FC<Props>  = ({label, children }) => {
   return <div>         
     <p><Text style={{color: "rgba(0, 0, 0, 0.65)", fontWeight: 700, fontSize: "1.1em"}}>{label}</Text></p>
     <p>{children}</p>
+    </div>
+}
+
+const PersonalSummary: React.FC<Props> = ({label, children}) => {
+    return <div>
+        <h5>{label}</h5>
+        <span>{children}</span>
     </div>
 }
 
@@ -75,131 +87,161 @@ export const Summary: React.FC<Props> = ({data}) => {
                     <Title level={2}> Summary </Title>
                     <Content className="content-1" style={{ backgroundColor: `white`, marginBottom: 50}}>
                         <div id="motor-content">
-                            <div>
+                            {/* <div>
                                 <Avatar shape="square" size={150} style={{marginLeft:`35px`}} icon={<UserOutlined />} />
-                            </div>
+                            </div> */}
                             <div className="motor-details">
                                 <div className="motor-summary">
-                                    <MotorSummary label="Make">N/A</MotorSummary>
-                                    <MotorSummary label="Model">N/A</MotorSummary>
-                                    <MotorSummary label="Year">N/A</MotorSummary>
-                                    <MotorSummary label="Total Sales Price">N/A</MotorSummary>
-                                    <MotorSummary label="Term">N/A</MotorSummary>
+                                    <MotorSummary label="Make">{data?.leaseCalculator?.assetMake ? data?.leaseCalculator?.assetMake : 'Empty'}</MotorSummary>
+                                    <MotorSummary label="Model">{data?.leaseCalculator?.assetModel ? data?.leaseCalculator?.assetModel : 'Empty'}</MotorSummary>
+                                    <MotorSummary label="Year">{data?.leaseCalculator?.assetYear ? data?.leaseCalculator?.assetYear : 'Empty'}</MotorSummary>
+                                    <MotorSummary label="Total Sales Price">{data?.leaseCalculator?.totalSalesPriceCents ? `$ ${data?.leaseCalculator?.totalSalesPriceCents}` : 'Empty'}</MotorSummary>
+                                    <MotorSummary label="Term">{data?.leaseCalculator?.term ? `${data?.leaseCalculator?.term} months` : 'Empty'}</MotorSummary>
                                 </div>
-                                <div className="motor-summary">
-                                    <MotorSummary label="Make">N/A</MotorSummary>
-                                    <MotorSummary label="Model">N/A</MotorSummary>
-                                    <MotorSummary label="Year">N/A</MotorSummary>
-                                    <MotorSummary label="Total Sales Price">N/A</MotorSummary>
-                                    <MotorSummary label="Term">N/A</MotorSummary>
-                                </div>
-                               
                             </div>
                         </div>
                         <div className="collapse-container">
                             <Collapse>
                               <Panel header="Applicant" key="1" style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/applicant`}><Tag>Edit</Tag></Link>}>
-                                  <div className="applicant-elements-above">
-                                      <Card title="Personal">
-                                        <p id="locateTest"><em>First Name:</em> {data?.lessee?.firstName}</p><Divider dashed />
-                                        <p><em>Middle Name:</em> {data?.lessee?.middleName}</p><Divider dashed />
-                                        <p><em>Last Name:</em> {data?.lessee?.lastName}</p><Divider dashed />
-                                        <p><em>Date of Birth(mm/dd/yyyy):</em> {data?.lessee?.dateOfBirth}</p><Divider dashed />
-                                        <p><em>Social Security Number:</em> {data?.lessee?.ssn}</p><Divider dashed />
-                                        <p><em>Driver's License Number:</em> {data?.lessee?.driversLicenseIdNumber}</p><Divider dashed />
-                                        <p><em>Home Phone Number:</em> { data?.lessee?.homePhoneNumber}</p><Divider dashed />
-                                        <p><em>Mobile Phone Number:</em> {data?.lessee?.mobilePhoneNumber}</p>
-                                      </Card>
-                                      <Card title="Home Address">
-                                        <p><em>Street Address 1 (no P.O. Boxes):</em> {data?.lessee?.homeAddress?.street1}</p><Divider dashed />
-                                        <p><em>Street Address 2:</em> {data?.lessee?.homeAddress?.street2}</p><Divider dashed />
-                                        <p><em>ZIP Code:</em> {data?.lessee?.homeAddress?.zipcode}</p><Divider dashed />
-                                        <p><em>State:</em>  {data?.lessee?.homeAddress?.state}</p><Divider dashed />
-                                        <p><em>County/Parish:</em> {data?.lessee?.homeAddress?.county}</p><Divider dashed />
-                                        <p><em>City:</em> {data?.lessee?.homeAddress?.cityId}</p><Divider dashed />
-                                        <p><em>Years at Current Address:</em> {data?.lessee?.atAddressYears}</p><Divider dashed />
-                                        <p><em>Months at Current Address:</em> {data?.lessee?.atAddressMonths}</p><Divider dashed />
-                                        <p><em>Monthly Mortgage or Rent:</em> {data?.lessee?.monthlyMortgage}</p><Divider dashed />
-                                        <p><em>Ownership:</em> {data?.lessee?.homeOwnership == 1 ? 'Own' : 'Rent'}</p>
-                                      </Card>
-                                      <Card title="Mailing Address">
-                                        <p><em>Street Address (no P.O. Boxes):</em> { data?.lessee?.mailingAddress?.street1}</p><Divider dashed />
-                                        <p><em>Street Address 2:</em> {data?.lessee?.mailingAddress?.street2}</p><Divider dashed />
-                                        <p><em>ZIP Code:</em> {data?.lessee?.mailingAddress?.zipcode}</p><Divider dashed />
-                                        <p><em>State:</em> {data?.lessee?.mailingAddress?.state}</p><Divider dashed />
-                                        <p><em>County/Parish:</em> {data?.lessee?.mailingAddress?.county}</p><Divider dashed />
-                                        <p><em>City:</em> {data?.lessee?.mailingAddress?.cityId}</p>
-                                      </Card>
+                              
+                              <Divider orientation="left"><span className='divider'>Personal</span></Divider>
+
+                                <div id="locateTest" className='applicant-elements-above'>
+                                  <PersonalSummary label="First Name">{data?.lessee?.firstName ? data?.lessee?.firstName : 'Empty'}</PersonalSummary> 
+                                  <PersonalSummary label="Middle Name">{data?.lessee?.middleName ? data?.lessee?.middleName : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Last Name">{data?.lessee?.lastName ? data?.lessee?.lastName : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Date of Birth(mm/dd/yyyy)">{data?.lessee?.dateOfBirth ? data?.lessee?.dateOfBirth: 'Empty'}</PersonalSummary>
+                                </div>
+                                <div className='applicant-elements-below'>
+                                  <PersonalSummary label="Social Security Number">{data?.lessee?.ssn ? data?.lessee?.ssn : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Driver's License Number">{data?.lessee?.driversLicenseIdNumber ? data?.lessee?.driversLicenseIdNumber : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Home Phone Number">{ data?.lessee?.homePhoneNumber ? data?.lessee?.homePhoneNumber : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Mobile Phone Number">{data?.lessee?.mobilePhoneNumber ? data?.lessee?.mobilePhoneNumber : 'Empty'}</PersonalSummary>
+                                </div>
+
+                                <Divider orientation="left"><span className='divider'>Home Address</span></Divider>
+
+                                <div className='applicant-elements-above'>
+                                  <PersonalSummary label="Street Address 1 (no P.O. Boxes)">{data?.lessee?.homeAddress?.street1 ? data?.lessee?.homeAddress?.street1 : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Street Address 2">{data?.lessee?.homeAddress?.street2 ? data?.lessee?.homeAddress?.street2 : 'Empty' }</PersonalSummary>
+                                  <PersonalSummary label="ZIP Code">{data?.lessee?.homeAddress?.zipcode ? data?.lessee?.homeAddress?.zipcode : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="State">{data?.lessee?.homeAddress?.state ? data?.lessee?.homeAddress?.state: 'Empty'}</PersonalSummary>
+                                </div>
+
+                                <div className='applicant-elements-below'>
+                                  <PersonalSummary label="County/Parish"> {data?.lessee?.homeAddress?.county ? data?.lessee?.homeAddress?.county : 'Empty' }</PersonalSummary>
+                                  <PersonalSummary label="City">{data?.lessee?.homeAddress?.cityId ? data?.lessee?.homeAddress?.cityId : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Years at Current Address">{data?.lessee?.atAddressYears ? data?.lessee?.atAddressYears : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Months at Current Address">{data?.lessee?.atAddressMonths ? data?.lessee?.atAddressMonths : 'Empty'}</PersonalSummary>
+                                </div>
+
+                                <div className='exception-cell ownership'>
+                                  <PersonalSummary label="Monthly Mortgage or Rent">{data?.lessee?.monthlyMortgage ? data?.lessee?.monthlyMortgage : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Ownership">{data?.lessee?.homeOwnership == 1 ? 'Own' : 'Rent'}</PersonalSummary>
+                                </div>
+
+                                <Divider orientation="left"><span className="divider">Mailing Address</span></Divider>
+                                 
+                                <div className='applicant-elements-above'>
+                                  <PersonalSummary label="Street Address (no P.O. Boxes)">{ data?.lessee?.mailingAddress?.street1 ? data?.lessee?.mailingAddress?.street1 : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Street Address 2">{data?.lessee?.mailingAddress?.street2 ? data?.lessee?.mailingAddress?.street2 : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="ZIP Code">{data?.lessee?.mailingAddress?.zipcode ? data?.lessee?.mailingAddress?.zipcode : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="State">{data?.lessee?.mailingAddress?.state ? data?.lessee?.mailingAddress?.state: 'Empty'}</PersonalSummary>
+                                </div>
+                                <div className='exception-cell'>
+                                    <PersonalSummary label="City">{data?.lessee?.mailingAddress?.cityId ? data?.lessee?.mailingAddress?.cityId : 'Empty'}</PersonalSummary>
+                                    <PersonalSummary label="County/Parish">{data?.lessee?.mailingAddress?.county ? data?.lessee?.mailingAddress?.county : 'Empty'}</PersonalSummary>
+                                </div>
+
+                                <Divider orientation="left"><span className='divider'>Employment Details</span></Divider>
                                       
-                                  </div>
-                                  <div className="applicant-elements-below">
-                                      <Card title="Employeer">
-                                        <p><em>Employer Name:</em> {data?.lessee?.employerName}</p><Divider dashed />
-                                        <p><em>Phone Number:</em> {data?.lessee?.employerPhoneNumber}</p><Divider dashed />
-                                        <p><em>City:</em>  {data?.lessee?.employmentAddress?.city}</p><Divider dashed />
-                                        <p><em>State: </em> {data?.lessee?.employmentAddress?.state}</p>
-                                      </Card>
-                                      <Card title="Employment Details">
-                                        <p><em>Employment Status:</em> {data?.lessee?.employmentStatus}</p><Divider dashed />
-                                        <p><em>Job Title:</em> {data?.lessee?.jobTitle}</p><Divider dashed />
-                                        <p><em>Years Employed:</em> {data?.lessee?.timeAtEmployerYears}</p><Divider dashed />
-                                        <p><em>Months Employed: </em> {data?.lessee?.timeAtEmployerMonths}</p><Divider dashed />
-                                        <p><em>Gross Monthly Income: </em> ${data?.lessee?.grossMonthlyIncome}</p>
-                                      </Card>
-                                  </div>
-                              </Panel>
-                              <Panel header="Co-Applicant" key="2" style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/co-applicant`}><Tag>Edit</Tag></Link>}>
-                                <div className="applicant-elements-above">
-                                    <Card title="Personal">
-                                      <p><em>First Name:</em> {data?.colessee?.firstName}</p><Divider dashed />
-                                      <p><em>Middle Name:</em>  {data?.colessee?.middleName}</p><Divider dashed />
-                                      <p><em>Last Name:</em> {data?.colessee?.lastName}</p><Divider dashed />
-                                      <p><em>Date of Birth(mm/dd/yyyy):</em> {data?.colessee?.dateOfBirth} </p><Divider dashed />
-                                      <p><em>Social Security Number:</em> {data?.colessee?.ssn}</p><Divider dashed />
-                                      <p><em>Driver's License Number:</em> {data?.colessee?.driversLicenseIdNumber}</p><Divider dashed />
-                                      <p><em>Home Phone Number:</em> { data?.colessee?.homePhoneNumber}</p><Divider dashed />
-                                        <p><em>Mobile Phone Number:</em> {data?.colessee?.mobilePhoneNumber}</p>
-                                    </Card>
-                                    <Card title="Home Address">
-                                        <p><em>Street Address 1 (no P.O. Boxes):</em> {data?.colessee?.homeAddress?.street1}</p><Divider dashed />
-                                        <p><em>Street Address 2:</em> {data?.colessee?.homeAddress?.street2}</p><Divider dashed />
-                                        <p><em>ZIP Code:</em> {data?.colessee?.homeAddress?.zipcode}</p><Divider dashed />
-                                        <p><em>State:</em>  {data?.colessee?.homeAddress?.state}</p><Divider dashed />
-                                        <p><em>County/Parish:</em> {data?.colessee?.homeAddress?.county}</p><Divider dashed />
-                                        <p><em>City:</em> {data?.colessee?.homeAddress?.cityId}</p><Divider dashed />
-                                        <p><em>Years at Current Address:</em> {data?.colessee?.atAddressYears}</p><Divider dashed />
-                                        <p><em>Months at Current Address:</em> {data?.colessee?.atAddressMonths}</p><Divider dashed />
-                                        <p><em>Monthly Mortgage or Rent:</em> {data?.colessee?.monthlyMortgage}</p><Divider dashed />
-                                        <p><em>Ownership:</em> {data?.colessee?.homeOwnership == 1 ? 'Own' : 'Rent'}</p>
-                                    </Card>
-                                    <Card title="Mailing Address">
-                                        <p><em>Street Address (no P.O. Boxes):</em> { data?.colessee?.mailingAddress?.street1}</p><Divider dashed />
-                                        <p><em>Street Address 2:</em> {data?.colessee?.mailingAddress?.street2}</p><Divider dashed />
-                                        <p><em>ZIP Code:</em> {data?.colessee?.mailingAddress?.zipcode}</p><Divider dashed />
-                                        <p><em>State:</em> {data?.colessee?.mailingAddress?.state}</p><Divider dashed />
-                                        <p><em>County/Parish:</em> {data?.colessee?.mailingAddress?.county}</p><Divider dashed />
-                                        <p><em>City:</em> {data?.colessee?.mailingAddress?.cityId}</p>
-                                    </Card>
-                                </div>
                                 <div className="applicant-elements-below">
-                                    <Card title="Employeer">
-                                        <p><em>Employer Name:</em> {data?.colessee?.employerName}</p><Divider dashed />
-                                        <p><em>Phone Number:</em> {data?.colessee?.employerPhoneNumber}</p><Divider dashed />
-                                        <p><em>City:</em>  {data?.colessee?.employmentAddress?.city}</p><Divider dashed />
-                                        <p><em>State: </em> {data?.colessee?.employmentAddress?.state}</p>
-                                    </Card>
-                                    <Card title="Employment Details">
-                                        <p><em>Employment Status:</em> {data?.colessee?.employmentStatus}</p><Divider dashed />
-                                        <p><em>Job Title:</em> {data?.colessee?.jobTitle}</p><Divider dashed />
-                                        <p><em>Years Employed:</em> {data?.colessee?.timeAtEmployerYears}</p><Divider dashed />
-                                        <p><em>Months Employed: </em> {data?.colessee?.timeAtEmployerMonths}</p><Divider dashed />
-                                        <p><em>Gross Monthly Income: </em> ${data?.colessee?.grossMonthlyIncome}</p>
-                                    </Card>
+                                  <PersonalSummary label="Employer Name">{data?.lessee?.employerName ? data?.lessee?.employerName : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Phone Number">{data?.lessee?.employerPhoneNumber ? data?.lessee?.employerPhoneNumber : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="City">{data?.lessee?.employmentAddress?.city ? data?.lessee?.employmentAddress?.city : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="State">{data?.lessee?.employmentAddress?.state ? data?.lessee?.employmentAddress?.state : 'Empty'}</PersonalSummary>
+                                </div>
+                                <div className='applicant-elements-above'>
+                                  <PersonalSummary label="Employment Status">{data?.lessee?.employmentStatus ? data?.lessee?.employmentStatus : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Job Title">{data?.lessee?.jobTitle ? data?.lessee?.jobTitle : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Years Employed">{data?.lessee?.timeAtEmployerYears ? data?.lessee?.timeAtEmployerYears : 'Empty'}</PersonalSummary>
+                                  <PersonalSummary label="Months Employed">{data?.lessee?.timeAtEmployerMonths ? data?.lessee?.timeAtEmployerMonths : 'Empty'}</PersonalSummary>
+                                </div>
+                                <div className='gross-monthly'>
+                                    <PersonalSummary label="Gross Monthly Income">{data?.lessee?.grossMonthlyIncome ? `$ ${data?.lessee?.grossMonthlyIncome}` : 'Empty'}</PersonalSummary>
                                 </div>
                               </Panel>
-                              <Panel header="Calculation" key="3"  style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}><Tag>Edit</Tag></Link>}>
-                              {/* <p>{text}</p> */}
+                              
+                              <Panel header="Co-Applicant" key="2" style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/co-applicant`}><Tag>Edit</Tag></Link>}>
+                              <Divider orientation="left"><span className='divider'>Personal</span></Divider>
+                                    <div className='applicant-elements-above'>
+                                      <PersonalSummary label="First Name">{data?.colessee?.firstName ? data?.colessee?.firstName : 'Empty'}</PersonalSummary> 
+                                      <PersonalSummary label="Middle Name">{data?.colessee?.middleName ? data?.colessee?.middleName : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Last Name">{data?.colessee?.lastName ? data?.colessee?.lastName : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Date of Birth(mm/dd/yyyy)">{data?.colessee?.dateOfBirth ? data?.colessee?.dateOfBirth: 'Empty'}</PersonalSummary>
+                                    </div>
+                                    <div className='applicant-elements-below'>
+                                      <PersonalSummary label="Social Security Number">{data?.colessee?.ssn ? data?.colessee?.ssn : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Driver's License Number">{data?.colessee?.driversLicenseIdNumber ? data?.colessee?.driversLicenseIdNumber : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Home Phone Number">{ data?.colessee?.homePhoneNumber ? data?.colessee?.homePhoneNumber : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Mobile Phone Number">{data?.colessee?.mobilePhoneNumber ? data?.colessee?.mobilePhoneNumber : 'Empty'}</PersonalSummary>
+                                    </div>
+
+                                    <Divider orientation="left"><span className='divider'>Home Address</span></Divider>
+
+                                    <div className='applicant-elements-above'>
+                                      <PersonalSummary label="Street Address 1 (no P.O. Boxes)">{data?.colessee?.homeAddress?.street1 ? data?.colessee?.homeAddress?.street1 : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Street Address 2">{data?.colessee?.homeAddress?.street2 ? data?.colessee?.homeAddress?.street2 : 'Empty' }</PersonalSummary>
+                                      <PersonalSummary label="ZIP Code">{data?.colessee?.homeAddress?.zipcode ? data?.colessee?.homeAddress?.zipcode : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="State">{data?.colessee?.homeAddress?.state ? data?.colessee?.homeAddress?.state: 'Empty'}</PersonalSummary>
+                                    </div>
+
+                                    <div className='applicant-elements-below'>
+                                      <PersonalSummary label="County/Parish"> {data?.colessee?.homeAddress?.county ? data?.colessee?.homeAddress?.county : 'Empty' }</PersonalSummary>
+                                      <PersonalSummary label="City">{data?.colessee?.homeAddress?.cityId ? data?.colessee?.homeAddress?.cityId : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Years at Current Address">{data?.colessee?.atAddressYears ? data?.colessee?.atAddressYears : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Months at Current Address">{data?.colessee?.atAddressMonths ? data?.colessee?.atAddressMonths : 'Empty'}</PersonalSummary>
+                                    </div>
+
+                                    <div className='exception-cell ownership'>
+                                      <PersonalSummary label="Monthly Mortgage or Rent">{data?.colessee?.monthlyMortgage ? data?.colessee?.monthlyMortgage : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Ownership">{data?.colessee?.homeOwnership == 1 ? 'Own' : 'Rent'}</PersonalSummary>
+                                    </div>
+
+                                    <Divider orientation="left"><span className="divider">Mailing Address</span></Divider>
+
+                                    <div className='applicant-elements-above'>
+                                      <PersonalSummary label="Street Address (no P.O. Boxes)">{ data?.colessee?.mailingAddress?.street1 ? data?.colessee?.mailingAddress?.street1 : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Street Address 2">{data?.colessee?.mailingAddress?.street2 ? data?.colessee?.mailingAddress?.street2 : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="ZIP Code">{data?.colessee?.mailingAddress?.zipcode ? data?.colessee?.mailingAddress?.zipcode : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="State">{data?.colessee?.mailingAddress?.state ? data?.colessee?.mailingAddress?.state: 'Empty'}</PersonalSummary>
+                                    </div>
+                                    <div className='exception-cell'>
+                                        <PersonalSummary label="City">{data?.colessee?.mailingAddress?.cityId ? data?.colessee?.mailingAddress?.cityId : 'Empty'}</PersonalSummary>
+                                        <PersonalSummary label="County/Parish">{data?.colessee?.mailingAddress?.county ? data?.colessee?.mailingAddress?.county : 'Empty'}</PersonalSummary>
+                                    </div>
+
+                                    <Divider orientation="left"><span className='divider'>Employment Details</span></Divider>
+
+                                    <div className="applicant-elements-below">
+                                      <PersonalSummary label="Employer Name">{data?.colessee?.employerName ? data?.colessee?.employerName : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Phone Number">{data?.colessee?.employerPhoneNumber ? data?.colessee?.employerPhoneNumber : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="City">{data?.colessee?.employmentAddress?.city ? data?.colessee?.employmentAddress?.city : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="State">{data?.colessee?.employmentAddress?.state ? data?.colessee?.employmentAddress?.state : 'Empty'}</PersonalSummary>
+                                    </div>
+                                    <div className='applicant-elements-above'>
+                                      <PersonalSummary label="Employment Status">{data?.colessee?.employmentStatus ? data?.colessee?.employmentStatus : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Job Title">{data?.colessee?.jobTitle ? data?.colessee?.jobTitle : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Years Employed">{data?.colessee?.timeAtEmployerYears ? data?.colessee?.timeAtEmployerYears : 'Empty'}</PersonalSummary>
+                                      <PersonalSummary label="Months Employed">{data?.colessee?.timeAtEmployerMonths ? data?.colessee?.timeAtEmployerMonths : 'Empty'}</PersonalSummary>
+                                    </div>
+                                    <div className='gross-monthly'>
+                                        <PersonalSummary label="Gross Monthly Income">{data?.colessee?.grossMonthlyIncome ? `$ ${data?.colessee?.grossMonthlyIncome}` : 'Empty'}</PersonalSummary>
+                                    </div>
                               </Panel>
+                              {/* <Panel header="Calculation" key="3"  style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}><Tag>Edit</Tag></Link>}>
+                        
+                              </Panel> */}
                             </Collapse>
                         </div>
                     </Content>

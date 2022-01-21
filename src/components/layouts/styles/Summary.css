@@ -34,4 +34,23 @@ html,body{
 
 #motor-content {
   display: flex;
+  margin-left: 15%;
+}
+
+.exception-cell, .gross-monthly {
+  display: flex;
+  margin-left: 0.8%;
+  margin-top: 2%;
+}
+
+.exception-cell > div:nth-child(2) {
+  margin-left: 21%;
+}
+
+.ownership > div:nth-child(2) {
+  margin-left: 8%;
+}
+
+.divider {
+  color: #4e0033;
 }
