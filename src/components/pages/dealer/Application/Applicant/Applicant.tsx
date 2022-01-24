@@ -627,26 +627,44 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
         setMonthYear(toMonthYears)
     }
 
-    const fillMailingAddress = (e:any)=>{
-        if(e.target.checked){
-            setMailingAddress({
-              street1: homeAddress.street1 ? homeAddress.street1 : data?.lessee?.homeAddress?.street1,
-              street2: homeAddress.street2 ? homeAddress.street2 : data?.lessee?.homeAddress?.street2, 
-              zipcode: homeAddress.zipcode ? homeAddress.zipcode : data?.lessee?.homeAddress?.zipcode,
-              state: stateTarget ? stateTarget : data?.lessee?.homeAddress?.state, 
-              county: countyTarget ? countyTarget : data?.lessee?.homeAddress?.county, 
-              city:cityTarget ? cityTarget : data?.lessee?.homeAddress?.cityId
-            })
-        }else {
-            setMailingAddress({
-                street1: "",
-                street2: "",
-                zipcode: "",
-                state:"",
-                county: "",
-                city:""
-            })
-        }
+    const fillMailingAddress = (e:any) => {
+      if (e.target.checked) {
+        // Copy options
+        setLesseeMailStateOptions(lesseeHomeStateOptions)
+        setLesseeMailCountyOptions(lesseeHomeCountyOptions)
+        setLesseeMailCityOptions(lesseeHomeCityOptions)
+
+        // Auto fill fields
+        lesseeForm.setFieldsValue({
+          lesseeAttributes: {
+            mailingAddressAttributes: {
+              street1: lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'street1']),
+              street2: lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'street2']),
+              cityId: lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'cityId']),
+              county: lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'county']),
+              state: lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'state']),
+              zipcode: lesseeForm.getFieldValue(['lesseeAttributes', 'homeAddressAttributes', 'zipcode']),
+            }
+          }
+        })
+      } else {
+        // Clear options and fields
+        setLesseeMailStateOptions([])
+        setLesseeMailCountyOptions([])
+        setLesseeMailCityOptions([])
+        lesseeForm.setFieldsValue({
+          lesseeAttributes: {
+            mailingAddressAttributes: {
+              street1: null,
+              street2: null,
+              cityId: null,
+              county: null,
+              state: null,
+              zipcode: null,
+            }
+          }
+        })
+      }
     }
 
     lesseeForm.setFieldsValue({
