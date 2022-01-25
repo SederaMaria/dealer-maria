@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent } from 'react'
-import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input, message } from "antd";
+import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input, message, Spin } from "antd";
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
@@ -63,14 +63,17 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
     const [showCreditTierState, setShowCreditTierState] = useState<object | null>(null)
 
     const [vinMake, setVinMake] = useState<string | undefined>("")
-    const [vinYear, setVinYear] = useState<string | number | undefined>("")
+    const [vinYear, setVinYear] = useState<any>("")
     const [vinModel, setVinModel] = useState<string | undefined>("")
 
     const [validateVIN, setValidateVIN] = useState<string | null>(null)
 
+    const [loading, setLoading] = useState<boolean>(false)
+
     const handleVin = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length === 17){
             let vin = e.target.value
+            setLoading(true)
             try {
                 await  network.GET(`/api/v1/vin_verification/verify-vin?vin=${vin}`
                 ).then(res => {
@@ -82,18 +85,22 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                     } });
                     setVinMake(res.data.vehicleInfo.make)
                     setVinYear(res.data.vehicleInfo.year)
-                    setVinModel(res.data.vehicleInfo.model[0])
+                    setVinModel(res.data.vehicleInfo.model)
                     setShowViaVIN(true)
                     setShowBikeForm(true)
+                    setLoading(false)
+                    getMakes()
                 }).catch(e => {
                     if (e && e.response.status === 404){
                         setValidateVIN("error")
                     } else {
                         setValidateVIN("success")
                     }
+                    setLoading(false)
                 })
             } catch (e) {
                 logger.error("Error verifying vin", e);
+                setLoading(false)
             };
         }
     }
@@ -226,8 +233,11 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
         setBtnAttribute(false);
     }
 
+    let today = new Date();
+    let year = today.getFullYear();
+
     return (
-        <div>
+        <Spin spinning={loading}>
              <ApplicationSteps 
                 stepType={`bike`} 
                 leaseApplicationId={`${leaseApplicationId}`} 
@@ -240,11 +250,10 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                 // colon={false}
                 onFinish={handleSubmit}
                 scrollToFirstError={true}
-                // initialValues={{
-                //     applicationDisclosureAgreement: 'unchecked'
-                // }}
+                initialValues={{
+                    // applicationDisclosureAgreement: 'unchecked'
+                }}
             >
-
 
             <Row gutter={[16, 16]}>
                     <Col span={24} className="cca-center-text" style={{ marginTop: 20 }}>
@@ -282,6 +291,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                 label="New/Used" 
                                                 name={['leaseCalculatorAttributes', 'newUsed']} 
                                                 rules={[{ required: true, message: 'New/Used is required!' }]}
+                                                hidden={showViaVIN}
                                                 >  
                                                     <Select 
                                                         showSearch 
@@ -293,6 +303,14 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                             <Option key="2" value="Used">Used</Option>
                                                     </Select>
                                                 </Form.Item>
+                                                    {
+                                                        showViaVIN && 
+                                                        <Row style={{marginTop: 10, marginBottom: 0}}>
+                                                            <Col span={24}>
+                                                                <b>New/Used</b> : { showViaVIN && <Text>{year- vinYear < 3 ? 'New' : 'Used'}</Text>}
+                                                            </Col>
+                                                        </Row>
+                                                    }
                                             </Col> 
                                         </Row>
                                         <Row>
@@ -322,10 +340,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                         showViaVIN && 
                                                         <Row style={{marginTop: 10, marginBottom: 0}}>
                                                             <Col span={24}>
-                                                                Make
-                                                            </Col>
-                                                            <Col span={24}>
-                                                                { showViaVIN && <Text>{vinMake}</Text>}
+                                                                <b>Make</b> : { showViaVIN && <Text>{vinMake}</Text>}
                                                             </Col>
                                                         </Row>
                                                     }
@@ -361,10 +376,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                         showViaVIN && 
                                                         <Row style={{marginTop: 10, marginBottom: 0}}>
                                                             <Col span={24}>
-                                                                Year
-                                                            </Col>
-                                                            <Col span={24}>
-                                                                { showViaVIN && <Text>{vinYear}</Text>}
+                                                                <b>Year</b> : { showViaVIN && <Text>{vinYear}</Text>}
                                                             </Col>
                                                         </Row>
                                                 }
@@ -399,10 +411,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                         showViaVIN && 
                                                         <Row style={{marginTop: 10, marginBottom: 10}}>
                                                             <Col span={24}>
-                                                                Year
-                                                            </Col>
-                                                            <Col span={24}>
-                                                                { showViaVIN && <Text>{vinModel}</Text>}
+                                                                <b>Model</b> : { showViaVIN && <Text>{vinModel}</Text>}
                                                             </Col>
                                                         </Row>
                                                 }
@@ -415,19 +424,19 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                 name={['leaseCalculatorAttributes', 'mileageTier']} 
                                                 rules={[{ required: true, message: 'Mileage Range is required!' }]}
                                                 >  
-                                                    <Select 
-                                                        showSearch 
-                                                        placeholder="Mileage Range" 
-                                                        {...showMileageRangeState}
-                                                        onSelect={handleMileageRangeStateChange}
-                                                        onBlur={hideBikeSelectOptions}
-                                                        >
-                                                        {
-                                                            mileageRangeOptions && mileageRangeOptions.map(({value, label}, index) => {
-                                                            return <Option key={index} value={`${value}`}>{label}</Option>
-                                                            })
-                                                        }
-                                                    </Select>
+                                                <Select 
+                                                    showSearch 
+                                                    placeholder="Mileage Range" 
+                                                    {...showMileageRangeState}
+                                                    onSelect={handleMileageRangeStateChange}
+                                                    onBlur={hideBikeSelectOptions}
+                                                    >
+                                                    {
+                                                        mileageRangeOptions && mileageRangeOptions.map(({value, label}, index) => {
+                                                        return <Option key={index} value={`${value}`}>{label}</Option>
+                                                        })
+                                                    }
+                                                </Select>
                                                 </Form.Item>
                                             </Col> 
                                         </Row>
@@ -449,7 +458,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
             
             </Form>
 
-        </div>
+        </Spin>
     )
 }
 
