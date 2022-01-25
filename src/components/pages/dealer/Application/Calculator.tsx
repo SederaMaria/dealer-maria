@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout, InputNumber } from "antd";
+import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout, InputNumber, Modal } from "antd";
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
 import '../styles/Calculator.css'
 
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 const { Content } = Layout;
 const { Option } = Select;
 const layout = {
@@ -114,7 +115,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
     const [calculatorData, setCalculatorData] = useState<CalculatorDataProps>({})
 
     const [activeStatesOptions, setActiveStatesOptions] = useState<Array<ActiveStatesOption>>([])
-    const [taxJurisdictionLabel, setTaxJurisdictionLabel] = useState<string>("Dealership's County/Tax Jurisdiction")
+    const [taxJurisdictionLabel, setTaxJurisdictionLabel] = useState<string>("Customer County/Tax Jurisdiction")
     const [taxJurisdictionOptions, setTaxJurisdictionOptions] = useState<string[]>([])
 
     
@@ -379,6 +380,28 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
         submitApplication(values)
     }
 
+    const dealerFundingBreakdownInfo = () => {
+      Modal.info({
+        title: '',
+        content: (
+          <>
+            <Paragraph>
+              Please remember that you keep the cash collected from the customer, you don’t have to forward that to us.
+            </Paragraph>
+            <Paragraph>
+              Please add the customer’s Total Cash Due at Signing to your Funding amount to determine your total proceeds.
+            </Paragraph>
+            <Paragraph>
+              Also, remember to include an trades/pay-offs included in the deal.
+            </Paragraph>
+            <Paragraph>
+              Thanks, call if questions.
+            </Paragraph>
+          </>
+        ),
+        onOk() {},
+      })
+    }
 
     return (
         <>
@@ -440,10 +463,10 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                     <Row>
                                         <Col span={24}> 
                                             <Form.Item 
-                                                label="Dealership's State" 
+                                                label="Customer State"
                                                 name={['leaseCalculatorAttributes', 'usState']} 
                                                 hasFeedback
-                                                rules={[{ required: true, message: `Dealership's State is required` }]}
+                                                rules={[{ required: true, message: `Customer State is required` }]}
                                             >  
                                                 <Select 
                                                 showSearch 
@@ -681,7 +704,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 
                                     <Row className={`bot-spacer-1 top-spacer-1 `}>
                                         <Col span={12}> 
-                                            NADA Rental
+                                            NADA Retail Value
                                         </Col> 
                                         <Col span={12} style={{textAlign: `right`}}> 
                                             <span>{calculatorData.nadaRental}</span>
@@ -693,7 +716,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                         <Col span={12}> 
                                             Purchase Option (Residual)
                                         </Col> 
-                                        <Col span={12} style={{textAlign: `right`}}> 
+                                        <Col span={12} style={{textAlign: `right`, fontWeight: 700}}>
                                         <span>{calculatorData.purchaseOption}</span>
                                         </Col> 
                                     </Row>
@@ -708,7 +731,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 
                                     <Row>
                                         <Col span={16}> 
-                                            Purchase Option (Residual)
+                                            Bike Price
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`}}> 
                                             <Form.Item 
@@ -868,7 +891,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                     </Row>
 
 
-                                    <Row className={`bot-spacer-1`}>
+                                    <Row>
                                         <Col span={16}> 
                                             Tire and Wheel
                                         </Col> 
@@ -887,7 +910,23 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                         </Col> 
                                     </Row>
 
-
+                                    <Row className={`bot-spacer-1`}>
+                                        <Col span={16}>
+                                            GPS
+                                        </Col>
+                                        <Col span={8} style={{textAlign: 'right'}}>
+                                            <Form.Item
+                                                hasFeedback
+                                            >
+                                                <InputNumber
+                                                    formatter={value => `$${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                    parser={(value: any | undefined) => value.replace(/\$\s?|(,*)/g, '')}
+                                                    precision={2}
+                                                    style={{textAlign: 'right'}}
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
 
                                     <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
@@ -912,7 +951,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                             </Col>
                             
                             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-                                <Card title="Cap Cost Reduction (Down Payment)">
+                                <Card title="Cap Cost Reduction (Customer Down Payment)">
                                     <Row>
                                         <Col span={16}> 
                                             Gross Trade Allowance
@@ -1156,20 +1195,10 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                 
                                     <Row className={`bot-spacer-1`}>
                                         <Col span={16} style={{ fontWeight: 700}}> 
-                                        Total Cash Out of Pocket
+                                        Total Due at Signing
                                         </Col> 
                                         <Col span={8} style={{textAlign: `right`, fontWeight: 700}}> 
                                             <span>{calculatorData.cashIn}</span>
-                                        </Col> 
-                                    </Row>
-
-                                    
-                                    <Row >
-                                        <Col span={16} style={{ fontWeight: 700}}> 
-                                        
-                                        </Col> 
-                                        <Col span={8} style={{textAlign: `right`, fontWeight: 700}}> 
-                                            <Button type="primary" > Copy to Cash Field</Button>
                                         </Col> 
                                     </Row>
 
@@ -1205,7 +1234,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 
 
 
-                                    <Title level={4}> Dealer Funding Breakdown </Title>
+                                    <Title level={4}> Dealer Funding Breakdown <InfoCircleOutlined onClick={dealerFundingBreakdownInfo} style={{fontSize: '0.75em'}} /> </Title>
                                     <Row className={`bot-spacer-1`}>
                                         <Col span={12}> 
                                         Total Transaction Price
@@ -1341,7 +1370,7 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                     </Row>
 
 
-                                    <Row>
+                                    <Row className={`bot-spacer-1`}>
                                         <Col span={24}> 
                                             You may email documents satisfying these stipulations to:  
                                             <a href="#"> 
@@ -1349,7 +1378,6 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                                             </a>
                                         </Col> 
                                     </Row>
-
                                 </Card>
                                 <div style={{ marginTop: 20, textAlign: `right`}}>
                                     <Button style={{ marginRight: 10 }}>Save</Button>
