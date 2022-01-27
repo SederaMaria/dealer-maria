@@ -70,6 +70,8 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
 
     const [loading, setLoading] = useState<boolean>(false)
 
+    const [rules, setRules] = useState<boolean>(false)
+
     const handleVin = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length === 17){
             let vin = e.target.value
@@ -141,6 +143,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
         setShowBikeForm(true)
         getMakes()
         setShowViaVIN(false)
+        setRules(true)
       }
 
 
@@ -290,7 +293,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                                                 <Form.Item 
                                                 label="New/Used" 
                                                 name={['leaseCalculatorAttributes', 'newUsed']} 
-                                                rules={[{ required: true, message: 'New/Used is required!' }]}
+                                                rules={[{ required: rules, message: 'New/Used is required!' }]}
                                                 hidden={showViaVIN}
                                                 >  
                                                     <Select 
