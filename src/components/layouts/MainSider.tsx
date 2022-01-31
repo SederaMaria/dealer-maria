@@ -21,12 +21,15 @@ interface Props {
 export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
   
   const [collapsed, setCollapsed]= useState(CollapseProps);
+  const [toolTip, setToolTip] = useState(true)
  
   const handleClick = () => {
     if(collapsed == CollapseProps) {
       setCollapsed(SiderProps)
+      setToolTip(false)
     }else if(collapsed == SiderProps) {
       setCollapsed(CollapseProps)
+      setToolTip(true)
     } 
   }
 
@@ -40,19 +43,19 @@ export const MainSider: React.FC<Props> = ({activeKey}: Props) => {
             mode="inline"
           >
             <Menu.Item key="home" icon={<HomeOutlined />}>
-              <Link to={`/home`}> Home</Link>
+              <Link title={toolTip ? 'Home' : ''} to={`/home`}> Home</Link>
             </Menu.Item>
 
             <Menu.Item key="application" icon={<ProfileOutlined />}>
-              <Link to={`/application`}> New Application</Link>
+              <Link title={toolTip ? 'New Application' : ''} to={`/application`}> New Application</Link>
             </Menu.Item>
 
             <Menu.Item key="saved-calculators" icon={<CalculatorOutlined />}>
-              <Link to={`/saved-calculators`}> Saved Calculators</Link>
+              <Link title={toolTip ? 'Saved Calculators' : ''} to={`/saved-calculators`}> Saved Calculators</Link>
             </Menu.Item>
 
             <Menu.Item key="archived-applications" icon={<ArchiveSvg/>}>
-              <Link className="lastMenu" to={`/archived-applications`}> Archived</Link>
+              <Link title={toolTip ? 'Archived' : ''} className="lastMenu" to={`/archived-applications`}> Archived</Link>
             </Menu.Item>
             
           </Menu> 
