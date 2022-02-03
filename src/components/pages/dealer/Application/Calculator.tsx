@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { logger, network } from '../../../../utils';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout, InputNumber, Modal } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -95,6 +96,7 @@ interface ActiveStatesOption {
 interface OptionProps {
   value?: string | number,
   label?: string,
+  id?: number,
 }
 
 const layout = {
@@ -136,6 +138,13 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
   const [vinMake, setVinMake] = useState<string | undefined>("")
   const [vinYear, setVinYear] = useState<string | number | undefined>("")
   const [vinModel, setVinModel] = useState<string | undefined>("")
+
+  const debouncedHandleOnFieldsChange = useDebouncedCallback(
+    (changedValues: any, allValues: any) => {
+      handleOnValuesChange(changedValues, allValues);
+    },
+    1000
+  )
 
   const handleMakes = (value: any) => {
     getYears(value)
@@ -251,10 +260,6 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
     }
   }
 
-  const handleCalculation = () => {
-    // setCalculatorRandom()
-  }
-
   const generateRandomNDigits = (n: number) => {
     let num: any = new Intl.NumberFormat().format( Math.floor(Math.random() * (9 * (Math.pow(10, n)))) + (Math.pow(10, n)) )
     return `$${num}`
@@ -265,45 +270,46 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
       await network.GET('/api/v1/calculators/active-state-select-option').then(response => {
         setActiveStatesOptions(response.data.active_state_select_option)
       }).catch(error => {
-        logger.error("handleLesseeMailZipcodeBlur.Request Error", error);
+        logger.error("setDealershipState.Request Error", error);
       });
     } catch (e) {
-      logger.error("handleLesseeMailZipcodeBlur Error", e);
+      logger.error("setDealershipState Error", e);
     }
   }
 
-  const setCalculatorRandom = () => {
+  const setCalculatorFromResult = (responseObj: any) => {
+    let calculations: any = responseObj.data.calculations
     let calData: Object = {
-      nadaRental: generateRandomNDigits(randomRange()),
-      purchaseOption: generateRandomNDigits(randomRange()),
-      upfrontTax: generateRandomNDigits(randomRange()),
-      totalBikePrice: generateRandomNDigits(randomRange()),
-      netTradeInAllowance: generateRandomNDigits(randomRange()),
-      totalCapCostReduction: generateRandomNDigits(randomRange()),
-      netDueOnMtorcycle: generateRandomNDigits(randomRange()),
-      acquisitionFee: generateRandomNDigits(randomRange()),
-      totalCapCost: generateRandomNDigits(randomRange()),
-      totalGrossCapCost: generateRandomNDigits(randomRange()),
-      baseMonthlyPayment: generateRandomNDigits(randomRange()),
-      monthlySaleTax: generateRandomNDigits(randomRange()),
-      totalMonthlyPayment: generateRandomNDigits(randomRange()),
-      firstMonthlyPayment: generateRandomNDigits(randomRange()),
-      refundableSecurityDeposit: generateRandomNDigits(randomRange()),
-      additionalCashDown: generateRandomNDigits(randomRange()),
-      totalCashAtSignIn: generateRandomNDigits(randomRange()),
-      cashIn: generateRandomNDigits(randomRange()),
-      bikeMinimum: generateRandomNDigits(randomRange()),
-      totalDealerParticipation: generateRandomNDigits(randomRange()),
-      totalTransactionPrice: generateRandomNDigits(randomRange()),
-      minusTradeIn: generateRandomNDigits(randomRange()),
-      minusDownPayment: generateRandomNDigits(randomRange()),
-      minusFirstMonthlyPayment: generateRandomNDigits(randomRange()),
-      minuseSecurityDeposit: generateRandomNDigits(randomRange()),
-      cashOnDeliveryBike: generateRandomNDigits(randomRange()),
-      plusDealerParticipation: generateRandomNDigits(randomRange()),
-      remitToDealer: generateRandomNDigits(randomRange()),
-      frontEndMaxAdvance: generateRandomNDigits(randomRange()),
-      backEndMaxAdvance: generateRandomNDigits(randomRange()),
+      nadaRental: calculations.nada_retail_value,
+      purchaseOption: calculations.customer_purchase_option, // NEEDS TRACING
+      upfrontTax: calculations.upfront_tax,
+      totalBikePrice: calculations.total_sales_price, // NEEDS TRACING
+      netTradeInAllowance: calculations.net_trade_in_allowance,
+      totalCapCostReduction: 0, // NO EXACT MATCH
+      netDueOnMtorcycle: 0, // NO EXACT MATCH
+      acquisitionFee: calculations.acquisition_fee,
+      totalCapCost: calculations.adjusted_capitalized_cost, // NEEDS TRACING
+      totalGrossCapCost: calculations.gross_capitalized_cost, // NEEDS TRACING
+      baseMonthlyPayment: calculations.base_monthly_payment,
+      monthlySaleTax: calculations.monthly_sales_tax,
+      totalMonthlyPayment: calculations.total_monthly_payment,
+      firstMonthlyPayment: calculations.base_monthly_payment, // NEEDS TRACING
+      refundableSecurityDeposit: calculations.refundable_security_deposit,
+      additionalCashDown: 0, // NEEDS TRACING
+      totalCashAtSignIn: calculations.total_cash_at_signing,
+      cashIn: 0, // NO EXACT MATCH
+      bikeMinimum: 0, // NO EXACT MATCH
+      totalDealerParticipation: 0, // NO EXACT MATCH
+      totalTransactionPrice: 0, // NO EXACT MATCH
+      minusTradeIn: 0, // NO EXACT MATCH
+      minusDownPayment: 0, // NO EXACT MATCH
+      minusFirstMonthlyPayment: 0, // NO EXACT MATCH
+      minuseSecurityDeposit: 0, // NO EXACT MATCH
+      cashOnDeliveryBike: 0, // NO EXACT MATCH
+      plusDealerParticipation: 0, // NO EXACT MATCH
+      remitToDealer: calculations.remit_to_dealer,
+      frontEndMaxAdvance: calculations.frontend_max_advance,
+      backEndMaxAdvance: calculations.backend_max_advance,
     }
     setCalculatorData(calData)
   }
@@ -313,25 +319,30 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
     return myArray[(Math.random() * myArray.length) | 0]
   }
 
-  const submitApplication = async (values: any) => {
+  const submitCalculator = async (values: any) => {
     try {
-      let calculate = await network.POST('/api/v1/dealers/calculator/calculate', values);
-      // setHasSubmitError(false)
-      // setDisableSubmitBtn(true)
-      // setSubmitSuccess(true)
-      // message.success("Save Successfully");
+      await network.POST('/api/v1/calculators', values).then(response => {
+        setCalculatorFromResult(response)
+      }).catch(error => {
+      })
     } catch (e) {
       logger.error("Request Error", e);
-      // message.error("Error saving details");
-      // setHasSubmitError(true)
-      // setDisableSubmitBtn(false)
     }
-    // setDisableSubmitBtn(false)
   }
 
   const handleSubmit = async (values: any) => {
     values = { ...values };
-    submitApplication(values)
+    submitCalculator(values)
+  }
+
+  const handleOnValuesChange = async (changedValues: any, allValues: any) => {
+    let values: any = {}
+
+    allValues.map((data: any) => {
+      values[`${data.name[1]}`] = data.value
+    })
+
+    submitCalculator({ lease_calculator: values })
   }
 
   const dealerFundingBreakdownInfo = () => {
@@ -358,7 +369,6 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
   }
 
   useEffect(() => {
-    setCalculatorRandom()
     setDealershipState()
   },[]);
 
@@ -379,7 +389,8 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
         <Form
           form={lesseeForm}
           // colon={false}
-          onFinish={handleSubmit}
+          // onFinish={handleSubmit}
+          onFieldsChange={(changedValues, allValues) => debouncedHandleOnFieldsChange(changedValues, allValues)}
           // scrollToFirstError={true}
           initialValues={{
             leaseCalculatorAttributes: {
@@ -431,7 +442,6 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                       >
                         <Select
                           showSearch
-                          onSelect={handleCalculation}
                           onChange={handleDealershipStateChange}
                         >
                           {
@@ -453,7 +463,6 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                       >
                         <Select
                           showSearch
-                          onSelect={handleCalculation}
                         >
                           {
                             taxJurisdictionOptions && taxJurisdictionOptions.map((value, index) => {
@@ -628,8 +637,8 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                           {...showCreditTierState}
                         >
                           {
-                            creditTierOptions && creditTierOptions.map(({value, label}, index) => {
-                              return <Option key={index} value={`${value}`}>{label}</Option>
+                            creditTierOptions && creditTierOptions.map(({value, label, id}, index) => {
+                              return <Option key={index} value={id}>{label}</Option>
                             })
                           }
                         </Select>
@@ -644,9 +653,11 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
                         name={['leaseCalculatorAttributes', 'term']}
                         rules={[{ required: true, message: ' is required' }]}
                       >
-                        <Select showSearch onSelect={handleCalculation} >
-                          <Option value="1">lessee term 1</Option>
-                          <Option value="2">lessee term 2</Option>
+                        <Select showSearch>
+                          <Option value="24">24 Months</Option>
+                          <Option value="36">36 Months</Option>
+                          <Option value="48">48 Months</Option>
+                          <Option value="60">60 Months</Option>
                         </Select>
                       </Form.Item>
                     </Col>
