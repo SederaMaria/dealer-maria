@@ -246,6 +246,7 @@ export const BikeInformation: React.FC<Props> = ({data}) => {
                 leaseApplicationId={`${leaseApplicationId}`} 
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
+                attribute={btnAttribute}
             />
             <Form 
                 form={lesseeForm} 

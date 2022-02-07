@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Col, Row, Steps, Layout } from 'antd';
+import { Col, Row, Steps, Layout, notification, Typography } from 'antd';
 import Icon from '@ant-design/icons';
-import { SolutionOutlined, UserOutlined, TeamOutlined, PoweroffOutlined } from '@ant-design/icons';
+import { SolutionOutlined, UserOutlined, TeamOutlined, PoweroffOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom';
-
 import { 
     MotorSvg, 
     CalculatorSvg 
@@ -13,14 +12,16 @@ import '../styles/NewApplication.css'
 
 const { Step } = Steps;
 const { Header } = Layout;
+const { Text } = Typography;
 
 interface Props {
     stepType: string, 
     leaseApplicationId: string, 
     leaseCalculatorId: string,
-    save: any
+    save: any,
+    attribute?: boolean
 }
-    export const ApplicationSteps: React.FC<Props> = ({stepType, leaseApplicationId, leaseCalculatorId}) => {
+    export const ApplicationSteps: React.FC<Props> = ({stepType, leaseApplicationId, leaseCalculatorId, attribute}) => {
     const history = useHistory();
         
     let calculatorUrl: string = `/applications/${leaseApplicationId.trim()}/calculators/${leaseCalculatorId.trim()}`
@@ -51,6 +52,15 @@ interface Props {
         history.push(`${url}/${page}`)
     }
 
+    const handleEmptyForm = () => {
+        notification.open({
+            message: <Text type="warning">Please Fill Out The Form And Save</Text>,
+            duration: 3,
+            icon: <InfoCircleOutlined style={{color: `#faad14`}}/>,
+            placement: 'topRight'
+            });
+    }
+
 
     return (
         <Header className="main-header-layout" id='main-menu'>
@@ -62,10 +72,10 @@ interface Props {
             </Col>
             <Col span={12}>
                 <Steps size="small">
-                    <Step onClick={handleBikeStep} className={`application-steps application-steps-wait ${ stepType === 'bike' && 'application-steps-process'}`} status="process" title="Bike" icon={<Icon component={ MotorSvg } />} />
+                    <Step onClick={attribute ? handleEmptyForm : handleBikeStep} className={`application-steps application-steps-wait ${ stepType === 'bike' && 'application-steps-process'}`} status="process" title="Bike" icon={<Icon component={ MotorSvg } />} />
                     {/* {stepType != 'bike' &&  <Step onClick={handleCalculatorStep} className={`application-steps application-steps-wait ${ stepType === 'calculator' && 'application-steps-process'}`} status="wait" title="Calculator" icon={<Icon component={ CalculatorSvg } />} />} */}
-                    <Step onClick={handleApplicantStep} className={`application-steps application-steps-wait ${ stepType === 'applicant' && 'application-steps-process'}`} status="wait" title="Applicant" icon={<UserOutlined />} />
-                    <Step onClick={handleCoApplicantStep} className={`application-steps application-steps-wait ${ stepType === 'co-applicant' && 'application-steps-process'}`} status="wait" title="Co-Applicant" icon={<TeamOutlined />} />
+                    <Step onClick={attribute ? handleEmptyForm : handleApplicantStep} className={`application-steps application-steps-wait ${ stepType === 'applicant' && 'application-steps-process'}`} status="wait" title="Applicant" icon={<UserOutlined />} />
+                    <Step onClick={attribute ? handleEmptyForm : handleCoApplicantStep} className={`application-steps application-steps-wait ${ stepType === 'co-applicant' && 'application-steps-process'}`} status="wait" title="Co-Applicant" icon={<TeamOutlined />} />
                     <Step onClick={handleSummaryStep} className={`application-steps application-steps-wait ${ stepType === 'summary' && 'application-steps-process'}`} status="wait" title="Summary" icon={<SolutionOutlined />} />
                 </Steps>
             </Col>

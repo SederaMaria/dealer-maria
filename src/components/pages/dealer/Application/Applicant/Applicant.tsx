@@ -744,7 +744,8 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
                 stepType={`applicant`} 
                 leaseApplicationId={`${leaseApplicationId}`} 
                 leaseCalculatorId={`${leaseCalculatorId}`}  
-                save={null} 
+                save={null}
+                attribute={btnAttribute} 
             />
             <div className="title-container">
                 <div className="subtitle-container">
@@ -1358,4 +1359,4 @@ export const Applicant: React.FC<Props> = ({data}: Props) => {
     ) : null
 }
 
-export default Applicant
+export default Applicant;

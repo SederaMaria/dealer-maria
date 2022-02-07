@@ -102,3 +102,11 @@
   direction: none;
   color: white;
 }
+
+.ant-notification {
+  margin-top: 5%;
+}
+
+.ant-notification-notice-close-x {
+  color: #faad14;
+}

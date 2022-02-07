@@ -747,6 +747,7 @@ export const CoApplicant: React.FC<Props> = ({data}: Props) => {
                 leaseApplicationId={`${leaseApplicationId}`} 
                 leaseCalculatorId={`${leaseCalculatorId}`}  
                 save={null} 
+                attribute={btnAttribute}
             />
             <div className="title-container">
                 <div className="subtitle-container">
