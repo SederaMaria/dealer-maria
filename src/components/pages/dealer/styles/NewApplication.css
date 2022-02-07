@@ -32,72 +32,45 @@
   margin-top: 20px;
 }
 
-.application-steps-finish
-  > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title {
+.application-steps-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
   /* color: white; */
   color: #1890ff;
 }
 
-.application-steps-finish
-  > .ant-steps-item-container
-  > .ant-steps-item-icon
-  > .ant-steps-icon {
+.application-steps-finish > .ant-steps-item-container > .ant-steps-item-icon > .ant-steps-icon {
   /* color: white; */
   color: #1890ff;
 }
 
-.application-steps-process
-  > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title,
-.application-steps-process
-  > .ant-steps-item-container
-  > .ant-steps-item-icon
-  > .ant-steps-icon {
+.application-steps-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title,
+.application-steps-process > .ant-steps-item-container > .ant-steps-item-icon > .ant-steps-icon {
   color: white !important;
 }
 
-.ant-steps-item-finish
-  > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title::after {
+.ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
   /* background-color: white; */
   color: #1890ff;
 }
 
-.application-steps-wait
-  > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title {
+.application-steps-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
   color: #1890ff;
 }
 
-.application-steps-wait
-  > .ant-steps-item-container
-  > .ant-steps-item-icon
-  > .ant-steps-icon {
+.application-steps-wait > .ant-steps-item-container > .ant-steps-item-icon > .ant-steps-icon {
   color: #1890ff;
 }
 
-.ant-steps-item-process
-  > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title::after,
-.ant-steps-item-wait
-  > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title::after {
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after,
+.ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
   background-color: #1890ff;
 }
 
 .ant-steps-item-container:hover,
-.ant-steps-item-content:hover, 
+.ant-steps-item-content:hover,
 .ant-steps-item-icon:hover {
-    cursor: pointer
+  cursor: pointer;
 }
-  
+
 .steps-exit-btn {
   direction: none;
   color: white;
