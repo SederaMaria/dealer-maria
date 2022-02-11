@@ -95,7 +95,6 @@ export const Summary: React.FC<Props> = ({data}) => {
                                     <MotorSummary label="Make">{data?.leaseCalculator?.assetMake ? data?.leaseCalculator?.assetMake : 'Empty'}</MotorSummary>
                                     <MotorSummary label="Model">{data?.leaseCalculator?.assetModel ? data?.leaseCalculator?.assetModel : 'Empty'}</MotorSummary>
                                     <MotorSummary label="Year">{data?.leaseCalculator?.assetYear ? data?.leaseCalculator?.assetYear : 'Empty'}</MotorSummary>
-                                    <MotorSummary label="Total Sales Price">{data?.leaseCalculator?.totalSalesPriceCents ? `$ ${data?.leaseCalculator?.totalSalesPriceCents}` : 'Empty'}</MotorSummary>
                                     <MotorSummary label="Term">{data?.leaseCalculator?.term ? `${data?.leaseCalculator?.term} months` : 'Empty'}</MotorSummary>
                                 </div>
                             </div>
