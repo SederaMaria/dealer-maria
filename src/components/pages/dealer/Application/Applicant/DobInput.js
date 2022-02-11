@@ -3,7 +3,7 @@ import { Form, DatePicker } from "antd";
 import MaskedInput from "antd-mask-input";
 import moment from "moment";
 
-export default function DobInput ({dateFormat, form}) {
+export default function DobInput ({dateFormat, form, requireCoApplicantFields}) {
 
   const [dateString, setDateString] = useState(null);
   const [dateObj, setDateObj] = useState(null);
@@ -59,7 +59,7 @@ export default function DobInput ({dateFormat, form}) {
       label="Date of Birth (mm/dd/yyyy)"
       name={['lesseeAttributes', 'dateOfBirth']}
       // hasFeedback
-      // rules={[{ required: true, message: 'Date of Birth is required!' }]}
+      rules={[{ required: requireCoApplicantFields , message: 'Date of Birth is required!' }]}
       validateStatus={dateOfBirthValidation}
       help={dateOfBirthValidationMessage}
     >

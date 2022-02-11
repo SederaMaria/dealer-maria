@@ -169,7 +169,6 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
 
   const handleNewUsedStateChange = () => {
     hideBikeSelectOptions()
-    setShowMakeState({ open: true })
   }
 
   const handleMakesStateChange = () => {
@@ -180,26 +179,18 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
       },
     })
     hideBikeSelectOptions()
-    setTimeout(() => {
-      setShowYearState({ open: true })
-    }, 500)
   }
 
   const handleYearStateChange = () => {
     hideBikeSelectOptions()
-    setTimeout(() => {
-      setShowModelState({ open: true })
-    }, 500)
   }
 
   const handleModelStateChange = () => {
     hideBikeSelectOptions()
-    setShowMileageRangeState({ open: true })
   }
 
   const handleMileageRangeStateChange = () => {
     hideBikeSelectOptions()
-    setShowCreditTierState({ open: true })
   }
 
   const formatOptions = (options: Object[], type?: string) => {
