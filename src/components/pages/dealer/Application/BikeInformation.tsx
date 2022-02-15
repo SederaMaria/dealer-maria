@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, MouseEvent, FormEvent } from 'react'
+import React, { useState, ChangeEvent, MouseEvent, FormEvent, useEffect } from 'react'
 import { Row, Col, Card, Form, Select, Typography, Layout, Button, Input, message, Spin } from 'antd'
 import { Link } from 'react-router-dom'
 import { logger, network } from '../../../../utils'
@@ -26,6 +26,11 @@ interface LeaseCalculator {
 
 interface RootLeaseCalculator {
   leaseCalculator?: LeaseCalculator
+  assetMake?: string
+  assetModel?: string
+  assetYear?: number
+  mileageTier?: string
+  newUsed?: string
 }
 
 interface Props {
@@ -34,13 +39,14 @@ interface Props {
     lessee: Lessee
     leaseCalculator: RootLeaseCalculator
   }
+  dataCheck: any
 }
 interface OptionProps {
   value?: string | number
   label?: string
 }
 
-export const BikeInformation: React.FC<Props> = ({ data }) => {
+export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
   const [lesseeForm] = Form.useForm()
 
   let leaseApplicationId: string | number | undefined = data?.id
@@ -71,6 +77,13 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
 
   const [rules, setRules] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (dataCheck !== null) {
+      setShowBikeForm(true)
+      setSaveBtnAttribute(false)
+    }
+  }, [])
+
   const handleVin = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length === 17) {
       let vin = e.target.value
@@ -93,6 +106,7 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
             setShowBikeForm(true)
             setLoading(false)
             getMakes()
+            setSaveBtnAttribute(false)
           })
           .catch((e) => {
             if (e && e.response.status === 404) {
@@ -145,6 +159,7 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
     getMakes()
     setShowViaVIN(false)
     setRules(true)
+    setSaveBtnAttribute(false)
   }
 
   const handleMakes = (value: any) => {
@@ -154,8 +169,6 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
   const handleYear = (value: any) => {
     let year = value
     let make = lesseeForm.getFieldValue(['leaseCalculatorAttributes', 'assetMake'])
-    console.log(year)
-    console.log(make)
     getModels(make, year)
   }
 
@@ -218,6 +231,7 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
   }
 
   const [btnAttribute, setBtnAttribute] = useState(true)
+  const [saveBtnAttribute, setSaveBtnAttribute] = useState(true)
 
   const handleSubmit = async (values: any) => {
     values = { ...values }
@@ -237,11 +251,15 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
         // colon={false}
         onFinish={handleSubmit}
         scrollToFirstError={true}
-        initialValues={
-          {
-            // applicationDisclosureAgreement: 'unchecked'
-          }
-        }
+        initialValues={{
+          leaseCalculatorAttributes: {
+            newUsed: data?.leaseCalculator?.newUsed,
+            assetMake: data?.leaseCalculator?.assetMake,
+            assetModel: data?.leaseCalculator?.assetModel,
+            assetYear: data?.leaseCalculator?.assetYear,
+            mileageTier: data?.leaseCalculator?.mileageTier,
+          },
+        }}
       >
         <Row gutter={[16, 16]}>
           <Col span={24} className="cca-center-text" style={{ marginTop: 20 }}>
@@ -404,7 +422,7 @@ export const BikeInformation: React.FC<Props> = ({ data }) => {
               </Card>
 
               <div style={{ marginTop: 20, textAlign: `right` }}>
-                <Button style={{ marginRight: 10 }} htmlType="submit">
+                <Button style={{ marginRight: 10 }} htmlType="submit" disabled={saveBtnAttribute}>
                   {' '}
                   Save{' '}
                 </Button>

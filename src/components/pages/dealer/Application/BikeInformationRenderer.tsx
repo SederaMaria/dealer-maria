@@ -8,35 +8,35 @@ function BikeInformationRenderer(props: any)  {
     const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<boolean>(false)
 
-
+  
     useEffect(() => {
         getApplicationDetails();
       },[]);
-      
+
       const getApplicationDetails = async () => {
         if (!loading) {
           setLoading(true)
         }
         try {
             let data = await network.GET(`/api/v1/dealers/get-details?id=${leaseApplicationId}`)
-            console.log(data.data.data.leaseApplication)
+
             setData(data.data.data.leaseApplication)
         } catch (e) {
             setLoading(false)
-            logger.error("Error fetching Applicatins", e);
+            logger.error("Error fetching Applicatins", e)
         }
         setLoading(false)
       }
 
-    return (
+      return data ? (
         <Spin 
-        spinning={loading}
-        size='large'
+        spinning={loading} 
+        size='large' 
         tip='Loading...'
         >
-            <BikeInformation data={data}/>
+             <BikeInformation dataCheck={data?.leaseCalculator.assetMake} data={data} />
         </Spin>
-    )
+  ) : null
 }
 
 export default BikeInformationRenderer

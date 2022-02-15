@@ -17,8 +17,8 @@ interface LeaseCalculator {
     assetMake?: string,
     assetModel?: string,
     assetYear?: number,
-    term?: number,
-    totalSalesPriceCents?: number
+    newUsed?: string
+    mileageTier?: string
 }
 
 interface Props {
@@ -68,8 +68,8 @@ export const Summary: React.FC<Props> = ({data}) => {
            logger.error("Request Error", e);
            setSubmitterMessage(e.response.data.message)
            setShowSubmitterMessage(true)
-           console.log(e.response)
-           console.log(e.response.data.message)
+
+           
          }
     }
 
@@ -92,10 +92,11 @@ export const Summary: React.FC<Props> = ({data}) => {
                             </div> */}
                             <div className="motor-details">
                                 <div className="motor-summary">
-                                    <MotorSummary label="Make">{data?.leaseCalculator?.assetMake ? data?.leaseCalculator?.assetMake : 'Empty'}</MotorSummary>
-                                    <MotorSummary label="Model">{data?.leaseCalculator?.assetModel ? data?.leaseCalculator?.assetModel : 'Empty'}</MotorSummary>
-                                    <MotorSummary label="Year">{data?.leaseCalculator?.assetYear ? data?.leaseCalculator?.assetYear : 'Empty'}</MotorSummary>
-                                    <MotorSummary label="Term">{data?.leaseCalculator?.term ? `${data?.leaseCalculator?.term} months` : 'Empty'}</MotorSummary>
+                                  <MotorSummary label="New/Used">{data?.leaseCalculator?.newUsed ? data?.leaseCalculator?.newUsed : 'Empty'}</MotorSummary>
+                                  <MotorSummary label="Make">{data?.leaseCalculator?.assetMake ? data?.leaseCalculator?.assetMake : 'Empty'}</MotorSummary>
+                                  <MotorSummary label="Model">{data?.leaseCalculator?.assetModel ? data?.leaseCalculator?.assetModel : 'Empty'}</MotorSummary>
+                                  <MotorSummary label="Year">{data?.leaseCalculator?.assetYear ? data?.leaseCalculator?.assetYear : 'Empty'}</MotorSummary>
+                                  <MotorSummary label="Mileage Tier">{data?.leaseCalculator?.mileageTier ? `$ ${data?.leaseCalculator?.mileageTier}` : 'Empty'}</MotorSummary>
                                 </div>
                             </div>
                         </div>

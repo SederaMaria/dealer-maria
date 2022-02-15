@@ -1327,7 +1327,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                     Save
                   </Button>
                   <Button className="button" type="primary">
-                    <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
+                    <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/bike`}> prev </Link>
                   </Button>
                   <Button className="button" type="primary" disabled={btnAttribute}>
                     <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>
