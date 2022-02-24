@@ -148,6 +148,7 @@ const formatOptions = (params: { options: Array<any>; type?: string }) => {
 }
 
 export const Applicant: React.FC<Props> = ({ data }: Props) => {
+  
   const { lessee } = data || {}
 
   const [lesseeForm] = Form.useForm()
@@ -962,13 +963,13 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                     <Col {...formLayout.field.col}>
                       <Form.Item label="First Motorcycle Purchase/Lease?" name={['lesseeAttributes', 'firstTimeRider']}>
                         <Radio.Group defaultValue={true}>
-                          <Radio value={true}>YES</Radio>
-                          <Radio value={false}>NO</Radio>
+                          <Radio value={true}>Yes</Radio>
+                          <Radio value={false}>No</Radio>
                         </Radio.Group>
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="Motorcycle Licence ?" name={['lesseeAttributes', 'motorcycleLicence']}>
+                      <Form.Item label="Motorcycle License ?" name={['lesseeAttributes', 'motorcycleLicence']}>
                         <Radio.Group defaultValue={false}>
                           <Radio value={true}>Yes</Radio>
                           <Radio value={false}>No</Radio>
