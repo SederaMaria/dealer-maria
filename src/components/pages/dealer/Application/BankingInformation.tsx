@@ -103,7 +103,11 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item label="Checking/Savings Account" name="paymentAccountType">
+                                        <Form.Item label="Checking/Savings Account" name="paymentAccountType"
+                                        rules={[{
+                                            required : true,
+                                            message : "This field is required"
+                                          }]}> 
                                             <Select>
                                               <Option  value="checking">Checking</Option>
                                               <Option value="savings">Savings</Option>
