@@ -148,6 +148,7 @@ const formatOptions = (params: { options: Array<any>; type?: string }) => {
 }
 
 export const Applicant: React.FC<Props> = ({ data }: Props) => {
+  
   const { lessee } = data || {}
 
   const [lesseeForm] = Form.useForm()
@@ -212,6 +213,9 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
   })
 
   const [monthYears, setMonthYear] = useState<any | undefined>(undefined)
+  const [manualMonthYears, setManualMonthYear] = useState<any | undefined>(undefined)
+  const [nullMonthYear, setNullMonthYear] = useState(true)
+
   const [btnAttribute, setBtnAttribute] = useState(true)
   const [btnClass, setBtnClass] = useState('button')
 
@@ -270,7 +274,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
               })
             )
             setLesseeHomeCityOptionsData(formatOptions({ options: response.data.city || [], type: 'city' }))
-            setShowHomeState({ open: true })
           }
           if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
             setZipHomeValidateStatus('error')
@@ -320,7 +323,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
               })
             )
             setLesseeMailCityOptionsData(formatOptions({ options: response.data.city || [], type: 'city' }))
-            setShowMailingState({ open: true })
           }
           if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
             setZipMailValidateStatus('error')
@@ -341,7 +343,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
 
   const handleHomeStateChange = () => {
     setShowHomeState(null)
-    setShowHomeCountyState({ open: true })
   }
 
   const handleHomeCountyStateChange = (countyStateId: any) => {
@@ -353,7 +354,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
     }
 
     setShowHomeCountyState(null)
-    setShowHomeCityState({ open: true })
   }
 
   const handleHomeCityStateChange = () => {
@@ -362,7 +362,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
 
   const handleMailingStateChange = () => {
     setShowMailingState(null)
-    setShowMailingCountyState({ open: true })
   }
 
   const handleMailingCountyStateChange = (countyStateId: any) => {
@@ -374,7 +373,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
     }
 
     setShowMailingCountyState(null)
-    setShowMailingCityState({ open: true })
   }
 
   const handleMailingCityStateChange = () => {
@@ -716,10 +714,31 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
     setCityTarget(f.children)
   }
 
-  const handleMonthYear = (e: any, f: any) => {
-    const monthYearDiff = e[1].toDate() - e[0].toDate()
-    const toMonthYears = (monthYearDiff / 365 / 86400000).toFixed(2)
-    setMonthYear(toMonthYears)
+  const handleManualMonthYear = (e:any) => {
+    setManualMonthYear(null)
+    setMonthYear(e)
+    setNullMonthYear(true)
+  }
+
+  const handleMonthYear = (e:any) => {
+    if (e !== null) {
+        let startDate = e._d
+        let newDate : any = moment().toDate() 
+        let monthYearDiff = newDate - startDate
+        const toMonthYears = Number((monthYearDiff/(365)/(86400000)).toFixed(2))
+        setMonthYear(toMonthYears)  
+        setManualMonthYear(null)
+        setNullMonthYear(false)
+    } else {
+        if (manualMonthYears !== null) {
+          setMonthYear(manualMonthYears)
+          setNullMonthYear(false)
+        }
+    }
+  }
+
+  const disabledDate = (current:any) => {
+    return current && current > moment().endOf('day');
   }
 
   const fillMailingAddress = (e: any) => {
@@ -931,10 +950,10 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col} className="space-up dob">
-                      <DobInput dateFormat={dateFormat} form={lesseeForm} />
+                    <DobInput dateFormat={dateFormat} form={lesseeForm} requireCoApplicantFields={true}/>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="Social Security Number" name={['lesseeAttributes', 'ssn']} className="space-down">
+                      <Form.Item label="Social Security Number" name={['lesseeAttributes', 'ssn']} className="space-down" rules={[{ required: true, message: 'SSN is required!' }]}>
                         <Input type="hidden" />
                       </Form.Item>
                       <Form.Item>
@@ -942,15 +961,15 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="First Time Rider ?" name={['lesseeAttributes', 'firstTimeRider']}>
+                      <Form.Item label="First Motorcycle Purchase/Lease?" name={['lesseeAttributes', 'firstTimeRider']}>
                         <Radio.Group defaultValue={true}>
-                          <Radio value={true}>YES</Radio>
-                          <Radio value={false}>NO</Radio>
+                          <Radio value={true}>Yes</Radio>
+                          <Radio value={false}>No</Radio>
                         </Radio.Group>
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="Motorcycle Licence ?" name={['lesseeAttributes', 'motorcycleLicence']}>
+                      <Form.Item label="Motorcycle License ?" name={['lesseeAttributes', 'motorcycleLicence']}>
                         <Radio.Group defaultValue={false}>
                           <Radio value={true}>Yes</Radio>
                           <Radio value={false}>No</Radio>
@@ -958,7 +977,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="Phone Number" name={['lesseeAttributes', `${phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber'}`]}>
+                      <Form.Item label="Phone Number" name={['lesseeAttributes', `${phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber'}`]} rules={[{ required: true, message: 'Phone Number is required!' }]}>
                         <MaskedInput mask="(111) 111-1111" placeholder="Phone Number" className="credit-app-phone-no" onChange={handleFormChange} />
                       </Form.Item>
                       <Radio.Group defaultValue={1}>
@@ -995,15 +1014,33 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="Appartment / Unit" name={['lesseeAttributes', 'homeAddressAttributes', 'street2']}>
-                        <Input placeholder="Appartment / Unit" onChange={handleChange} className="ant-input-comp space-up" />
+                      <Form.Item label="Apartment / Unit" name={['lesseeAttributes', 'homeAddressAttributes', 'street2']}>
+                        <Input placeholder="Apartment / Unit" onChange={handleChange} className="ant-input-comp space-up" />
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="City" name={['lesseeAttributes', 'homeAddressAttributes', 'cityId']} rules={[{ required: true, message: 'City is required!' }]}>
-                        <Select showSearch placeholder="City" {...showHomeCityState} onSelect={handleHomeCityStateChange} onChange={handleCityTarget} className="space-up">
-                          {lesseeHomeCityOptions &&
-                            lesseeHomeCityOptions.map(({ value, label }, index) => {
+                      <Form.Item
+                        label="ZIP Code"
+                        name={['lesseeAttributes', 'homeAddressAttributes', 'zipcode']}
+                        validateStatus={zipHomeValidateStatus}
+                        help={zipHomeErrorMessage}
+                        rules={[{ required: true, message: 'ZIP Code is required!' }]}
+                      >
+                        <MaskedInput
+                          mask="11111"
+                          placeholder="ZIP Code"
+                          onPressEnter={handleLesseeHomeZipcodeBlur}
+                          onBlur={handleLesseeHomeZipcodeBlur}
+                          className="ant-input-comp space-up"
+                          onChange={handleChange}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col {...formLayout.field.col}>
+                      <Form.Item label="State" name={['lesseeAttributes', 'homeAddressAttributes', 'state']} rules={[{ required: true, message: 'State is required!' }]}>
+                        <Select showSearch placeholder="State" {...showHomeState} onSelect={handleHomeStateChange} onChange={handleStateTarget} className="space-up">
+                          {lesseeHomeStateOptions &&
+                            lesseeHomeStateOptions.map(({ value, label }, index) => {
                               return (
                                 <Option key={index} value={`${value}`}>
                                   {label}
@@ -1037,10 +1074,10 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="State" name={['lesseeAttributes', 'homeAddressAttributes', 'state']} rules={[{ required: true, message: 'State is required!' }]}>
-                        <Select showSearch placeholder="State" {...showHomeState} onSelect={handleHomeStateChange} onChange={handleStateTarget} className="space-up">
-                          {lesseeHomeStateOptions &&
-                            lesseeHomeStateOptions.map(({ value, label }, index) => {
+                      <Form.Item label="City" name={['lesseeAttributes', 'homeAddressAttributes', 'cityId']} rules={[{ required: true, message: 'City is required!' }]}>
+                        <Select showSearch placeholder="City" {...showHomeCityState} onSelect={handleHomeCityStateChange} onChange={handleCityTarget} className="space-up">
+                          {lesseeHomeCityOptions &&
+                            lesseeHomeCityOptions.map(({ value, label }, index) => {
                               return (
                                 <Option key={index} value={`${value}`}>
                                   {label}
@@ -1051,28 +1088,15 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item
-                        label="ZIP Code"
-                        name={['lesseeAttributes', 'homeAddressAttributes', 'zipcode']}
-                        validateStatus={zipHomeValidateStatus}
-                        help={zipHomeErrorMessage}
-                        rules={[{ required: true, message: 'ZIP Code is required!' }]}
+                      <Form.Item 
+                      label="Length of Stay at Current Address" 
+                      name={['lesseeAttributes', 'monthYears']}
+                      rules={[{ required: nullMonthYear, message: 'Length of Stay is required!' }]}
                       >
-                        <MaskedInput
-                          mask="11111"
-                          placeholder="ZIP Code"
-                          onPressEnter={handleLesseeHomeZipcodeBlur}
-                          onBlur={handleLesseeHomeZipcodeBlur}
-                          className="ant-input-comp space-up"
-                          onChange={handleChange}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col {...formLayout.field.col}>
-                      <Form.Item label="Length of Stay at Current Address" name={['lesseeAttributes', 'monthYears']}>
                         <Space direction="horizontal">
-                          <RangePicker picker="date" onChange={handleMonthYear} />
-                          <InputNumber placeholder="Length of Stay at Current Address" value={monthYears !== 0 ? monthYears : ''} />
+                        <DatePicker onChange={handleMonthYear} disabledDate={disabledDate}></DatePicker>
+                        <span>to Present</span>
+                        <InputNumber placeholder="Length of Stay at Current Address" onChange={handleManualMonthYear} value={(monthYears)}/>
                         </Space>
                       </Form.Item>
                     </Col>
@@ -1119,12 +1143,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                         label="Street Address (no P.O. Boxes)"
                         name={['lesseeAttributes', 'mailingAddressAttributes', 'street1']}
                         className="street-address"
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Street Address (no P.O. Boxes) is required!',
-                          },
-                        ]}
                       >
                         <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
                       </Form.Item>
@@ -1135,10 +1153,20 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="City" name={['lesseeAttributes', 'mailingAddressAttributes', 'cityId']} rules={[{ required: true, message: 'City is required!' }]}>
-                        <Select showSearch placeholder="City" {...showMailingCityState} onSelect={handleMailingCityStateChange} className="space-up">
-                          {lesseeMailCityOptions &&
-                            lesseeMailCityOptions.map(({ value, label }, index) => {
+                      <Form.Item
+                        label="ZIP Code"
+                        name={['lesseeAttributes', 'mailingAddressAttributes', 'zipcode']}
+                        validateStatus={zipMailValidateStatus}
+                        help={zipMailErrorMessage}
+                      >
+                        <MaskedInput mask="11111" placeholder="ZIP Code" onPressEnter={handleLesseeMailZipcodeBlur} onBlur={handleLesseeMailZipcodeBlur} className="ant-input-comp space-up" />
+                      </Form.Item>
+                    </Col>
+                    <Col {...formLayout.field.col}>
+                      <Form.Item label="State" name={['lesseeAttributes', 'mailingAddressAttributes', 'state']}>
+                        <Select showSearch placeholder="State" {...showMailingState} onSelect={handleMailingStateChange} className="space-up">
+                          {lesseeMailStateOptions &&
+                            lesseeMailStateOptions.map(({ value, label }, index) => {
                               return (
                                 <Option key={index} value={`${value}`}>
                                   {label}
@@ -1163,10 +1191,10 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="State" name={['lesseeAttributes', 'mailingAddressAttributes', 'state']}>
-                        <Select showSearch placeholder="State" {...showMailingState} onSelect={handleMailingStateChange} className="space-up">
-                          {lesseeMailStateOptions &&
-                            lesseeMailStateOptions.map(({ value, label }, index) => {
+                      <Form.Item label="City" name={['lesseeAttributes', 'mailingAddressAttributes', 'cityId']}>
+                        <Select showSearch placeholder="City" {...showMailingCityState} onSelect={handleMailingCityStateChange} className="space-up">
+                          {lesseeMailCityOptions &&
+                            lesseeMailCityOptions.map(({ value, label }, index) => {
                               return (
                                 <Option key={index} value={`${value}`}>
                                   {label}
@@ -1174,17 +1202,6 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                               )
                             })}
                         </Select>
-                      </Form.Item>
-                    </Col>
-                    <Col {...formLayout.field.col}>
-                      <Form.Item
-                        label="ZIP Code"
-                        name={['lesseeAttributes', 'mailingAddressAttributes', 'zipcode']}
-                        validateStatus={zipMailValidateStatus}
-                        help={zipMailErrorMessage}
-                        rules={[{ required: true, message: 'ZIP Code is required!' }]}
-                      >
-                        <MaskedInput mask="11111" placeholder="ZIP Code" onPressEnter={handleLesseeMailZipcodeBlur} onBlur={handleLesseeMailZipcodeBlur} className="ant-input-comp space-up" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1217,12 +1234,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       <Form.Item
                         label="Employer Name"
                         name={['lesseeAttributes', 'employerName']}
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Employer Name is required!',
-                          },
-                        ]}
+                        rules={[{ required: requireEmploymentFields, message: 'Employer Name is required!' }]}
                       >
                         <Input placeholder="Employer Name" className="ant-input-comp space-up" />
                       </Form.Item>
@@ -1231,23 +1243,18 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       <Form.Item
                         label="Phone Number"
                         name={['lesseeAttributes', 'employerPhoneNumber']}
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Phone Number is required!',
-                          },
-                        ]}
+                        rules={[{ required: requireEmploymentFields, message: 'Phone Number is required!' }]}
                       >
                         <MaskedInput mask="(111) 111-1111" placeholder="Phone Number" className="credit-app-phone-no space-up" onChange={handleFormChange} />
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="City" name={['lesseeAttributes', 'employmentAddressAttributes', 'city']} rules={[{ required: true, message: 'City is required!' }]}>
+                      <Form.Item label="City" name={['lesseeAttributes', 'employmentAddressAttributes', 'city']} rules={[{ required: requireEmploymentFields, message: 'City is required!' }]}>
                         <Input placeholder="City" className="ant-input-comp space-up" />
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="State" name={['lesseeAttributes', 'employmentAddressAttributes', 'state']} rules={[{ required: true, message: 'State is required!' }]}>
+                      <Form.Item label="State" name={['lesseeAttributes', 'employmentAddressAttributes', 'state']} rules={[{ required: requireEmploymentFields, message: 'State is required!' }]}>
                         <Select showSearch placeholder="State" className="space-up">
                           {usStates &&
                             usStates.map(({ name, abbreviation }, index) => {
@@ -1282,7 +1289,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Col>
                     <Col {...formLayout.field.col}>
-                      <Form.Item label="Job Title" name={['lesseeAttributes', 'jobTitle']} rules={[{ required: true, message: 'Job Tile is required!' }]}>
+                      <Form.Item label="Job Title" name={['lesseeAttributes', 'jobTitle']} rules={[{ required: requireEmploymentFields, message: 'Job Tile is required!' }]}>
                         <Input placeholder="Job Title" className="ant-input-comp space-up" />
                       </Form.Item>
                     </Col>
@@ -1292,12 +1299,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                           <Form.Item
                             label="Years Employed"
                             name={['lesseeAttributes', 'timeAtEmployerYears']}
-                            rules={[
-                              {
-                                required: true,
-                                message: 'Years Employed is required!',
-                              },
-                            ]}
+                            rules={[{ required: requireEmploymentFields, message: 'Years Employed is required!' }]}
                           >
                             <InputNumber className="space-up" placeholder="Years Employed" />
                           </Form.Item>
@@ -1313,12 +1315,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                       <Form.Item
                         label="Gross Monthly Income"
                         name={['lesseeAttributes', 'grossMonthlyIncome']}
-                        rules={[
-                          {
-                            required: true,
-                            message: 'Gross Monthly Income is required!',
-                          },
-                        ]}
+                        rules={[{ required: requireEmploymentFields, message: 'Gross Monthly Income is required!' }]}
                       >
                         <InputNumber className="space-up" placeholder="Gross Monthly Income" />
                       </Form.Item>
@@ -1331,7 +1328,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                     Save
                   </Button>
                   <Button className="button" type="primary">
-                    <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}> prev </Link>
+                    <Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/bike`}> prev </Link>
                   </Button>
                   <Button className="button" type="primary" disabled={btnAttribute}>
                     <Link to={`/applications/${leaseApplicationId}/co-applicant`}> Next </Link>

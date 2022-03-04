@@ -51,17 +51,15 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
             <MainHeader />
             <Layout>
                 <BankSider activeKey="banking-information"/>
-                <Layout>
-                    <div className="indication">
-                        <MainBreadcrumb 
-                                items={[
-                                    { text: " Dealers", link_type: "linkto", link: "#" },
-                                    { text: " Lease Application", link_type: "linkto", link: "#" },
-                                    { text:  `${appIdentifier}`, link_type: "linkto", link: "#" },
-                                    { text: " Bank Information", link_type: "linkto", link: "#" },
-                                ]}
-                                />
-                    </div>
+                <Layout id="content-area-layout">
+                    <MainBreadcrumb 
+                        items={[
+                            { text: "Home", link_type: "linkto", link: "/home" },
+                            { text: "Lease Applications", link_type: "linkto", link: "/home" },
+                            { text:  `${appIdentifier ? appIdentifier : leaseApplicationId}`, link_type: "linkto", link: "#" },
+                            { text: "Bank Information", link_type: "linkto", link: "#" },
+                            ]}
+                        />
                     <Content id='main-content'>
                     <div className="bank-info-container">
                         <Card type="inner" title="Lessee Banking Information">
@@ -77,35 +75,39 @@ const BankingInformation: React.FC<Props> = ({leaseApplicationId, data}) => {
                             >
                                 <Row gutter={16}>
                                     <Col xs={24} sm={12} md={6}>
-                                        <Form.Item className="largeInput" label="Bank Name" name="paymentBankName" rules={[{
+                                        <Form.Item label="Bank Name" name="paymentBankName" rules={[{
                                           required : true,
                                           message : "This field is required"
                                         }]} >
-                                            <Input placeholder="your bank name" /> 
+                                            <Input /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item className="largeInput" label="ABA Routing Number" name="paymentAbaRoutingNumber" rules={[{
+                                        <Form.Item label="ABA Routing Number" name="paymentAbaRoutingNumber" rules={[{
                                           required : true,
                                           message : "This field is required"
                                         }]} >
-                                            <Input  placeholder="your routing number" /> 
+                                            <Input /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item className="largeInput" label="Account Number" name="paymentAccountNumber"
+                                        <Form.Item label="Account Number" name="paymentAccountNumber"
                                         rules={[{
                                             required : true,
                                             message : "This field is required"
                                           }]} >
-                                            <Input placeholder="your account number" /> 
+                                            <Input /> 
                                         </Form.Item>
                                     </Col> 
                                 
                                     <Col xs={24} sm={12} md={6}> 
-                                        <Form.Item className="largeInput" label="Checking/Savings Account" name="paymentAccountType">
+                                        <Form.Item label="Checking/Savings Account" name="paymentAccountType"
+                                        rules={[{
+                                            required : true,
+                                            message : "This field is required"
+                                          }]}> 
                                             <Select>
                                               <Option  value="checking">Checking</Option>
                                               <Option value="savings">Savings</Option>

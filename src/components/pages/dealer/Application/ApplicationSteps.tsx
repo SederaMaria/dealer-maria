@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Col, Row, Steps, Layout, notification, Typography } from 'antd'
 import Icon from '@ant-design/icons'
 import { SolutionOutlined, UserOutlined, TeamOutlined, PoweroffOutlined, InfoCircleOutlined } from '@ant-design/icons'
@@ -48,13 +49,52 @@ export const ApplicationSteps: React.FC<Props> = ({ stepType, leaseApplicationId
     history.push(`${url}/${page}`)
   }
 
-  const handleEmptyForm = () => {
-    notification.open({
-      message: <Text type="warning">Please Fill Out The Form And Save</Text>,
-      duration: 3,
-      icon: <InfoCircleOutlined style={{ color: `#faad14` }} />,
-      placement: 'topRight',
-    })
+  const location = useLocation()
+
+  const handleEmptyForm = (e: any) => {
+    const rawPathName = location.pathname
+    const pathName = rawPathName.replace(/^.*[\\\/]/, '')
+    const targetName = e.target.innerText
+
+    switch (pathName) {
+      case 'applicant':
+        if (targetName == 'Bike') {
+          setStepRedirect(calculatorUrl, `bike`)
+        } else {
+          notification.open({
+            message: <Text type="warning">Please Fill Out The Form And Save</Text>,
+            duration: 3,
+            icon: <InfoCircleOutlined style={{ color: `#faad14` }} />,
+            placement: 'topRight',
+          })
+        }
+        break
+      case 'co-applicant':
+        if (targetName == 'Applicant') {
+          setStepRedirect(applicantUrl, `applicant`)
+        } else if (targetName == 'Bike') {
+          setStepRedirect(calculatorUrl, `bike`)
+        }
+        break
+
+      case 'summary':
+        if (targetName == 'Co-Applicant') {
+          setStepRedirect(applicantUrl, `co-applicant`)
+        } else if (targetName == 'Applicant') {
+          setStepRedirect(applicantUrl, `applicant`)
+        } else if (targetName == 'Bike') {
+          setStepRedirect(calculatorUrl, `bike`)
+        }
+        break
+
+      default:
+        notification.open({
+          message: <Text type="warning">Please Fill Out The Form And Save</Text>,
+          duration: 3,
+          icon: <InfoCircleOutlined style={{ color: `#faad14` }} />,
+          placement: 'topRight',
+        })
+    }
   }
 
   return (
@@ -90,7 +130,7 @@ export const ApplicationSteps: React.FC<Props> = ({ stepType, leaseApplicationId
               icon={<TeamOutlined />}
             />
             <Step
-              onClick={handleSummaryStep}
+              onClick={attribute ? handleEmptyForm : handleSummaryStep}
               className={`application-steps application-steps-wait ${stepType === 'summary' && 'application-steps-process'}`}
               status="wait"
               title="Summary"

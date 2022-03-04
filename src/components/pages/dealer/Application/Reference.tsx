@@ -112,10 +112,10 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
                 <Layout id='content-area-layout'>
                     <MainBreadcrumb items={
                         [
-                            { text: "Dealers", link_type: "linkto", link: "/" },
-                            { text: "Lease Application", link_type: "linkto", link: "/" },
+                            { text: "Home", link_type: "linkto", link: "/" },
+                            { text: "Lease Applications", link_type: "linkto", link: "/" },
                             // { text: `${appNumber || 'N/A'}`, link_type: "ahref", link: void(0) },
-                            { text: `${leaseApplicationId}`, link_type: "ahref", link: `/applications/${leaseApplicationId}` },
+                            { text: `${leaseApplicationId}`, link_type: "ahref", link: `#` },
                             // { text: "References", link_type: "linkto", link: `/applications/${appNumber }/references` }
                             { text: "References", link_type: "linkto", link: `/applications/${leaseApplicationId}/references` }
                         ]
@@ -130,34 +130,52 @@ export const Reference: React.FC<Props> = ({data, leaseApplicationId}: Props) =>
                                 >
                                 <Row gutter={14}>
                                 <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="First Name" name="firstName" className="label">
-                                            <Input placeholder="First Name" />
+                                    <Form.Item 
+                                        label="First Name" 
+                                        name="firstName" 
+                                        rules={[{ required: true, message: 'First Name is required!' }]}
+                                    >
+                                        <Input/>
+                                    </Form.Item>
+                                    </Col>
+                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
+                                        <Form.Item 
+                                            label="Last Name" 
+                                            name="lastName" 
+                                            rules={[{ required: true, message: 'Last Name is required!' }]}
+                                        >
+                                            <Input/>
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Last Name" name="lastName" className="label">
-                                            <Input placeholder="Last Name" />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="Phone Number" name="phoneNumber" className="label">
+                                        <Form.Item 
+                                            label="Phone Number" 
+                                            name="phoneNumber" 
+                                            rules={[{ required: true, message: 'Phone Number is required!' }]}
+                                        >
                                             <MaskedInput
                                                 mask="(111) 111-1111"
-                                                placeholder="Phone Number"
                                             />
                                         </Form.Item>
                                     </Col>
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="City" name="city" className="label">
-                                            <Input placeholder="City" />
+                                        <Form.Item 
+                                            label="City" 
+                                            name="city" 
+                                            rules={[{ required: true, message: 'City is required!' }]}
+                                        >
+                                            <Input/>
                                         </Form.Item>
                                     </Col>
 
                                     <Col className= "column-width" xs={24} sm={16} md={4}> 
-                                        <Form.Item label="State" name="state" className="label">
+                                        <Form.Item 
+                                            label="State" 
+                                            name="state" 
+                                            rules={[{ required: true, message: 'State is required!' }]}
+                                        >
                                             <MaskedInput 
-                                                mask ="AA"
-                                                placeholder="State"                             
+                                                mask ="AA"                           
                                             />
                                         </Form.Item>
                                     </Col>
