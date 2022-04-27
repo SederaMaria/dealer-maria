@@ -6,6 +6,7 @@ import { Row, Col, Card, Button, Form, Input, Select, Typography, Layout, InputN
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ApplicationSteps from './ApplicationSteps';
+import CalculatorHead from '../../../layouts/CalculatorHead';
 
 import '../styles/Calculator.css'
 
@@ -374,12 +375,13 @@ export const Calculator: React.FC<Props> = ({data}: Props) => {
 
   return (
     <>
-      <ApplicationSteps
+      {/* <ApplicationSteps
         stepType={'calculator'}
         leaseApplicationId={`${leaseApplicationId}`}
         leaseCalculatorId={`${leaseCalculatorId}`}
         save={null}
-      />
+      /> */}
+      <CalculatorHead />
       <div style={{ margin: '10px 50px' }}>
         <div style={{ textAlign: 'center' }}>
           <Title level={2}> Calculator </Title>

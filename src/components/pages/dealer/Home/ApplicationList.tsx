@@ -44,7 +44,9 @@ interface ActionPermission {
   canAddCoapplicant: boolean;
   canChangeBikes: boolean;
   canOpenCreditApplication: boolean;
+  canEditCreditApplication: boolean;
   canOpenPaymentCalculator: boolean;
+  canEditPaymentCalculator: boolean;
   canRemoveCoapplicant: boolean;
   canRequestLeaseDocuments: boolean;
   canSubmitBankInfo: boolean;
@@ -85,12 +87,12 @@ function ApplicationList() {
   const menu = (actionPermission: ActionPermission, record: Applications) => {
     let paymentCalcNode;
 
-    if (actionPermission.canOpenPaymentCalculator) {
+    if (actionPermission.canEditPaymentCalculator) {
       paymentCalcNode = (
         <Link
           to={`/applications/${record.id}/calculators/:calculatorID/calculator`}
         >
-          Open Payment Calculator
+          Edit Payment Calculator
         </Link>
       );
     } else if (actionPermission.canChangeBikes) {
@@ -101,21 +103,35 @@ function ApplicationList() {
           Open Payment Calculator
         </Link>
       );
-    } else {
-      paymentCalcNode = <a href='#'>View Payment Calculator</a>;
+    } else if(actionPermission.canOpenPaymentCalculator) {
+      paymentCalcNode = paymentCalcNode = (
+        <Link
+          to={`/applications/${record.id}/calculators/:calculatorID/calculator`}
+        >
+          View Payment Calculator
+        </Link>
+      );
     }
-
     return (
       <Menu>
         <Menu.Item className='hovering'>{paymentCalcNode}</Menu.Item>
         <Menu.Item className='hovering'>
-          {actionPermission.canOpenCreditApplication ? (
-            <a href='#'>Open Credit Application</a>
-          ) : (
-            <Link to={`/applications/${record.id}/applicant`}>
-              View Credit Application
-            </Link>
-          )}
+        {actionPermission.canEditCreditApplication && (
+          <Link
+           to={`/applications/${record.id}/calculators/:leaseApplicationID/bike`}
+          >
+           Edit Credit Application
+          </Link>
+        )} 
+        </Menu.Item>
+        <Menu.Item className='hovering'>
+        {actionPermission.canOpenCreditApplication && (
+          <Link
+           to={`/applications/${record.id}/summary`}
+          >
+            View Credit Application
+          </Link>
+        )} 
         </Menu.Item>
         {actionPermission.canSwapApplicants && (
           <Menu.Item className='hovering'>
@@ -138,7 +154,7 @@ function ApplicationList() {
         )}
         {actionPermission.canChangeBikes && (
           <>
-            <Menu.Item className='hovering'>
+            {/* <Menu.Item className='hovering'>
               <a href='#'>Bike Change</a>
             </Menu.Item>
 
@@ -147,14 +163,14 @@ function ApplicationList() {
             </Menu.Item>
             <Menu.Item className='hovering'>
               <a href='#'>Change Mileage</a>
-            </Menu.Item>
+            </Menu.Item> */}
           </>
         )}
-        {actionPermission.canRequestLeaseDocuments && (
+        {/* {actionPermission.canRequestLeaseDocuments && (
           <Menu.Item className='hovering'>
             <a href='#'>Request Lease Documents</a>
           </Menu.Item>
-        )}
+        )} */}
         {actionPermission.canRemoveCoapplicant && (
           <Menu.Item className='hovering'>
             <a href='#'>Remove Co-applicant</a>
