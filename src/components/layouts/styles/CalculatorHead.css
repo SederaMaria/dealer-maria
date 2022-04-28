@@ -1,0 +1,12 @@
+.wrapper {
+  display:flex;
+  justify-content:space-between;
+}
+
+.logo-img {
+  width: 60%;
+}
+
+.return-to-home {
+  margin-right: 15%;
+}
