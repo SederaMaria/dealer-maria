@@ -1,0 +1,28 @@
+.reference-container {
+    width: 96%;
+    margin: 1% auto;
+    position: relative;
+  }
+  
+.input-container {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+  
+.create-reference {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.input{
+    flex: 0 1 250px;
+}
+
+.column-width{
+    margin-right: 3%;
+}
+
+.label{
+    font-weight: 500;
+}

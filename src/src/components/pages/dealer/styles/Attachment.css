@@ -1,0 +1,14 @@
+.card-form .card-elements {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.card-form .dragger {
+  flex: 0 1 450px;
+}
+
+.card-list {
+  margin-top: 1em;
+}
