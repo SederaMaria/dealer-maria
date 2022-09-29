@@ -54,3 +54,54 @@ html,body{
 .divider {
   color: #4e0033;
 }
+
+.AccordionSum{
+  position: relative;
+}
+
+.chip{
+  color: #fff;
+  background-color: #e82512;
+  border: solid 2px #e82512;}
+
+.tabContainer{
+  box-shadow: solid 2px #20262c;
+  margin-top: 2;
+}
+
+
+.ant-collapse > .ant-collapse-item{
+  text-align: left;
+  background-color: #20262c;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header{
+  font-size : medium;
+  font-weight: 500;
+  color: #fff;
+  padding: 10px;
+}
+
+.panel-container{
+  padding: 30px;
+}
+
+.content{
+  margin-bottom: 3%;
+}
+
+.MuiTableCell-root{
+  border: solid 1px #aeb2b2;
+  width: 300px;
+  align-items: center;
+}
+
+.tableHead{
+  color: #e82512;
+  margin-bottom: 2%;
+}
+
+.MuiButton-root{
+  background-color: #e82512;
+  color:#fff;
+}
