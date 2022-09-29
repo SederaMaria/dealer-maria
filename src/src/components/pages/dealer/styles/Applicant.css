@@ -1,0 +1,114 @@
+.ant-picker,
+.ant-input-number {
+  width: 100%;
+}
+
+.credit-app-phone-no {
+  border: 1px solid #d9d9d9 !important;
+}
+
+.ant-input-comp {
+  border: 1px solid #d9d9d9 !important;
+}
+
+.cca-center-text {
+  text-align: center;
+}
+
+.cca-center-justify {
+  text-align: justify;
+}
+
+.disclosure-paragraph {
+  color: #707070;
+}
+
+.content-1 {
+  padding: 24px;
+  min-height: 280;
+  background: white;
+  margin-bottom: 50px;
+}
+
+.content-2 {
+  padding: 10px 24px 24px 24px;
+  margin: 0;
+  min-height: 280;
+  /* background: white;
+  margin-bottom: 50px; */
+}
+
+.title-container {
+  margin: 20px 100px;
+}
+
+.subtitle-container {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.card > .ant-card-head {
+  background: #d9d9d9;
+}
+
+.space-up {
+  margin-top: 5px;
+}
+
+.space-down {
+  margin-top: 0;
+}
+
+.coApplicant-last-name {
+  margin-top: 5px;
+ }
+
+.button-container {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.button {
+  margin-right: 10px;
+}
+
+.green-border {
+  border: 2px solid green;
+  margin-right: 10px;
+}
+
+.collapse-container {
+  padding: 15px;
+}
+
+.ant-notification-notice.ant-notification-notice-closable {
+  background-color: rgb(37, 36, 35);
+  color: white;
+  font-size: 1.5em;
+}
+
+.ant-notification-notice-message {
+  color: orange;
+}
+
+@media screen and (min-width: 768px) and (max-width: 904px) {
+  .dob {
+    margin-top: -3px;
+  }
+
+  label[for="lesseeAttributes_dateOfBirth"],
+  label[for="colesseeAttributes_dateOfBirth"] {
+    padding-bottom: 5px;
+    font-size: 13px;
+  }
+
+  label[for="colesseeAttributes_relationshipToLesseeId"],
+  label[for="lesseeAttributes_ssn"],
+  label[for="colesseeAttributes_ssn"] {
+    font-size: 12px;
+  }
+
+  .years-current-address, .monthly-mortgage{
+    margin-top: 11px;
+  }
+}
