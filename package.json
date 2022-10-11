@@ -3,6 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
+    "@ant-design/icons": "4.0.0",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@jridgewell/gen-mapping": "^0.3.2",
+    "@material-ui/core": "^4.12.4",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.7",
+    "@mui/x-date-pickers": "^5.0.3",
+=======
     "@ant-design/charts": "^1.4.2",
     "@ant-design/icons": "^4.7.0",
     "@emotion/react": "^11.10.4",
@@ -13,6 +23,7 @@
     "@mui/x-data-grid": "^5.17.4",
     "@mui/x-data-grid-pro": "^5.17.4",
     "@mui/x-license-pro": "^5.17.0",
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -34,6 +45,7 @@
     "react-dom": "^17.0.2",
     "react-google-recaptcha": "^2.1.0",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.36.1",
     "react-idle-timer": "^4.6.4",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
@@ -69,6 +81,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/helper-environment-visitor": "^7.18.9",
     "@testing-library/dom": "^8.11.1",
     "@types/enzyme": "^3.10.9",
     "@types/react": "^17.0.27",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col, Card, Button, Form, Input, Radio, InputNumber, Select, Typography, Layout, message, Checkbox, DatePicker, Space, Collapse, notification } from 'antd'
+import { Row, Col, Form,Input,Collapse, Radio, InputNumber, Select, /*Typography, */Layout, message, Checkbox, DatePicker, Space } from 'antd'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { logger, network } from '../../../../../utils'
@@ -8,11 +8,24 @@ import ApplicationSteps from '../ApplicationSteps'
 import SsnInput from './SsnInput'
 import DobInput from './DobInput'
 import { AutoCompleteAddress } from './AutoCompleteAddress'
+import { useHistory } from "react-router-dom";
 import '../../styles/Applicant.css'
+
+//Material UI
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import {TextField, Typography, Paper, Grid,  Button } from '@mui/material'
+import { ExpandMore} from '@mui/icons-material'
+
 
 const { Option } = Select
 const { RangePicker } = DatePicker
-const { Title } = Typography
+//const { Title } = Typography
 const { Content } = Layout
 const { Panel } = Collapse
 const dateFormat = 'MM/DD/YYYY'
@@ -24,6 +37,9 @@ const layout = {
     span: 24,
   },
 }
+
+
+
 
 const formLayouts = {
   horizontal: {
@@ -262,11 +278,17 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
     setDisableSubmitBtn(false)
   }
 
+  const history = useHistory();
+
   const handleSubmit = async (values: any) => {
     values = { ...values }
+    console.log("values", values)
     setDisableSubmitBtn(true)
     submitApplication(values)
+    let path=`/applications/${leaseApplicationId}/summary`
+    history.push(path);
   }
+
 
   const handleRelationshiptoApplicant = (value:string) => {
     const relationshipArray = ['1', '2', '3', '4', '5', '6']
@@ -932,12 +954,14 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
     city: mailingAddress.city,
   })
 
+  console.log("data?.colessee?.employmentStatus", data?.colessee?.employmentStatus)
+
   return data ? (
     <>
       <ApplicationSteps stepType={`co-applicant`} leaseApplicationId={`${leaseApplicationId}`} leaseCalculatorId={`${leaseCalculatorId}`} save={null} attribute={btnAttribute} />
       <div className="title-container">
         <div className="subtitle-container">
-          <Title level={2}> Co-Applicant </Title>
+          <Typography variant="h3">Co-Applicant</Typography>
           <p> Enter information about yourself to apply for a lease. </p>
         </div>
         <Form
@@ -993,429 +1017,485 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
             },
           }}
         >
-          <Content className="content-1">
+          {/*<Content className="content-1">*/}
+          <Paper
+            sx={{
+              p: 2,
+              margin: 2,
+              marginBottom: 5,
+              padding: 5,
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+            }}
+          >
             <Row gutter={[16, 40]}>
               <Col span={24} className="cca-center-text">
-                <Title level={2}> About You </Title>
-                <br />
-              </Col>
-            </Row>
-              <div className="collapse-container">
-                <Collapse defaultActiveKey={['1', '2', '3']}>
-                  <Panel header="Personal" key="1">
-                    <Col {...formLayout.container.formCol}>
-                      <Row gutter={[16, 0]}>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item
-                            label="Relationship To Applicant"
-                            name={['colesseeAttributes', 'relationshipToLesseeId']}
-                          >
-                            <Select showSearch placeholder="Relationship To Applicant" onChange={handleRelationshiptoApplicant}>
-                              {relationshipToLesseeOptions &&
-                                relationshipToLesseeOptions.map(({ value, label }, index) => {
-                                  return (
-                                    <Option key={index} value={`${value}`}>
-                                      {label}
-                                    </Option>
-                                  )
-                                })}
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item
-                            label="First Name"
-                            name={['colesseeAttributes', 'firstName']}
-                            rules={[{ required: requireCoApplicantFields, message: 'First Name is required!' }]}
-                          >
-                            <Input placeholder="First Name" className="ant-input-comp" />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="Middle Name" name={['colesseeAttributes', 'middleName']}>
-                            <Input placeholder="Middle Name" className="ant-input-comp" />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="Last Name" name={['colesseeAttributes', 'lastName']} rules={[{ required: requireCoApplicantFields, message: 'Last Name is required!' }]}>
-                            <Input placeholder="Last Name" className="ant-input-comp coApplicant-last-name" />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col} className="space-up dob">
-                          <DobInput dateFormat={dateFormat} form={lesseeForm} requireCoApplicantFields={requireCoApplicantFields}/>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="Social Security Number" name={['colesseeAttributes', 'ssn']} className="space-down" rules={[{ required: requireCoApplicantFields, message: 'Social Security Number is required!' }]}>
-                            <Input type="hidden" />
-                          </Form.Item>
-                          <Form.Item>
-                            <SsnInput defaultValue={(data?.colessee && data?.colessee?.ssn?.replace(/-/g, '')) || ''} form={lesseeForm} lesseeType="colessee" />
-                          </Form.Item>
-                        </Col>
-
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="Phone Number" name={['colesseeAttributes', `${phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber'}`]} rules={[{ required: requireCoApplicantFields, message: 'Phone Number is required!' }]}>
-                            <MaskedInput mask="(111) 111-1111" placeholder="Phone Number" className="credit-app-phone-no" onChange={handleFormChange} />
-                          </Form.Item>
-                          <Radio.Group defaultValue={1}>
-                            {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
-                            <Radio value={1}>Mobile</Radio>
-                            <Radio value={2}>Home</Radio>
-                          </Radio.Group>
-                        </Col>
-
-                        <Col {...formLayout.field.col}>
-                          <Form.Item
-                            label="Will this applicant also be riding the motorcycle?"
-                            name={['colesseeAttributes', 'isDriving']}
-                            rules={[{ required: requireCoApplicantFields, message: 'Please pick option if co-applicant is driving or not.' }]}
-                          >
-                            <Radio.Group>
-                              <Radio value={1}>Yes</Radio>
-                              <Radio value={0}>No</Radio>
-                            </Radio.Group>
-                          </Form.Item>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Panel>
-
-                  <Panel header="Home Address" key="2">
-                    <Col {...formLayout.container.formCol}>
-                        <Row gutter={[16, 0]}>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item label="Search Address">
-                              <AutoCompleteAddress beforePlacesGetDetails={autoCompleteLesseeHomeBeforePlacesGetDetails} onPlacesGetDetailsResult={autoCompleteLesseeHomeOnPlacesGetDetailsResult} />
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item
-                              label="Street Address (no P.O. Boxes)"
-                              name={['colesseeAttributes', 'homeAddressAttributes', 'street1']}
-                              className="street-address"
-                              rules={[{ required: requireCoApplicantFields, message: 'Street Address (no P.O. Boxes) is required!' }]}
-                            >
-                              <Input placeholder="Street Address (no P.O. Boxes)" onChange={handleChange} className="ant-input-comp space-up" />
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item label="Apartment / Unit" name={['colesseeAttributes', 'homeAddressAttributes', 'street2']}>
-                              <Input placeholder="Apartment / Unit" onChange={handleChange} className="ant-input-comp space-up" />
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item
-                              label="ZIP Code"
-                              name={['colesseeAttributes', 'homeAddressAttributes', 'zipcode']}
-                              validateStatus={zipHomeValidateStatus}
-                              help={zipHomeErrorMessage}
-                              rules={[{ required: requireCoApplicantFields, message: 'ZIP Code is required!' }]}
-                            >
-                              <MaskedInput
-                                mask="11111"
-                                placeholder="ZIP Code"
-                                onPressEnter={handleLesseeHomeZipcodeBlur}
-                                onBlur={handleLesseeHomeZipcodeBlur}
-                                className="ant-input-comp space-up"
-                                onChange={handleChange}
-                              />
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item label="State" name={['colesseeAttributes', 'homeAddressAttributes', 'state']} rules={[{ required: requireCoApplicantFields, message: 'State is required!' }]}>
-                              <Select showSearch placeholder="State" {...showHomeState} onSelect={handleHomeStateChange} onChange={handleStateTarget} className="space-up">
-                                {lesseeHomeStateOptions &&
-                                  lesseeHomeStateOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-                              </Select>
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item
-                              label="County/Parish"
-                              name={['colesseeAttributes', 'homeAddressAttributes', 'county']}
-                              rules={[{ required: requireCoApplicantFields, message: 'County/Parish is required!' }]}
-                            >
-                              <Select showSearch placeholder="County/Parish" {...showHomeCountyState} onSelect={handleHomeCountyStateChange} onChange={handleCountyTarget} className="space-up">
-                                {lesseeHomeCountyOptions &&
-                                  lesseeHomeCountyOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-                              </Select>
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item label="City" name={['colesseeAttributes', 'homeAddressAttributes', 'cityId']} rules={[{ required: requireCoApplicantFields, message: 'City is required!' }]}>
-                              <Select showSearch placeholder="City" {...showHomeCityState} onSelect={handleHomeCityStateChange} onChange={handleCityTarget} className="space-up">
-                                {lesseeHomeCityOptions &&
-                                  lesseeHomeCityOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-                              </Select>
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col span={24}>
-                            <Form.Item label="Length of Stay at Current Address" name={['colesseeAttributes', 'monthYears']} rules={[{ required: requireCoApplicantFields && nullMonthYear, message: 'Length of Stay required!' }]}>
-                              <Space direction="horizontal">
-                                <DatePicker onChange={handleMonthYear} disabledDate={disabledDate}> </DatePicker>
-                                <span>to Present</span>
-                                <InputNumber placeholder="Length of Stay at Current Address" onChange={handleManualMonthYear} value={(monthYears)}/>
-                              </Space>
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col {...formLayout.field.col}>
-                            <Form.Item
-                              label="Monthly Mortgage or Rent"
-                              name={['colesseeAttributes', 'monthlyMortgage']}
-                              rules={[{ required: requireCoApplicantFields, message: 'Monthly Mortgage or Rent is required!' }]}
-                            >
-                              <InputNumber className="space-up monthly-mortgage" placeholder="Monthly Mortgage or Rent" />
-                            </Form.Item>
-                            <Form.Item name={['colesseeAttributes', 'homeOwnership']} rules={[{ required: requireCoApplicantFields, message: 'Ownership is required!' }]}>
-                              <Radio.Group className="space-up">
-                                <Radio value={1}>Own</Radio>
-                                <Radio value={2}>Rent</Radio>
-                              </Radio.Group>
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                    </Col>
-                  </Panel>
-
-                  <Panel header="Mailing Address" key="3">
-                    <Col {...formLayout.container.formCol}>
-                      <Row gutter={[16, 0]}>
-                        <Col {...formLayout.field.col}>
-                          <Checkbox style={{ fontSize: `13px`, marginTop: `5px` }} onChange={fillMailingAddress}>
-                            Is Home Address Same as Mailing Address?
-                          </Checkbox>
-                        </Col>
-
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="Search Address">
-                            <AutoCompleteAddress beforePlacesGetDetails={autoCompleteLesseeMailingBeforePlacesGetDetails} onPlacesGetDetailsResult={autoCompleteLesseeMailingOnPlacesGetDetailsResult} />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item
-                            label="Street Address (no P.O. Boxes)"
-                            name={['colesseeAttributes', 'mailingAddressAttributes', 'street1']}
-                            className="street-address"
-                          >
-                            <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="Apartment / Unit" name={['colesseeAttributes', 'mailingAddressAttributes', 'street2']}>
-                            <Input placeholder="Apartment / Unit" className="ant-input-comp space-up" />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item
-                            label="ZIP Code"
-                            name={['colesseeAttributes', 'mailingAddressAttributes', 'zipcode']}
-                            validateStatus={zipMailValidateStatus}
-                            help={zipMailErrorMessage}
-                          >
-                            <MaskedInput mask="11111" placeholder="ZIP Code" onPressEnter={handleLesseeMailZipcodeBlur} onBlur={handleLesseeMailZipcodeBlur} className="ant-input-comp space-up" />
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="State" name={['colesseeAttributes', 'mailingAddressAttributes', 'state']}>
-                            <Select showSearch placeholder="State" {...showMailingState} onSelect={handleMailingStateChange} className="space-up">
-                              {lesseeMailStateOptions &&
-                                lesseeMailStateOptions.map(({ value, label }, index) => {
-                                  return (
-                                    <Option key={index} value={`${value}`}>
-                                      {label}
-                                    </Option>
-                                  )
-                                })}
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="County/Parish" name={['colesseeAttributes', 'mailingAddressAttributes', 'county']}>
-                            <Select showSearch placeholder="County/Parish" {...showMailingCountyState} onSelect={handleMailingCountyStateChange} className="space-up">
-                              {lesseeMailCountyOptions &&
-                                lesseeMailCountyOptions.map(({ value, label }, index) => {
-                                  return (
-                                    <Option key={index} value={`${value}`}>
-                                      {label}
-                                    </Option>
-                                  )
-                                })}
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                        <Col {...formLayout.field.col}>
-                          <Form.Item label="City" name={['colesseeAttributes', 'mailingAddressAttributes', 'cityId']}>
-                            <Select showSearch placeholder="City" {...showMailingCityState} onSelect={handleMailingCityStateChange} className="space-up">
-                              {lesseeMailCityOptions &&
-                                lesseeMailCityOptions.map(({ value, label }, index) => {
-                                  return (
-                                    <Option key={index} value={`${value}`}>
-                                      {label}
-                                    </Option>
-                                  )
-                                })}
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                      </Row>
-                    </Col>
-                  </Panel>
-                </Collapse>
-            </div>
-          </Content>
-
-          <Content className="content-1">
-            <Row gutter={[16, 16]}>
-              <Col span={24} className="cca-center-text">
-                <Title level={2}> About Your Work </Title>
-                <br />
+                <Typography variant='h3'>About you</Typography>
               </Col>
             </Row>
 
             <div className="collapse-container">
-              <Collapse defaultActiveKey={['1', '2']}>
-                <Col {...formLayout.container.placeholderCol}></Col>
-                <Panel header="Employer" key="1">
-                  <Col {...formLayout.container.formCol}>
-                    <Row gutter={[16, 0]}>
-                      {data?.colessee?.employmentAddress && (
-                        <Col {...formLayout.field.col}>
-                          <Form.Item style={{ display: 'none' }} name={['colesseeAttributes', 'employmentAddressAttributes', 'id']}>
-                            <Input className="space-up" />
-                          </Form.Item>
-                        </Col>
-                      )}
-                      <Col {...formLayout.field.col}>
-                        <Form.Item
-                          label="Employer Name"
-                          name={['colesseeAttributes', 'employerName']}
-                          rules={[{ required: requireEmploymentFields, message: 'Employer Name is required!' }]}
-                        >
-                          <Input placeholder="Employer Name" className="ant-input-comp space-up" />
-                        </Form.Item>
-                      </Col>
-                      <Col {...formLayout.field.col}>
-                        <Form.Item
-                          label="Phone Number"
-                          name={['colesseeAttributes', 'employerPhoneNumber']}
-                          rules={[{ required: requireEmploymentFields, message: 'Phone Number is required!' }]}
-                        >
-                          <MaskedInput mask="(111) 111-1111" placeholder="Phone Number" className="credit-app-phone-no space-up" onChange={handleFormChange} />
-                        </Form.Item>
-                      </Col>
-                      <Col {...formLayout.field.col}>
-                        <Form.Item label="City" name={['colesseeAttributes', 'employmentAddressAttributes', 'city']} rules={[{ required: requireEmploymentFields, message: 'City is required!' }]}>
-                          <Input placeholder="City" className="ant-input-comp space-up" />
-                        </Form.Item>
-                      </Col>
-                      <Col {...formLayout.field.col}>
-                        <Form.Item label="State" name={['colesseeAttributes', 'employmentAddressAttributes', 'state']} rules={[{ required: requireEmploymentFields, message: 'State is required!' }]}>
-                        <Select
-                            showSearch
-                            placeholder="State"
-                            className="space-up"
-                        >
-                            {
-                                usStates && usStates.map(({name, abbreviation}, index) => {
-                                    return <Option key={index} value={`${name}`}>{abbreviation}</Option>
-                                })
-                            }
+            <Collapse defaultActiveKey={['1']}>
+                  <Panel header="Personal" key="1">
+                  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="flex-start" alignItems="flex-end">
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="Relationship To Applicant"
+                        name={['colesseeAttributes', 'relationshipToLesseeId']}
+                      >
+                        <Select showSearch placeholder="Relationship To Applicant" onChange={handleRelationshiptoApplicant}>
+                          {relationshipToLesseeOptions &&
+                            relationshipToLesseeOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
                         </Select>
+                      </Form.Item>
+                    </Grid>
+
+                    <Grid item xs={2} sm={4} md={4} >
+                      <Form.Item
+                        name={['colesseeAttributes', 'firstName']}
+                      >
+                        <TextField
+                            label="First Name"
+                            variant="standard"
+                            required={requireCoApplicantFields}
+                            fullWidth
+                            size="small"
+                            />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item name={['colesseeAttributes', 'middleName']}>
+                      <TextField 
+                            label="Middle Name"
+                            variant="standard"
+                            fullWidth
+                            size="small"
+                            />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item name={['colesseeAttributes', 'lastName']}>
+                      <TextField 
+                            label="Last Name"
+                            required={requireCoApplicantFields}
+                            variant="standard"
+                            fullWidth
+                            size="small"
+                          />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <DobInput dateFormat={dateFormat} form={lesseeForm} requireCoApplicantFields={requireCoApplicantFields}/>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="Social Security Number" name={['colesseeAttributes', 'ssn']} className="space-down" rules={[{ required: requireCoApplicantFields, message: 'Social Security Number is required!' }]}>
+                        <Input type="hidden" />
+                      </Form.Item>
+                      <Form.Item>
+                        <SsnInput defaultValue={(data?.colessee && data?.colessee?.ssn?.replace(/-/g, '')) || ''} form={lesseeForm} lesseeType="colessee" />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="Phone Number" name={['colesseeAttributes', `${phoneOption === 1 ? 'mobilePhoneNumber' : 'homePhoneNumber'}`]} rules={[{ required: requireCoApplicantFields, message: 'Phone Number is required!' }]}>
+                        <MaskedInput mask="(111) 111-1111" placeholder="Phone Number" className="credit-app-phone-no" onChange={handleFormChange} />
+                      </Form.Item>
+                      <Radio.Group>
+                        {/* <Radio.Group defaultValue={1} onChange={handlePhoneNumber}> */}
+                        <Radio value={1}>Mobile</Radio>
+                        <Radio value={2}>Home</Radio>
+                      </Radio.Group>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="Will this applicant also be riding the motorcycle?"
+                        name={['colesseeAttributes', 'isDriving']}
+                        rules={[{ required: requireCoApplicantFields, message: 'Please pick option if co-applicant is driving or not.' }]}
+                      >
+                        <Radio.Group>
+                          <Radio value={1}>Yes</Radio>
+                          <Radio value={0}>No</Radio>
+                        </Radio.Group>
+                      </Form.Item>
+                    </Grid>
+                  </Grid>
+                </Panel>
+
+                <Panel header="Home Address" key="2">
+                  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="flex-start" alignItems="flex-end">
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="Search Address">
+                        <AutoCompleteAddress beforePlacesGetDetails={autoCompleteLesseeHomeBeforePlacesGetDetails} onPlacesGetDetailsResult={autoCompleteLesseeHomeOnPlacesGetDetailsResult} />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="Street Address (no P.O. Boxes)"
+                        name={['colesseeAttributes', 'homeAddressAttributes', 'street1']}
+                        className="street-address"
+                        rules={[{ required: requireCoApplicantFields, message: 'Street Address (no P.O. Boxes) is required!' }]}
+                      >
+                        <Input placeholder="Street Address (no P.O. Boxes)" onChange={handleChange} className="ant-input-comp space-up" />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item name={['colesseeAttributes', 'homeAddressAttributes', 'street2']}>
+                      <TextField 
+                           label="Apartment / Unit"
+                           variant="standard"
+                           fullWidth
+                            size="small"
+                            />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="ZIP Code"
+                        name={['colesseeAttributes', 'homeAddressAttributes', 'zipcode']}
+                        validateStatus={zipHomeValidateStatus}
+                        help={zipHomeErrorMessage}
+                        rules={[{ required: requireCoApplicantFields, message: 'ZIP Code is required!' }]}
+                      >
+                        <MaskedInput
+                          mask="11111"
+                          placeholder="ZIP Code"
+                          onPressEnter={handleLesseeHomeZipcodeBlur}
+                          onBlur={handleLesseeHomeZipcodeBlur}
+                          className="ant-input-comp space-up"
+                          onChange={handleChange}
+                        />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="State" name={['colesseeAttributes', 'homeAddressAttributes', 'state']} rules={[{ required: requireCoApplicantFields, message: 'State is required!' }]}>
+                        <Select showSearch placeholder="State" {...showHomeState} onSelect={handleHomeStateChange} onChange={handleStateTarget} className="space-up">
+                          {lesseeHomeStateOptions &&
+                            lesseeHomeStateOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="County/Parish"
+                        name={['colesseeAttributes', 'homeAddressAttributes', 'county']}
+                        rules={[{ required: requireCoApplicantFields, message: 'County/Parish is required!' }]}
+                      >
+                        <Select showSearch placeholder="County/Parish" {...showHomeCountyState} onSelect={handleHomeCountyStateChange} onChange={handleCountyTarget} className="space-up">
+                          {lesseeHomeCountyOptions &&
+                            lesseeHomeCountyOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="City" name={['colesseeAttributes', 'homeAddressAttributes', 'cityId']} rules={[{ required: requireCoApplicantFields, message: 'City is required!' }]}>
+                        <Select showSearch placeholder="City" {...showHomeCityState} onSelect={handleHomeCityStateChange} onChange={handleCityTarget} className="space-up">
+                          {lesseeHomeCityOptions &&
+                            lesseeHomeCityOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="Length of Stay at Current Address" name={['colesseeAttributes', 'monthYears']} rules={[{ required: requireCoApplicantFields && nullMonthYear, message: 'Length of Stay required!' }]}>
+                        <Space direction="horizontal">
+                          <DatePicker onChange={handleMonthYear} disabledDate={disabledDate}> </DatePicker>
+                          <span>to Present</span>
+                          <InputNumber placeholder="Length of Stay at Current Address" onChange={handleManualMonthYear} value={(monthYears)}/>
+                        </Space>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="Monthly Mortgage or Rent"
+                        name={['colesseeAttributes', 'monthlyMortgage']}
+                        rules={[{ required: requireCoApplicantFields, message: 'Monthly Mortgage or Rent is required!' }]}
+                      >
+                        <InputNumber className="space-up monthly-mortgage" placeholder="Monthly Mortgage or Rent" />
+                      </Form.Item>
+                      <Form.Item name={['colesseeAttributes', 'homeOwnership']} rules={[{ required: requireCoApplicantFields, message: 'Ownership is required!' }]}>
+                        <Radio.Group className="space-up">
+                          <Radio value={1}>Own</Radio>
+                          <Radio value={2}>Rent</Radio>
+                        </Radio.Group>
+                      </Form.Item>
+                    </Grid>
+                  </Grid>
+                </Panel>
+
+                <Panel header="Mailing Address" key="3">
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="flex-start" alignItems="flex-end">
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Checkbox style={{ fontSize: `13px`, marginTop: `5px` }} onChange={fillMailingAddress}>
+                        Is Home Address Same as Mailing Address?
+                      </Checkbox>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="Search Address">
+                        <AutoCompleteAddress beforePlacesGetDetails={autoCompleteLesseeMailingBeforePlacesGetDetails} onPlacesGetDetailsResult={autoCompleteLesseeMailingOnPlacesGetDetailsResult} />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                    <Form.Item
+                      label="Street Address (no P.O. Boxes)"
+                      name={['colesseeAttributes', 'mailingAddressAttributes', 'street1']}
+                      className="street-address"
+                    >
+                      <Input placeholder="Street Address (no P.O. Boxes)" className="ant-input-comp space-up" />
+                    </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item name={['colesseeAttributes', 'mailingAddressAttributes', 'street2']}>
+                      <TextField 
+                              variant="standard" 
+                              label="Appartment / Unit" 
+                              placeholder="Appartment / Unit" 
+                              fullWidth
+                              size="small"
+                            />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="ZIP Code"
+                        name={['colesseeAttributes', 'mailingAddressAttributes', 'zipcode']}
+                        validateStatus={zipMailValidateStatus}
+                        help={zipMailErrorMessage}
+                      >
+                        <MaskedInput mask="11111" placeholder="ZIP Code" onPressEnter={handleLesseeMailZipcodeBlur} onBlur={handleLesseeMailZipcodeBlur} className="ant-input-comp space-up" />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="State" name={['colesseeAttributes', 'mailingAddressAttributes', 'state']}>
+                        <Select showSearch placeholder="State" {...showMailingState} onSelect={handleMailingStateChange} className="space-up">
+                          {lesseeMailStateOptions &&
+                            lesseeMailStateOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="County/Parish" name={['colesseeAttributes', 'mailingAddressAttributes', 'county']}>
+                        <Select showSearch placeholder="County/Parish" {...showMailingCountyState} onSelect={handleMailingCountyStateChange} className="space-up">
+                          {lesseeMailCountyOptions &&
+                            lesseeMailCountyOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="City" name={['colesseeAttributes', 'mailingAddressAttributes', 'cityId']}>
+                        <Select showSearch placeholder="City" {...showMailingCityState} onSelect={handleMailingCityStateChange} className="space-up">
+                          {lesseeMailCityOptions &&
+                            lesseeMailCityOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid> 
+                  </Grid>
+                </Panel>
+                </Collapse>
+            </div>
+          </Paper>
+          
+
+          <Paper
+            sx={{
+              p: 2,
+              margin: 2,
+              marginBottom: 5,
+              padding: 5,
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+            }}
+          >
+            <Row gutter={[16, 16]}>
+              <Col span={24} className="cca-center-text">
+                <Typography variant='h3'>About Your Work</Typography>
+                <br />
+              </Col>
+            </Row>
+            
+            <div className="collapse-container">
+            <Collapse>
+              <Panel header="Employer" key="1">
+                  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="flex-start" alignItems="flex-end">
+                    {data?.colessee?.employmentAddress && (
+                      <Grid item xs={2} sm={3} md={8}>
+                        <Form.Item style={{ display: 'none' }} name={['colesseeAttributes', 'employmentAddressAttributes', 'id']}>
+                          <Input className="space-up" />
                         </Form.Item>
-                      </Col>
-                    </Row>
-                  </Col>
+                      </Grid>
+                    )}
+                    <Grid item xs={2} sm={4} md={6}>
+                      <Form.Item
+                        name={['colesseeAttributes', 'employerName']}
+                        rules={[{ required: requireEmploymentFields, message: 'Employer Name is required!' }]}
+                      >
+                        <TextField 
+                            label="Employer Name" 
+                            variant="standard" 
+                            placeholder="Employer Name" 
+                            fullWidth
+                            size="small"
+                            required
+                            />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item name={['colesseeAttributes', 'employmentAddressAttributes', 'city']} rules={[{ required: requireEmploymentFields, message: 'City is required!' }]}>
+                      <TextField 
+                            label="City"
+                            variant="standard" 
+                            placeholder="City" 
+                            fullWidth
+                            size="small"
+                            required
+                          />
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={6}>
+                      <Form.Item label="State" name={['colesseeAttributes', 'employmentAddressAttributes', 'state']} rules={[{ required: requireEmploymentFields, message: 'State is required!' }]}>
+                      <Select
+                          showSearch
+                          placeholder="State"
+                          className="space-up"
+                      >
+                          {
+                              usStates && usStates.map(({name, abbreviation}, index) => {
+                                  return <Option key={index} value={`${name}`}>{abbreviation}</Option>
+                              })
+                          }
+                      </Select>
+                      </Form.Item>
+                    </Grid>
+
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="Phone Number"
+                        name={['colesseeAttributes', 'employerPhoneNumber']}
+                        rules={[{ required: requireEmploymentFields, message: 'Phone Number is required!' }]}
+                      >
+                        <MaskedInput mask="(111) 111-1111" placeholder="Phone Number" className="credit-app-phone-no space-up" onChange={handleFormChange} />
+                      </Form.Item>
+                    </Grid>
+                  </Grid>
                 </Panel>
 
                 <Panel header="Employment Details" key="2">
-                  <Col {...formLayout.container.formCol}>
-                    <Row gutter={[16, 0]}>
-                      <Col {...formLayout.field.col}>
-                        <Form.Item label="Employment Status" name={['colesseeAttributes', 'employmentStatus']} rules={[{ required: requireCoApplicantFields, message: 'Status is required!' }]}>
-                          <Select showSearch placeholder="Employment Status" onChange={handleEmploymentStatus} optionFilterProp="children" className="space-up">
-                            {employmentStatusOptions &&
-                              employmentStatusOptions.map(({ value, label }, index) => {
-                                return (
-                                  <Option key={index} value={`${value}`}>
-                                    {label}
-                                  </Option>
-                                )
-                              })}
-                          </Select>
+                  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent="flex-start" alignItems="flex-end">
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item label="Employment Status" name={['colesseeAttributes', 'employmentStatus']} rules={[{ required: requireCoApplicantFields, message: 'Status is required!' }]}>
+                        <Select showSearch placeholder="Employment Status" onChange={handleEmploymentStatus} optionFilterProp="children" className="space-up">
+                          {employmentStatusOptions &&
+                            employmentStatusOptions.map(({ value, label }, index) => {
+                              return (
+                                <Option key={index} value={`${value}`}>
+                                  {label}
+                                </Option>
+                              )
+                            })}
+                        </Select>
+                      </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                        <Form.Item name={['colesseeAttributes', 'jobTitle']} rules={[{ required: requireEmploymentFields, message: 'Job Tile is required!' }]}>
+                        <TextField 
+                            label="Job Title"
+                            variant="standard" 
+                            placeholder="Job Title" 
+                            fullWidth
+                            size="small"
+                            required
+                              />
                         </Form.Item>
-                      </Col>
-                      <Col {...formLayout.field.col}>
-                        <Form.Item label="Job Title" name={['colesseeAttributes', 'jobTitle']} rules={[{ required: requireEmploymentFields, message: 'Job Tile is required!' }]}>
-                          <Input placeholder="Job Title" className="ant-input-comp space-up" />
-                        </Form.Item>
-                      </Col>
-                      <Col {...formLayout.field.colgroup[2]}>
-                        <Row gutter={[16, 0]}>
-                          <Col {...formLayout.field.colmem[2]}>
-                            <Form.Item
-                              label="Years Employed"
-                              name={['colesseeAttributes', 'timeAtEmployerYears']}
-                              rules={[{ required: requireEmploymentFields, message: 'Years Employed is required!' }]}
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                          <Form.Item
+                            name={['colesseeAttributes', 'timeAtEmployerYears']}
+                            rules={[{ required: requireEmploymentFields, message: 'Years Employed is required!' }]}
 
-                            >
-                              <InputNumber className="space-up" placeholder="Years Employed" />
-                            </Form.Item>
-                          </Col>
-                          <Col {...formLayout.field.colmem[2]}>
-                            <Form.Item label="Months Employed" name={['colesseeAttributes', 'timeAtEmployerMonths']}>
-                              <InputNumber className="space-up" placeholder="Months Employed" />
-                            </Form.Item>
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col {...formLayout.field.col}>
-                        <Form.Item
-                          label="Gross Monthly Income"
-                          name={['colesseeAttributes', 'grossMonthlyIncome']}
-                          rules={[{ required: requireEmploymentFields, message: 'Gross Monthly Income is required!' }]}
-                        >
-                          <InputNumber className="space-up" placeholder="Gross Monthly Income" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Panel>
-              </Collapse>
-              <div className="button-container">
-                <Button className={btnClass} disabled={disableSubmitBtn} htmlType="submit">
-                  Save
-                </Button>
-                <Button className="button" type="primary">
-                  <Link to={`/applications/${leaseApplicationId}/applicant`}> prev </Link>
-                </Button>
-                <Button className="button" type="primary" disabled={btnAttribute}>
-                  <Link to={`/applications/${leaseApplicationId}/summary`}> Next </Link>
-                </Button>
-              </div>
-            </div>
-          </Content>
+                          >
+                            <TextField 
+                                label="Years Employed"
+                                variant="standard" 
+                                placeholder="Years Employed" 
+                                fullWidth
+                                size="small"
+                                required
+                              />
+                          </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                          <Form.Item label="Months Employed" name={['colesseeAttributes', 'timeAtEmployerMonths']}>
+                            <InputNumber className="space-up" placeholder="Months Employed" />
+                          </Form.Item>
+                    </Grid>
+                    <Grid item xs={2} sm={4} md={4}>
+                      <Form.Item
+                        label="Gross Monthly Income"
+                        name={['colesseeAttributes', 'grossMonthlyIncome']}
+                        rules={[{ required: requireEmploymentFields, message: 'Gross Monthly Income is required!' }]}
+                      >
+                        <InputNumber className="space-up" placeholder="Gross Monthly Income" />
+                      </Form.Item>
+                    </Grid>
+                  </Grid>
+                  </Panel>
+                </Collapse>
+             </div>
+                <div className="button-container">
+                  {/* <Button className={btnClass} disabled={disableSubmitBtn} htmlType="submit">
+                    Save
+                  </Button> */}
+                  {/* <Button>
+                    <Link to={`/applications/${leaseApplicationId}/applicant`}> prev </Link>
+                  </Button> */}
+                  {/* <Button className="button" type="primary" disabled={btnAttribute}>
+                    <Link to={`/applications/${leaseApplicationId}/summary`}> Next </Link>
+                  </Button> */}
+                  <Button variant="contained" style={{backgroundColor: "#e93b1b"}} type="submit">
+                      Go To Summary Page
+                  </Button>
+                </div>
+              
+            </Paper>
 
           {/*
                     <Content className="content-2">

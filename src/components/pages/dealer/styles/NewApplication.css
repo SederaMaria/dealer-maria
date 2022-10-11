@@ -34,12 +34,12 @@
 
 .application-steps-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
   /* color: white; */
-  color: #1890ff;
+  color: #EF4829;
 }
 
 .application-steps-finish > .ant-steps-item-container > .ant-steps-item-icon > .ant-steps-icon {
   /* color: white; */
-  color: #1890ff;
+  color: #EF4829;
 }
 
 .application-steps-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title,
@@ -49,20 +49,20 @@
 
 .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
   /* background-color: white; */
-  color: #1890ff;
+  color: #EF4829;
 }
 
 .application-steps-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
-  color: #1890ff;
+  color: #EF4829;
 }
 
 .application-steps-wait > .ant-steps-item-container > .ant-steps-item-icon > .ant-steps-icon {
-  color: #1890ff;
+  color: #EF4829;
 }
 
 .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after,
 .ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
-  background-color: #1890ff;
+  background-color: #EF4829;
 }
 
 .ant-steps-item-container:hover,
@@ -81,5 +81,5 @@
 }
 
 .ant-notification-notice-close-x {
-  color: #faad14;
+  color: #EF4829;
 }

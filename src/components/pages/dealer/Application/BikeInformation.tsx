@@ -1,18 +1,35 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent, useEffect } from 'react'
+<<<<<<< HEAD
+import { Row, Col, Form, Layout, Button, Input, message, Spin } from 'antd'
+=======
 import { Row, Col, Form, Select, Layout, Button, Input, message, Spin } from 'antd'
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
 import { Link } from 'react-router-dom'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import TextField from "@material-ui/core/TextField";
+<<<<<<< HEAD
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
+import { Stack, Autocomplete } from "@mui/material";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { Controller, useForm } from "react-hook-form";
+import { logger, network } from '../../../../utils';
+import ApplicationSteps from './ApplicationSteps';
+//import '../styles/BikeInformation.css';
+=======
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
 import '../styles/BikeInformation.css';
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
 
 
 // const { Title, Text } = Typography
 const { Content } = Layout
-const { Option } = Select
+// const { Option } = Select
 
 const layout = {
   labelCol: {
@@ -53,6 +70,11 @@ interface OptionProps {
   label?: string
 }
 
+type Asset = {
+  index: number
+  label: string
+}
+
 export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
   const [lesseeForm] = Form.useForm()
 
@@ -64,7 +86,7 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
   const [modelsOptions, setModelsOptions] = useState<OptionProps[]>([])
   const [mileageRangeOptions, setMileageRangeOptions] = useState<OptionProps[]>([])
   const [creditTierOptions, setCreditTierOptions] = useState<OptionProps[]>([])
-
+  
   const [showBikeForm, setShowBikeForm] = useState<boolean>(false)
   const [showViaVIN, setShowViaVIN] = useState<boolean>(false)
 
@@ -82,12 +104,23 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
 
   const [loading, setLoading] = useState<boolean>(false)
 
-  const [rules, setRules] = useState<boolean>(false)
+  const [rules, setRules] = useState<boolean>(false)  
+
+  const [modelCall, setModelCall] = useState<string>('')
+  const [makeValue, setMakevalue] = useState<any>(null)
+  const [yearValue, setYearValue] = useState<any>(null)
+  const [assetState, setAssetState] = useState<any>(null)
+  const [mileageValue, setMileageValue] = useState<any>(null)
+
 
   useEffect(() => {
     if (dataCheck !== null) {
       setShowBikeForm(true)
       setSaveBtnAttribute(false)
+      setAssetState(data?.leaseCalculator?.newUsed,)
+      setMakevalue(data?.leaseCalculator?.assetMake)
+      setYearValue(data?.leaseCalculator?.assetYear)
+      setMileageValue(data?.leaseCalculator?.mileageTier)
     }
   }, [])
 
@@ -154,11 +187,12 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
     try {
       let result = await network.GET(`/api/v1/bike-information/models-options?make=${make}&year=${year}`)
       setModelsOptions(formatOptions(result.data.models || [], 'collection'))
-      console.log(formatOptions(result.data.models || [], 'collection'))
     } catch (e) {
       logger.error('Request Error', e)
     }
   }
+
+  
 
   const handleNoVin = (e: MouseEvent<HTMLElement>) => {
     setShowBikeForm(true)
@@ -168,14 +202,22 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
     setSaveBtnAttribute(false)
   }
 
-  const handleMakes = (value: any) => {
-    getYears(value)
+  const handleAssetState = (e: any, newValue:any) =>{
+      setAssetState(newValue.label)
   }
 
-  const handleYear = (value: any) => {
-    let year = value
-    let make = lesseeForm.getFieldValue(['leaseCalculatorAttributes', 'assetMake'])
+  const handleMakes = (e: any, newValue:any) => {
+    setModelCall(newValue.label)
+    getYears(newValue.label)
+    setMakevalue(newValue.label)
+  }
+
+  const handleYear = (value:any, newValue:any) => {
+    let year = newValue.label
+    // let make = lesseeForm.getFieldValue(['leaseCalculatorAttributes', 'assetMake'])
+    let make = modelCall;
     getModels(make, year)
+    setYearValue(newValue.label)
   }
 
   const hideBikeSelectOptions = () => {
@@ -208,7 +250,8 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
     hideBikeSelectOptions()
   }
 
-  const handleMileageRangeStateChange = () => {
+  const handleMileageRangeStateChange = (e:any, newValue:any) => {
+    setMileageValue(newValue.label)
     hideBikeSelectOptions()
   }
 
@@ -240,32 +283,66 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
   const [saveBtnAttribute, setSaveBtnAttribute] = useState(true)
 
   const handleSubmit = async (values: any) => {
-    values = { ...values }
-    submitApplication(values)
+    const myValues = {
+      leaseCalculatorAttributes:{
+        assetMake : makeValue,
+        assetYear : yearValue,
+        mileageTier : mileageValue,
+        newUsed : assetState,
+        vin: undefined
+      }
+    }
+    //values = { ...values }
+    submitApplication(myValues)
     setBtnAttribute(false)
+    console.log("Values : ", myValues)
   }
 
   let today = new Date()
   let year = today.getFullYear()
 
+  const assetOption = [
+    { label: 'New', id: 1 },
+    { label: 'Used', id: 2 }
+  ]
+
+  const makeOption = makesOptions.map(({ value, label }, index) => {
+    return (
+       {label}
+    )
+  })
+
+  const yearOption = yearsOptions.map(({ value, label }, index) => {
+    return (
+       {label}
+    )
+  })
+
+  const mileageOption = mileageRangeOptions.map(({ value, label }, index) => {
+    return (
+       {label}
+    )
+  })
+
+
   return (
     <Spin spinning={loading}>
       <ApplicationSteps stepType={`bike`} leaseApplicationId={`${leaseApplicationId}`} leaseCalculatorId={`${leaseCalculatorId}`} save={null} attribute={btnAttribute} />
       <Form
-        form={lesseeForm}
-        {...layout}
-        // colon={false}
         onFinish={handleSubmit}
-        scrollToFirstError={true}
-        initialValues={{
-          leaseCalculatorAttributes: {
-            newUsed: data?.leaseCalculator?.newUsed,
-            assetMake: data?.leaseCalculator?.assetMake,
-            assetModel: data?.leaseCalculator?.assetModel,
-            assetYear: data?.leaseCalculator?.assetYear,
-            mileageTier: data?.leaseCalculator?.mileageTier,
-          },
-        }}
+        form={lesseeForm}
+        // {...layout}
+        // // colon={false}
+        // scrollToFirstError={true}
+        // initialValues={{
+        //   leaseCalculatorAttributes: {
+        //     newUsed: data?.leaseCalculator?.newUsed,
+        //     assetMake: data?.leaseCalculator?.assetMake,
+        //     assetModel: data?.leaseCalculator?.assetModel,
+        //     assetYear: data?.leaseCalculator?.assetYear,
+        //     mileageTier: data?.leaseCalculator?.mileageTier,
+        //   },
+        // }}
       >
         <Row gutter={[16, 16]}>
           <Col span={24} className="cca-center-text" style={{ marginTop: 20 }}>
@@ -296,7 +373,10 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                             variant="filled"
                             onChange={(e) => handleVin(e)}
                           />
+<<<<<<< HEAD
+=======
 
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                           <Button type="link" block onClick={handleNoVin} style={{ textAlign: `left`, padding: `4px 0px` }}>
                             I don't know the VIN
                           </Button>
@@ -308,6 +388,10 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                       <div>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
+                          {/* <FormControl variant="standard">
+=======
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             <Form.Item
                               label="New/Used"
                               name={['leaseCalculatorAttributes', 'newUsed']}
@@ -318,16 +402,49 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                 },
                               ]}
                               hidden={showViaVIN}
+<<<<<<< HEAD
+                              className='new_used'
+                            > */}
+                              {/* <Select showSearch placeholder="New/Used" onSelect={handleNewUsedStateChange} onBlur={hideBikeSelectOptions}>
+=======
                             >
                               <Select showSearch placeholder="New/Used" onSelect={handleNewUsedStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 <Option key="1" value="New">
                                   New
                                 </Option>
                                 <Option key="2" value="Used">
                                   Used
                                 </Option>
+<<<<<<< HEAD
+                               </Select> */}
+                              
+                              {/* <Select>
+                                <MenuItem value="new"><span className="select-option">New</span></MenuItem>
+                                <MenuItem value="used"><span className="select-option">Used</span></MenuItem>
+                              </Select>
+                            </Form.Item>      
+                          </FormControl> */}
+
+                              <Stack spacing={2} width='250px'>
+                                <Autocomplete 
+                                   options={assetOption}
+                                   renderInput={(params)=> {
+                                     return <TextField 
+                                              {...params} 
+                                              label='New/Used'
+                                             
+                                            />
+                                  }}
+                                  value={assetState ? assetState : null}
+                                  onChange={handleAssetState}
+                                 />
+                              </Stack>
+                
+=======
                               </Select>
                             </Form.Item>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             {showViaVIN && (
                               <Row style={{ marginTop: 10, marginBottom: 0 }}>
                                 <Col span={24}>
@@ -339,8 +456,14 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                         </Row>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
+                          
+                              {/* <Form.Item label="Make" name={['leaseCalculatorAttributes', 'assetMake']} rules={[{ required: true, message: 'Make is required!' }]} hidden={showViaVIN}> */}
+                              {/* <Select showSearch placeholder="Make" {...showMakeState} onChange={handleMakes} onSelect={handleMakesStateChange} onBlur={hideBikeSelectOptions}>
+=======
                             <Form.Item label="Make" name={['leaseCalculatorAttributes', 'assetMake']} rules={[{ required: true, message: 'Make is required!' }]} hidden={showViaVIN}>
                               <Select showSearch placeholder="Make" {...showMakeState} onChange={handleMakes} onSelect={handleMakesStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {makesOptions &&
                                   makesOptions.map(({ value, label }, index) => {
                                     return (
@@ -349,21 +472,53 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
+                              </Select> */}
+                              {/* </Form.Item> */}
+
+                              <Stack spacing={2} width='250px'>
+                                <Autocomplete 
+                                   options={makeOption}
+                                   renderInput={(params)=> {
+                                     return <TextField 
+                                              {...params} 
+                                              label='Make'
+                                             
+                                            />
+                                  }}
+                                  value={makeValue ? makeValue : null}
+                                  onChange={handleMakes}
+                                 />
+                              </Stack>
+                           
+                              {showViaVIN && (
+=======
                               </Select>
                             </Form.Item>
                             {showViaVIN && (
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                               <Row style={{ marginTop: 10, marginBottom: 0 }}>
                                 <Col span={24}>
                                   <b>Make</b> : {showViaVIN && <p>{vinMake}</p>}
                                 </Col>
                               </Row>
                             )}
+<<<<<<< HEAD
+                        </Col>
+                        </Row>
+                        <Row>
+                          <Col span={24}>
+                          {/* <FormControl variant="standard" fullWidth>   */}
+                            {/* <Form.Item label="Year" name={['leaseCalculatorAttributes', 'assetYear']} rules={[{ required: true, message: 'Year is required!' }]} hidden={showViaVIN}> */}
+                              {/* <Select showSearch placeholder="Year" {...showYearState} onChange={handleYear} onSelect={handleYearStateChange} onBlur={hideBikeSelectOptions}>
+=======
                           </Col>
                         </Row>
                         <Row>
                           <Col span={24}>
                             <Form.Item label="Year" name={['leaseCalculatorAttributes', 'assetYear']} rules={[{ required: true, message: 'Year is required!' }]} hidden={showViaVIN}>
                               <Select showSearch placeholder="Year" {...showYearState} onChange={handleYear} onSelect={handleYearStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {yearsOptions &&
                                   yearsOptions.map(({ value, label }, index) => {
                                     return (
@@ -372,9 +527,43 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
+                              </Select> */}
+                              
+                                {/* <Select {...showYearState} onChange={handleYear}>
+                                  {yearsOptions &&
+                                    yearsOptions.map(({ value, label }, index) => {
+                                     return (
+                                      <MenuItem value={`${value}`}  key={index}>
+                                        <span className="select-option">{label}</span>
+                                      </MenuItem>
+                                    )
+                                  })}
+                                </Select> */}
+                              
+                            {/* </Form.Item> */}
+                          {/* </FormControl>       */}
+
+                              <Stack spacing={2} width='250px'>
+                                <Autocomplete 
+                                   options={yearOption}
+                                   renderInput={(params)=> {
+                                     return <TextField 
+                                              {...params} 
+                                              label='Year'
+                                             
+                                            />
+                                  }}
+                                  autoSelect 
+                                  value={yearValue ? yearValue : null}
+                                  onChange={handleYear}
+                                 />
+                              </Stack>
+=======
                               </Select>
                             </Form.Item>
                                 
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             {showViaVIN && (
                               <Row style={{ marginTop: 10, marginBottom: 0 }}>
                                 <Col span={24}>
@@ -386,8 +575,14 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                         </Row>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
+                          {/* <FormControl variant="standard" fullWidth> */}
+                            {/* <Form.Item label="Model" name={['leaseCalculatorAttributes', 'assetModel']} rules={[{ required: true, message: 'Model is required!' }]} hidden={showViaVIN}> */}
+                              {/* <Select showSearch placeholder="Model" {...showModelState} onSelect={handleModelStateChange} onBlur={hideBikeSelectOptions}>
+=======
                             <Form.Item label="Model" name={['leaseCalculatorAttributes', 'assetModel']} rules={[{ required: true, message: 'Model is required!' }]} hidden={showViaVIN}>
                               <Select showSearch placeholder="Model" {...showModelState} onSelect={handleModelStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {modelsOptions &&
                                   modelsOptions.map(({ value, label }, index) => {
                                     return (
@@ -396,9 +591,27 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
+                              </Select> */}
+                              
+                                {/* <Select {...showModelState}  onSelect={handleModelStateChange} >
+                                  {modelsOptions &&
+                                  modelsOptions.map(({ value, label }, index) => {
+                                    return (
+                                      <MenuItem value={`${value}`}  key={index}>
+                                        <span className="select-option">{label}</span>
+                                      </MenuItem>
+                                    )
+                                  })}
+                                </Select>
+                               */}
+                            {/* </Form.Item> */}
+                          {/* </FormControl>       */}
+=======
                               </Select>
                             </Form.Item>
                                 
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             {showViaVIN && (
                               <Row style={{ marginTop: 10, marginBottom: 10 }}>
                                 <Col span={24}>
@@ -410,7 +623,12 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                         </Row>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
+                          {/* <FormControl variant="standard" fullWidth> */}
+                            {/* <Form.Item
+=======
                             <Form.Item
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                               label="Mileage Range"
                               name={['leaseCalculatorAttributes', 'mileageTier']}
                               rules={[
@@ -419,8 +637,13 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                   message: 'Mileage Range is required!',
                                 },
                               ]}
+<<<<<<< HEAD
+                            > */}
+                              {/* <Select showSearch placeholder="Mileage Range" {...showMileageRangeState} onSelect={handleMileageRangeStateChange} onBlur={hideBikeSelectOptions}>
+=======
                             >
                               <Select showSearch placeholder="Mileage Range" {...showMileageRangeState} onSelect={handleMileageRangeStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {mileageRangeOptions &&
                                   mileageRangeOptions.map(({ value, label }, index) => {
                                     return (
@@ -429,8 +652,40 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
+                              </Select> */}
+                              
+                                {/* <Select {...showMileageRangeState} onSelect={handleMileageRangeStateChange} >
+                                  {mileageRangeOptions &&
+                                    mileageRangeOptions.map(({ value, label }, index) => {
+                                    return (
+                                      <MenuItem value={`${value}`}  key={index}>
+                                        <span className="select-option">{label}</span>
+                                      </MenuItem>
+                                    )
+                                  })}
+                                </Select> */}
+                            {/* </Form.Item> */}
+                          {/* </FormControl> */}
+                              <Stack spacing={2} width='250px'>
+                                <Autocomplete 
+                                   options={mileageOption}
+                                   renderInput={(params)=> {
+                                     return <TextField 
+                                              {...params} 
+                                              label='Mileage Range'
+                                             
+                                            />
+                                  }}
+                                  autoSelect 
+                                  value={mileageValue ? mileageValue : null}
+                                  onChange={handleMileageRangeStateChange}
+                                 />
+                              </Stack>
+=======
                               </Select>
                             </Form.Item>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                           </Col>
                         </Row>
                       </div>
@@ -440,8 +695,12 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
 
               <div style={{ marginTop: 20, textAlign: `right` }}>
                 <Button style={{ marginRight: 10 }} type="primary" htmlType="submit" disabled={saveBtnAttribute}>
+<<<<<<< HEAD
                   {' '}
-                  Save{' '}
+                  Save
+=======
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
+                  {' '}
                 </Button>
                 <Button style={{ marginRight: 10 }} type="primary" disabled={btnAttribute}>
                   <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
