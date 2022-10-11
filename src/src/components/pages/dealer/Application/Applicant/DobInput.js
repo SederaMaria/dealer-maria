@@ -11,6 +11,7 @@ export default function DobInput ({dateFormat, form, requireCoApplicantFields}) 
 
   const [dateOfBirthValidation, setDateOfBirthValidation] = useState(undefined);
   const [dateOfBirthValidationMessage, setDateOfBirthValidationMessage] = useState(undefined);
+  const dateOfBirth = form.getFieldValue(['lesseeAttributes', 'dateOfBirth'])
 
   const onDatePickerChange = (momentObj) => {
     let dateString = moment(momentObj).format('MM/DD/YYYY');
@@ -46,7 +47,7 @@ export default function DobInput ({dateFormat, form, requireCoApplicantFields}) 
   }
 
   useEffect(() => {
-    var date = moment(new Date(form.getFieldValue(['lesseeAttributes', 'dateOfBirth'])), dateFormat, true);
+    var date = moment(new Date(dateOfBirth ? dateOfBirth : null), dateFormat, true);
     let dateString = date.format('MM/DD/YYYY');
     setDateObj(date);
     setDateString(dateString);
