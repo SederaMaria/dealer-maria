@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { TextField } from '@mui/material';
 
 
 export default function SsnInput({defaultValue, form, lesseeType}) {
@@ -193,7 +194,7 @@ export default function SsnInput({defaultValue, form, lesseeType}) {
 
 
     return (
-        <Input 
+        <Input
           placeholder="Social Security Number"
           value={toMask ? maskedSsn : actualDashedSsn} 
           ref={inputSsnRef}  

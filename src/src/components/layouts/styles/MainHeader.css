@@ -1,0 +1,32 @@
+.main-header-layout .logo {
+  width: 152px;
+  height: 31px;
+  margin: 0 24px 0 0;
+  float: left;
+}
+
+.main-header-layout {
+  height: 64px;
+  padding: 0 25px;
+  line-height: 64px;
+  background: #001529;
+}
+
+.main-header-layout .logo .logo-img {
+  width: 100%;
+} 
+
+#main-menu .ant-menu-item-selected a, 
+#main-menu .ant-menu-item-selected a:hover {
+  color: white;
+}
+
+#main-menu .ant-menu-item:hover, 
+#main-menu .ant-menu-submenu:hover {
+  background-color: #1890ff;
+  color: #fff;
+}
+
+#main-menu .ant-menu-submenu-open .ant-menu-submenu-title {
+  color: #fff;
+}
