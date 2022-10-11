@@ -34,7 +34,7 @@ function ApplicantRenderer(props: any)  {
         size='large'
         tip='Loading...'
         >
-            <Applicant data={data}/>
+          <Applicant data={data}/>
         </Spin>
     ) : null
 }

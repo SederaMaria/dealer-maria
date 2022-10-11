@@ -1,0 +1,54 @@
+html,body{
+  height:100%;
+}
+
+.collapse-container {
+  padding: 15px;
+}
+
+.applicant-elements-below, .applicant-elements-above {
+  display: flex;
+  justify-content: start;
+}
+
+.applicant-elements-above > * {
+  width: 33%;
+}
+
+.applicant-elements-below > * {
+  width: 35%;
+}
+
+.motor-details {
+  width: 75%;
+  margin-top: 1%;
+}
+
+.motor-summary {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2%;
+}
+
+#motor-content {
+  display: flex;
+  margin-left: 15%;
+}
+
+.exception-cell, .gross-monthly {
+  display: flex;
+  /* margin-left: 0.8%; */
+  margin-top: 2%;
+}
+
+.exception-cell > div:nth-child(2) {
+  /* margin-left: 21%; */
+}
+
+.ownership > div:nth-child(2) {
+  /* margin-left: 8%; */
+}
+
+.divider {
+  color: #4e0033;
+}

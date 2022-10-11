@@ -1,0 +1,9 @@
+/*.MuiInputBase-root > .MuiFilledInput-root {
+  width: 180%;
+  margin-bottom: 10px;
+  background-color: #e82512;
+}*/
+
+.MuiDivider-root{
+  color: #e82512;
+}

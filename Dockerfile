@@ -1,4 +1,4 @@
-FROM node:16.0.0
+FROM node:16.10.0
 
 # Create app directory and copy source
 RUN mkdir -p /app
