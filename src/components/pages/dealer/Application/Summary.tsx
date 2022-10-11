@@ -43,6 +43,15 @@ interface Props {
   label?: any
 }
 
+const gridStyle: React.CSSProperties = {
+  width: '25%',
+};
+
+const cardStyle: React.CSSProperties = {
+  backgroundColor: '#181c27',
+  color: '#eff0f2',
+}
+
 const MotorSummary: React.FC<Props> = ({ label, children }) => {
   return (
     <div>
@@ -56,10 +65,10 @@ const MotorSummary: React.FC<Props> = ({ label, children }) => {
 
 const PersonalSummary: React.FC<Props> = ({ label, children }) => {
   return (
-    <div>
+    <Card.Grid hoverable={false} style={gridStyle}>
       <h5>{label}</h5>
       <span>{children}</span>
-    </div>
+    </Card.Grid>
   )
 }
 
@@ -359,7 +368,7 @@ export const Summary: React.FC<Props> = ({ data }) => {
                   
                 
                 {/* <Panel header="Calculation" key="3"  style={{textAlign:`left`}} extra={<Link to={`/applications/${leaseApplicationId}/calculators/${leaseCalculatorId}/calculator`}><Tag>Edit</Tag></Link>}>
-                        
+
                               </Panel> */}
               
               

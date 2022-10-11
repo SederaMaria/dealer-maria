@@ -1,10 +1,15 @@
 import React, { useState, ChangeEvent, MouseEvent, FormEvent, useEffect } from 'react'
+<<<<<<< HEAD
 import { Row, Col, Form, Layout, Button, Input, message, Spin } from 'antd'
+=======
+import { Row, Col, Form, Select, Layout, Button, Input, message, Spin } from 'antd'
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
 import { Link } from 'react-router-dom'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import TextField from "@material-ui/core/TextField";
+<<<<<<< HEAD
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -15,6 +20,11 @@ import { Controller, useForm } from "react-hook-form";
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
 //import '../styles/BikeInformation.css';
+=======
+import { logger, network } from '../../../../utils';
+import ApplicationSteps from './ApplicationSteps';
+import '../styles/BikeInformation.css';
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
 
 
 // const { Title, Text } = Typography
@@ -363,6 +373,10 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                             variant="filled"
                             onChange={(e) => handleVin(e)}
                           />
+<<<<<<< HEAD
+=======
+
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                           <Button type="link" block onClick={handleNoVin} style={{ textAlign: `left`, padding: `4px 0px` }}>
                             I don't know the VIN
                           </Button>
@@ -374,7 +388,10 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                       <div>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
                           {/* <FormControl variant="standard">
+=======
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             <Form.Item
                               label="New/Used"
                               name={['leaseCalculatorAttributes', 'newUsed']}
@@ -385,15 +402,21 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                 },
                               ]}
                               hidden={showViaVIN}
+<<<<<<< HEAD
                               className='new_used'
                             > */}
                               {/* <Select showSearch placeholder="New/Used" onSelect={handleNewUsedStateChange} onBlur={hideBikeSelectOptions}>
+=======
+                            >
+                              <Select showSearch placeholder="New/Used" onSelect={handleNewUsedStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 <Option key="1" value="New">
                                   New
                                 </Option>
                                 <Option key="2" value="Used">
                                   Used
                                 </Option>
+<<<<<<< HEAD
                                </Select> */}
                               
                               {/* <Select>
@@ -418,6 +441,10 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                  />
                               </Stack>
                 
+=======
+                              </Select>
+                            </Form.Item>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             {showViaVIN && (
                               <Row style={{ marginTop: 10, marginBottom: 0 }}>
                                 <Col span={24}>
@@ -429,9 +456,14 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                         </Row>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
                           
                               {/* <Form.Item label="Make" name={['leaseCalculatorAttributes', 'assetMake']} rules={[{ required: true, message: 'Make is required!' }]} hidden={showViaVIN}> */}
                               {/* <Select showSearch placeholder="Make" {...showMakeState} onChange={handleMakes} onSelect={handleMakesStateChange} onBlur={hideBikeSelectOptions}>
+=======
+                            <Form.Item label="Make" name={['leaseCalculatorAttributes', 'assetMake']} rules={[{ required: true, message: 'Make is required!' }]} hidden={showViaVIN}>
+                              <Select showSearch placeholder="Make" {...showMakeState} onChange={handleMakes} onSelect={handleMakesStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {makesOptions &&
                                   makesOptions.map(({ value, label }, index) => {
                                     return (
@@ -440,6 +472,7 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
                               </Select> */}
                               {/* </Form.Item> */}
 
@@ -459,12 +492,18 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                               </Stack>
                            
                               {showViaVIN && (
+=======
+                              </Select>
+                            </Form.Item>
+                            {showViaVIN && (
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                               <Row style={{ marginTop: 10, marginBottom: 0 }}>
                                 <Col span={24}>
                                   <b>Make</b> : {showViaVIN && <p>{vinMake}</p>}
                                 </Col>
                               </Row>
                             )}
+<<<<<<< HEAD
                         </Col>
                         </Row>
                         <Row>
@@ -472,6 +511,14 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                           {/* <FormControl variant="standard" fullWidth>   */}
                             {/* <Form.Item label="Year" name={['leaseCalculatorAttributes', 'assetYear']} rules={[{ required: true, message: 'Year is required!' }]} hidden={showViaVIN}> */}
                               {/* <Select showSearch placeholder="Year" {...showYearState} onChange={handleYear} onSelect={handleYearStateChange} onBlur={hideBikeSelectOptions}>
+=======
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col span={24}>
+                            <Form.Item label="Year" name={['leaseCalculatorAttributes', 'assetYear']} rules={[{ required: true, message: 'Year is required!' }]} hidden={showViaVIN}>
+                              <Select showSearch placeholder="Year" {...showYearState} onChange={handleYear} onSelect={handleYearStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {yearsOptions &&
                                   yearsOptions.map(({ value, label }, index) => {
                                     return (
@@ -480,6 +527,7 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
                               </Select> */}
                               
                                 {/* <Select {...showYearState} onChange={handleYear}>
@@ -511,6 +559,11 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                   onChange={handleYear}
                                  />
                               </Stack>
+=======
+                              </Select>
+                            </Form.Item>
+                                
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             {showViaVIN && (
                               <Row style={{ marginTop: 10, marginBottom: 0 }}>
                                 <Col span={24}>
@@ -522,9 +575,14 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                         </Row>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
                           {/* <FormControl variant="standard" fullWidth> */}
                             {/* <Form.Item label="Model" name={['leaseCalculatorAttributes', 'assetModel']} rules={[{ required: true, message: 'Model is required!' }]} hidden={showViaVIN}> */}
                               {/* <Select showSearch placeholder="Model" {...showModelState} onSelect={handleModelStateChange} onBlur={hideBikeSelectOptions}>
+=======
+                            <Form.Item label="Model" name={['leaseCalculatorAttributes', 'assetModel']} rules={[{ required: true, message: 'Model is required!' }]} hidden={showViaVIN}>
+                              <Select showSearch placeholder="Model" {...showModelState} onSelect={handleModelStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {modelsOptions &&
                                   modelsOptions.map(({ value, label }, index) => {
                                     return (
@@ -533,6 +591,7 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
                               </Select> */}
                               
                                 {/* <Select {...showModelState}  onSelect={handleModelStateChange} >
@@ -548,6 +607,11 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                */}
                             {/* </Form.Item> */}
                           {/* </FormControl>       */}
+=======
+                              </Select>
+                            </Form.Item>
+                                
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                             {showViaVIN && (
                               <Row style={{ marginTop: 10, marginBottom: 10 }}>
                                 <Col span={24}>
@@ -559,8 +623,12 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                         </Row>
                         <Row>
                           <Col span={24}>
+<<<<<<< HEAD
                           {/* <FormControl variant="standard" fullWidth> */}
                             {/* <Form.Item
+=======
+                            <Form.Item
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                               label="Mileage Range"
                               name={['leaseCalculatorAttributes', 'mileageTier']}
                               rules={[
@@ -569,8 +637,13 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                   message: 'Mileage Range is required!',
                                 },
                               ]}
+<<<<<<< HEAD
                             > */}
                               {/* <Select showSearch placeholder="Mileage Range" {...showMileageRangeState} onSelect={handleMileageRangeStateChange} onBlur={hideBikeSelectOptions}>
+=======
+                            >
+                              <Select showSearch placeholder="Mileage Range" {...showMileageRangeState} onSelect={handleMileageRangeStateChange} onBlur={hideBikeSelectOptions}>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                                 {mileageRangeOptions &&
                                   mileageRangeOptions.map(({ value, label }, index) => {
                                     return (
@@ -579,6 +652,7 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                       </Option>
                                     )
                                   })}
+<<<<<<< HEAD
                               </Select> */}
                               
                                 {/* <Select {...showMileageRangeState} onSelect={handleMileageRangeStateChange} >
@@ -608,6 +682,10 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
                                   onChange={handleMileageRangeStateChange}
                                  />
                               </Stack>
+=======
+                              </Select>
+                            </Form.Item>
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                           </Col>
                         </Row>
                       </div>
@@ -617,8 +695,11 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
 
               <div style={{ marginTop: 20, textAlign: `right` }}>
                 <Button style={{ marginRight: 10 }} type="primary" htmlType="submit" disabled={saveBtnAttribute}>
+<<<<<<< HEAD
                   {' '}
                   Save
+=======
+>>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
                   {' '}
                 </Button>
                 <Button style={{ marginRight: 10 }} type="primary" disabled={btnAttribute}>

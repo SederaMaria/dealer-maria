@@ -8,21 +8,19 @@ html,body{
 
 .applicant-elements-below, .applicant-elements-above {
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 
 .applicant-elements-above > * {
   width: 33%;
-  margin: 0 1%
 }
 
 .applicant-elements-below > * {
   width: 35%;
-  margin: 2% 1%;
 }
 
 .motor-details {
-  width: 75%;  
+  width: 75%;
   margin-top: 1%;
 }
 
@@ -39,16 +37,16 @@ html,body{
 
 .exception-cell, .gross-monthly {
   display: flex;
-  margin-left: 0.8%;
+  /* margin-left: 0.8%; */
   margin-top: 2%;
 }
 
 .exception-cell > div:nth-child(2) {
-  margin-left: 21%;
+  /* margin-left: 21%; */
 }
 
 .ownership > div:nth-child(2) {
-  margin-left: 8%;
+  /* margin-left: 8%; */
 }
 
 .divider {

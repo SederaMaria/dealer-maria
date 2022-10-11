@@ -27,8 +27,8 @@ const { Option } = Select
 const { RangePicker } = DatePicker
 //const { Title } = Typography
 const { Content } = Layout
-const dateFormat = 'MM/DD/YYYY'
 const { Panel } = Collapse
+const dateFormat = 'MM/DD/YYYY'
 const layout = {
   labelCol: {
     span: 24,
@@ -237,6 +237,29 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
   const [btnAttribute, setBtnAttribute] = useState(true)
   const [btnClass, setBtnClass] = useState('button')
 
+  const openNotification = () => {
+    const args = {
+      message: 'Your attention please!',
+      description:
+        'The system doesn\'t have the zip code for this address, please add it manually',
+      duration: 0,
+    };
+    notification.open(args);
+  };
+
+  const zipCodeNotification = (zipcode:string)=> {
+    if(zipcode == undefined){
+      openNotification();
+    }
+  }
+
+
+  const validStateArr = ["AL", "AZ", "CA", "DE", "FL", "GA", "IL", "IN", "LA", "MD",
+  "MI", "MS", "MO", "NV", "NJ", "NM", "NC", "OH", "OK", "PA", "SC", "TN", "TX", "VA" ]  
+  
+  let isStateValid; 
+
+
   const submitApplication = async (values: any) => {
     try {
       await network.PUT(`/api/v1/dealers/update-details?id=${leaseApplicationId}`, values)
@@ -274,7 +297,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
       if (relationshipArray.includes(value)) {
         setRequireCoApplicantFields(true)
       }
-    })    
+    })
 }
 
   const handleLesseeHomeZipcodeBlur = async () => {
@@ -294,6 +317,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
       await network
         .GET(`/api/v1/address/city-details?zipcode=${zipcode}`)
         .then((response) => {
+          isStateValid = validStateArr.includes(response.data.state[0]?.abbreviation);
           if (response.data.is_state_active_on_calculator) {
             setLesseeHomeStateOptions(
               formatOptions({
@@ -309,10 +333,24 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
             )
             setLesseeHomeCityOptionsData(formatOptions({ options: response.data.city || [], type: 'city' }))
           }
-          if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
+          if (!isStateValid || !response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
             setZipHomeValidateStatus('error')
             setZipHomeErrorMessage('Speed Leasing currently does not lease to residents of this state.')
             setShowHomeState(null)
+            setLesseeHomeStateOptions(
+              formatOptions({
+                options: [],
+                type: 'state',
+              })
+            )
+            setLesseeHomeCountyOptions(
+              formatOptions({
+                options: [],
+                type: 'county',
+              })
+            )
+            setLesseeHomeCityOptionsData(formatOptions({ options: [], type: 'city' }))
+
           } else {
             setZipHomeValidateStatus(undefined)
             setZipHomeErrorMessage(undefined)
@@ -343,6 +381,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
       await network
         .GET(`/api/v1/address/city-details?zipcode=${zipcode}`)
         .then((response) => {
+          isStateValid = validStateArr.includes(response.data.state[0]?.abbreviation); 
           if (response.data.is_state_active_on_calculator) {
             setLesseeMailStateOptions(
               formatOptions({
@@ -358,10 +397,25 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
             )
             setLesseeMailCityOptionsData(formatOptions({ options: response.data.city || [], type: 'city' }))
           }
-          if (!response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
+          if (!isStateValid || !response.data.is_state_active_on_calculator || response.data.city.length < 1 || response.data.city === undefined) {
             setZipMailValidateStatus('error')
             setZipMailErrorMessage('Speed Leasing currently does not lease to residents of this state.')
             setShowMailingState(null)
+
+            setLesseeMailStateOptions(
+              formatOptions({
+                options: [],
+                type: 'state',
+              })
+            )
+            setLesseeMailCountyOptions(
+              formatOptions({
+                options: [],
+                type: 'county',
+              })
+            )
+            setLesseeMailCityOptionsData(formatOptions({ options: [], type: 'city' }))
+
           } else {
             setZipMailValidateStatus(undefined)
             setZipMailErrorMessage(undefined)
@@ -413,7 +467,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
     setShowMailingCityState(null)
   }
 
-  const autoCompleteLesseeHomeBeforePlacesGetDetails = (value: any, option: any) => {
+  const autoCompleteLesseeHomeBeforePlacesGetDetails = (value: any, option: any) => {  
     lesseeForm.setFieldsValue({
       colesseeAttributes: {
         homeAddressAttributes: {
@@ -424,6 +478,10 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
   }
 
   const autoCompleteLesseeHomeOnPlacesGetDetailsResult = (placeResult: any, placeServiceStatus: any) => {
+
+    let addressLength = placeResult.address_components.length-1
+    let addressToTest = placeResult.address_components[addressLength]
+
     if (placeServiceStatus == 'OK') {
       placeResult.address_components.map((component: any) => {
         if (component.types.includes('postal_code')) {
@@ -435,6 +493,9 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
           autoCompleteLesseeHomeZipcodeStateCountyCity(placeResult.address_components)
         }
       })
+      if (!addressToTest.types.includes('postal_code')){
+        openNotification();   
+      }
     }
   }
 
@@ -539,7 +600,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
     }
   }
 
-  const autoCompleteLesseeMailingBeforePlacesGetDetails = (value: any, option: any) => {
+  const autoCompleteLesseeMailingBeforePlacesGetDetails = (value: any, option: any) => { 
     lesseeForm.setFieldsValue({
       colesseeAttributes: {
         mailingAddressAttributes: {
@@ -550,6 +611,9 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
   }
 
   const autoCompleteLesseeMailingOnPlacesGetDetailsResult = (placeResult: any, placeServiceStatus: any) => {
+    let addressLength = placeResult.address_components.length-1
+    let addressToTest = placeResult.address_components[addressLength]
+
     if (placeServiceStatus == 'OK') {
       placeResult.address_components.map((component: any) => {
         if (component.types.includes('postal_code')) {
@@ -561,6 +625,10 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
           autoCompleteLesseeMailingZipcodeStateCountyCity(placeResult.address_components)
         }
       })
+      
+      if (!addressToTest.types.includes('postal_code')){
+        openNotification();   
+      }
     }
   }
 
@@ -797,10 +865,10 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
   const handleMonthYear = (e:any) => {
     if (e !== null) {
         let startDate = e._d
-        let newDate : any = moment().toDate() 
+        let newDate : any = moment().toDate()
         let monthYearDiff = newDate - startDate
         const toMonthYears = Number((monthYearDiff/(365)/(86400000)).toFixed(2))
-        setMonthYear(toMonthYears)  
+        setMonthYear(toMonthYears)
         setManualMonthYear(null)
         setNullMonthYear(false)
     } else {
@@ -1429,7 +1497,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
               
             </Paper>
 
-          {/* 
+          {/*
                     <Content className="content-2">
                         <Row >
                             <Col span={24} >
@@ -1443,13 +1511,13 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                         </Row>
                         { (hasSubmitError || submitSuccess) && <br/> }
                         <Row>
-                            <Col span={24} className="cca-center-text"> 
+                            <Col span={24} className="cca-center-text">
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" disabled={disableSubmitBtn}>
                                     Submit
                                     </Button>
                                 </Form.Item>
-                            </Col> 
+                            </Col>
                         </Row>
                     </Content> */}
         </Form>
