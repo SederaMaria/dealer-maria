@@ -1,9 +1,32 @@
-/*.MuiInputBase-root > .MuiFilledInput-root {
+.MuiFilledInput-root {
   width: 180%;
   margin-bottom: 10px;
-  background-color: #e82512;
-}*/
+}
+
+.select-option:hover {
+  background-color: "#cdc9c933";
+  color: #e93b1b;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  text-decoration-color: #e93b1b;
+  text-decoration-thickness: 2px;
+  font-weight: 500;
+}
+
+.MuiInputBase-root {
+  width: 100%;
+}
+
+.new_used {
+  width: 361px;
+}
 
 .MuiDivider-root{
   color: #e82512;
+}
+
+.MuiTableCell-root{
+  border: none;
+  width: auto;
 }

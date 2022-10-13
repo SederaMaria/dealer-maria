@@ -14,13 +14,10 @@ import '../../styles/Applicant.css'
 // material UI
 
 import {TextField, Typography, Paper, Grid, Button} from '@mui/material'
+import { useForm } from "react-hook-form";
 import { styled } from '@mui/material/styles'
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
-import MuiAccordionSummary, {
-  AccordionSummaryProps,
-} from '@mui/material/AccordionSummary'
-import MuiAccordionDetails from '@mui/material/AccordionDetails'
+
 
 
 const { Option } = Select
@@ -270,13 +267,15 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
 
   const history = useHistory();
 
-  const handleSubmit = async (values: any) => {
+  const onSubmit = async (values: any) => {
     values = { ...values }
     console.log("values", values)
     setDisableSubmitBtn(true)
     submitApplication(values)
     history.push(path);
   }
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const handleRedirectionClick = (e:any) => {
      if(e.target.innerText=="GO TO CO-APPLICANT PAGE"){
@@ -955,7 +954,7 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
         <Form
           form={lesseeForm}
           {...layout}
-          onFinish={handleSubmit}
+          onFinish={handleSubmit(onSubmit)}
           // scrollToFirstError={true}
           onChange={handleFormChange}
           initialValues={{
@@ -1033,10 +1032,12 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                         <Form.Item  name={['lesseeAttributes', 'firstName']}>
                           <TextField
                             label="First Name"
-                            required
                             variant="standard"
                             fullWidth
                             size="small"
+                            {...register("firstName", { required: "First Name is required." })}
+                            error={Boolean(errors.firstName)}
+                            helperText={errors.firstName?.message}
                             />
                         </Form.Item> 
                       </Grid>
@@ -1051,13 +1052,15 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                         </Form.Item>
                       </Grid>
                       <Grid item xs={2} sm={4} md={4}>
-                        <Form.Item  name={['lesseeAttributes', 'lastName']} rules={[{ required: true, message: 'Last Name is required!' }]}>
+                        <Form.Item  name={['lesseeAttributes', 'lastName']}>
                           <TextField 
                             label="Last Name"
-                            required
                             variant="standard"
                             fullWidth
                             size="small"
+                            {...register("lastName", { required: "Last Name is required." })}
+                            error={Boolean(errors.lastName)}
+                            helperText={errors.lastName?.message}
                             />
                         </Form.Item>
                       </Grid>
@@ -1352,7 +1355,9 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                             placeholder="Employer Name" 
                             fullWidth
                             size="small"
-                            required
+                            {...register("employerName", { required: "Employer name is required." })}
+                            error={Boolean(errors.employerName)}
+                            helperText={errors.employerName?.message}
                             />
                         </Form.Item>
                       </Grid>
@@ -1365,7 +1370,9 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                             placeholder="City" 
                             fullWidth
                             size="small"
-                            required
+                            {...register("employmentAddressAttributes", { required: "Employment Address is required." })}
+                            error={Boolean(errors.employmentAddressAttributes)}
+                            helperText={errors.employmentAddressAttributes?.message}
                             />
                         </Form.Item>
                       </Grid>
@@ -1419,7 +1426,9 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                                 placeholder="Job Title" 
                                 fullWidth
                                 size="small"
-                                required
+                                {...register("jobTitle", { required: "Job title is required." })}
+                                error={Boolean(errors.jobTitle)}
+                                helperText={errors.jobTitle?.message}
                               />
                             </Form.Item>
                           </Grid>
@@ -1431,7 +1440,9 @@ export const Applicant: React.FC<Props> = ({ data }: Props) => {
                                 placeholder="Years Employed" 
                                 fullWidth
                                 size="small"
-                                required
+                                {...register("timeAtEmployerYears", { required: "Time at employer years is required." })}
+                                error={Boolean(errors.timeAtEmployerYears)}
+                                helperText={errors.timeAtEmployerYears?.message}
                               />
                             </Form.Item>
                           </Grid>
