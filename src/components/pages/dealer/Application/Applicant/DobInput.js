@@ -13,10 +13,7 @@ export default function DobInput ({dateFormat, form, requireCoApplicantFields}) 
   const [dateOfBirthValidation, setDateOfBirthValidation] = useState(undefined);
   const [dateOfBirthValidationMessage, setDateOfBirthValidationMessage] = useState(undefined);
   const dateOfBirth = form.getFieldValue(['lesseeAttributes', 'dateOfBirth'])
-<<<<<<< HEAD
   
-=======
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
 
   const onDatePickerChange = (momentObj) => {
     let dateString = moment(momentObj).format('MM/DD/YYYY');

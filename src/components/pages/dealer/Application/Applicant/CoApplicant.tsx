@@ -6,7 +6,7 @@ import { logger, network } from '../../../../../utils'
 import MaskedInput from 'antd-mask-input'
 import ApplicationSteps from '../ApplicationSteps'
 import SsnInput from './SsnInput'
-import DobInput from './DobInput'
+import DobInput from './DobInput.js'
 import { AutoCompleteAddress } from './AutoCompleteAddress'
 import { useHistory } from "react-router-dom";
 import '../../styles/Applicant.css'
@@ -21,6 +21,7 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import {TextField, Typography, Paper, Grid,  Button } from '@mui/material'
 import { ExpandMore} from '@mui/icons-material'
+import { useForm } from "react-hook-form";
 
 
 const { Option } = Select
@@ -244,7 +245,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
         'The system doesn\'t have the zip code for this address, please add it manually',
       duration: 0,
     };
-    notification.open(args);
+    //notification.open(args);
   };
 
   const zipCodeNotification = (zipcode:string)=> {
@@ -280,7 +281,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
 
   const history = useHistory();
 
-  const handleSubmit = async (values: any) => {
+  const onSubmit = async (values: any) => {
     values = { ...values }
     console.log("values", values)
     setDisableSubmitBtn(true)
@@ -289,6 +290,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
     history.push(path);
   }
 
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const handleRelationshiptoApplicant = (value:string) => {
     const relationshipArray = ['1', '2', '3', '4', '5', '6']
@@ -967,7 +969,7 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
         <Form
           form={lesseeForm}
           {...layout}
-          onFinish={handleSubmit}
+          onFinish={handleSubmit(onSubmit)}
           onChange={handleFormChange}
           initialValues={{
             colesseeAttributes: {
@@ -1066,6 +1068,9 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                             required={requireCoApplicantFields}
                             fullWidth
                             size="small"
+                            {...register("firstName", { required: "First Name is required." })}
+                            error={Boolean(errors.firstName)}
+                            helperText={errors.firstName?.message}
                             />
                       </Form.Item>
                     </Grid>
@@ -1087,6 +1092,9 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                             variant="standard"
                             fullWidth
                             size="small"
+                            {...register("lastName", { required: "Last Name is required." })}
+                            error={Boolean(errors.lastName)}
+                            helperText={errors.lastName?.message}
                           />
                       </Form.Item>
                     </Grid>
@@ -1366,7 +1374,6 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                     <Grid item xs={2} sm={4} md={6}>
                       <Form.Item
                         name={['colesseeAttributes', 'employerName']}
-                        rules={[{ required: requireEmploymentFields, message: 'Employer Name is required!' }]}
                       >
                         <TextField 
                             label="Employer Name" 
@@ -1374,19 +1381,23 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                             placeholder="Employer Name" 
                             fullWidth
                             size="small"
-                            required
+                            {...register("employerName", { required: "Employer Name is required." })}
+                            error={Boolean(errors.employerName)}
+                            helperText={errors.employerName?.message}
                             />
                       </Form.Item>
                     </Grid>
                     <Grid item xs={2} sm={4} md={4}>
-                      <Form.Item name={['colesseeAttributes', 'employmentAddressAttributes', 'city']} rules={[{ required: requireEmploymentFields, message: 'City is required!' }]}>
+                      <Form.Item name={['colesseeAttributes', 'employmentAddressAttributes', 'city']}>
                       <TextField 
                             label="City"
                             variant="standard" 
                             placeholder="City" 
                             fullWidth
                             size="small"
-                            required
+                            {...register("employmentAddressAttributes", { required: "Employment Address is required." })}
+                            error={Boolean(errors.employmentAddressAttributes)}
+                            helperText={errors.employmentAddressAttributes?.message}
                           />
                       </Form.Item>
                     </Grid>
@@ -1435,22 +1446,22 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                       </Form.Item>
                     </Grid>
                     <Grid item xs={2} sm={4} md={4}>
-                        <Form.Item name={['colesseeAttributes', 'jobTitle']} rules={[{ required: requireEmploymentFields, message: 'Job Tile is required!' }]}>
+                        <Form.Item name={['colesseeAttributes', 'jobTitle']}>
                         <TextField 
                             label="Job Title"
                             variant="standard" 
                             placeholder="Job Title" 
                             fullWidth
                             size="small"
-                            required
+                            {...register("jobTitle", { required: "Job title is required." })}
+                            error={Boolean(errors.jobTitle)}
+                            helperText={errors.jobTitle?.message}
                               />
                         </Form.Item>
                     </Grid>
                     <Grid item xs={2} sm={4} md={4}>
                           <Form.Item
                             name={['colesseeAttributes', 'timeAtEmployerYears']}
-                            rules={[{ required: requireEmploymentFields, message: 'Years Employed is required!' }]}
-
                           >
                             <TextField 
                                 label="Years Employed"
@@ -1458,7 +1469,9 @@ export const CoApplicant: React.FC<Props> = ({ data }: Props) => {
                                 placeholder="Years Employed" 
                                 fullWidth
                                 size="small"
-                                required
+                                {...register("timeAtEmployerYears", { required: "Time at employer years is required." })}
+                                error={Boolean(errors.timeAtEmployerYears)}
+                                helperText={errors.timeAtEmployerYears?.message}
                               />
                           </Form.Item>
                     </Grid>

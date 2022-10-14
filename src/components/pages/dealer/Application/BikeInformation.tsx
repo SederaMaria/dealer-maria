@@ -1,35 +1,27 @@
-import React, { useState, ChangeEvent, MouseEvent, FormEvent, useEffect } from 'react'
-<<<<<<< HEAD
-import { Row, Col, Form, Layout, Button, Input, message, Spin } from 'antd'
-=======
-import { Row, Col, Form, Select, Layout, Button, Input, message, Spin } from 'antd'
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-import { Link } from 'react-router-dom'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import React, { useState, MouseEvent, useEffect } from 'react'
+import { Row, Col, Form, Layout, message, Spin } from 'antd'
 import Typography from '@mui/material/Typography';
-import TextField from "@material-ui/core/TextField";
-<<<<<<< HEAD
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Box from '@mui/material/Box';
-import { Stack, Autocomplete } from "@mui/material";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Controller, useForm } from "react-hook-form";
+import { makeStyles, TextField } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { Stack, Autocomplete, Grid, Button, Box, Paper, Divider} from "@mui/material";
+import {Table, TableContainer, TableRow, TableCell} from "@mui/material";
 import { logger, network } from '../../../../utils';
 import ApplicationSteps from './ApplicationSteps';
-//import '../styles/BikeInformation.css';
-=======
-import { logger, network } from '../../../../utils';
-import ApplicationSteps from './ApplicationSteps';
+import { useForm } from "react-hook-form";
+
 import '../styles/BikeInformation.css';
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
 
 
 // const { Title, Text } = Typography
 const { Content } = Layout
 // const { Option } = Select
+
+const useStyles = makeStyles(() => ({
+  textField: {
+    width: "100%",
+    marginBotttom: "2%"
+  }
+}));
 
 const layout = {
   labelCol: {
@@ -76,8 +68,8 @@ type Asset = {
 }
 
 export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
+  const classes = useStyles();
   const [lesseeForm] = Form.useForm()
-
   let leaseApplicationId: string | number | undefined = data?.id
   let leaseCalculatorId: string | number | undefined = data?.leaseCalculator?.leaseCalculator?.id
 
@@ -86,8 +78,7 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
   const [modelsOptions, setModelsOptions] = useState<OptionProps[]>([])
   const [mileageRangeOptions, setMileageRangeOptions] = useState<OptionProps[]>([])
   const [creditTierOptions, setCreditTierOptions] = useState<OptionProps[]>([])
-  
-  const [showBikeForm, setShowBikeForm] = useState<boolean>(false)
+  const [showBikeForm, setShowBikeForm] = useState<boolean>(true)
   const [showViaVIN, setShowViaVIN] = useState<boolean>(false)
 
   const [showMakeState, setShowMakeState] = useState<object | null>(null)
@@ -192,7 +183,11 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
     }
   }
 
-  
+  useEffect(()=>{
+    getMakes()
+    setShowBikeForm(true)
+  },[])
+
 
   const handleNoVin = (e: MouseEvent<HTMLElement>) => {
     setShowBikeForm(true)
@@ -281,21 +276,22 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
 
   const [btnAttribute, setBtnAttribute] = useState(true)
   const [saveBtnAttribute, setSaveBtnAttribute] = useState(true)
+  const history = useHistory();
 
-  const handleSubmit = async (values: any) => {
+  const onSubmit = async (values: any) => {
     const myValues = {
-      leaseCalculatorAttributes:{
-        assetMake : makeValue,
-        assetYear : yearValue,
-        mileageTier : mileageValue,
-        newUsed : assetState,
+      leaseCalculatorAttributes: {
+        assetMake:makeValue,
+        assetYear: yearValue,
+        mileageTier: mileageValue,
+        newUsed: assetState,
         vin: undefined
       }
     }
-    //values = { ...values }
     submitApplication(myValues)
     setBtnAttribute(false)
-    console.log("Values : ", myValues)
+    let path=`/applications/${leaseApplicationId}/applicant`
+    history.push(path);
   }
 
   let today = new Date()
@@ -324,15 +320,18 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
     )
   })
 
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  
 
   return (
     <Spin spinning={loading}>
       <ApplicationSteps stepType={`bike`} leaseApplicationId={`${leaseApplicationId}`} leaseCalculatorId={`${leaseCalculatorId}`} save={null} attribute={btnAttribute} />
       <Form
-        onFinish={handleSubmit}
-        form={lesseeForm}
+        // form={lesseeForm}
         // {...layout}
         // // colon={false}
+        onFinish={handleSubmit(onSubmit)}
         // scrollToFirstError={true}
         // initialValues={{
         //   leaseCalculatorAttributes: {
@@ -353,364 +352,237 @@ export const BikeInformation: React.FC<Props> = ({ data, dataCheck }) => {
           </Col>  
         </Row>
 
-        <Content className="content-1">
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={24} md={24} lg={8} xl={8}></Col>
-            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-              <Card variant="outlined" sx={{ minWidth: 275, border:'2px solid orange', borderRadius: '5px' }}>
-                <CardContent>
-                    <Row>
-                      <Col span={24}>
-                        <Form.Item
-                          name={['leaseCalculatorAttributes', 'vin']}
-                          validateStatus={validateVIN ? (validateVIN === 'error' ? 'error' : 'success') : undefined}
-                          help={validateVIN && (validateVIN === 'error' ? 'VIN not found' : ' ')}
-                        >
-                          {/* <Input allowClear maxLength={17} onChange={(e) => handleVin(e)} style={{ marginBottom: 10 }} /> */}
-                          <TextField
-                            id="filled-input"
-                            label="your vin number here"
-                            variant="filled"
-                            onChange={(e) => handleVin(e)}
-                          />
-<<<<<<< HEAD
-=======
-
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                          <Button type="link" block onClick={handleNoVin} style={{ textAlign: `left`, padding: `4px 0px` }}>
-                            I don't know the VIN
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
-                    {showBikeForm && (
-                      <div>
-                        <Row>
-                          <Col span={24}>
-<<<<<<< HEAD
-                          {/* <FormControl variant="standard">
-=======
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container>
+            <Grid item xs></Grid>
+            <Grid item xs={10}>
+              <Paper
+                sx={{
+                  p: 2,
+                  margin: 2,
+                  marginBottom: 5,
+                  padding: 8,
+              }}
+              >
+                <Grid container direction="row" justifyContent="space-around" spacing={2} >
+                  <Grid item sm={4}>
+                    
+                    <TableContainer>
+                      <Table>
+                        <TableRow>
+                          <TableCell style={{border:"none", width:"auto"}}>
                             <Form.Item
-                              label="New/Used"
-                              name={['leaseCalculatorAttributes', 'newUsed']}
-                              rules={[
-                                {
-                                  required: rules,
-                                  message: 'New/Used is required!',
-                                },
-                              ]}
-                              hidden={showViaVIN}
-<<<<<<< HEAD
-                              className='new_used'
-                            > */}
-                              {/* <Select showSearch placeholder="New/Used" onSelect={handleNewUsedStateChange} onBlur={hideBikeSelectOptions}>
-=======
-                            >
-                              <Select showSearch placeholder="New/Used" onSelect={handleNewUsedStateChange} onBlur={hideBikeSelectOptions}>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                                <Option key="1" value="New">
-                                  New
-                                </Option>
-                                <Option key="2" value="Used">
-                                  Used
-                                </Option>
-<<<<<<< HEAD
-                               </Select> */}
-                              
-                              {/* <Select>
-                                <MenuItem value="new"><span className="select-option">New</span></MenuItem>
-                                <MenuItem value="used"><span className="select-option">Used</span></MenuItem>
-                              </Select>
-                            </Form.Item>      
-                          </FormControl> */}
+                              name={['leaseCalculatorAttributes', 'vin']}
+                              validateStatus={validateVIN ? (validateVIN === 'error' ? 'error' : 'success') : undefined}
+                              help={validateVIN && (validateVIN === 'error' ? 'VIN not found' : ' ')}
+                              >
+                              {/* <Input allowClear maxLength={17} onChange={(e) => handleVin(e)} style={{ marginBottom: 10 }} /> */}
+                              <TextField
+                                id="filled-input"
+                                label="VIN"
+                                variant="outlined"
+                                onChange={(e) => handleVin(e)}
+                                className={classes.textField}
+                              />
+                            </Form.Item>
+                          </TableCell>
+                        </TableRow>
+                      </Table>
+                    </TableContainer>
 
-                              <Stack spacing={2} width='250px'>
+                    {showViaVIN && (
+                      <TableContainer style={{marginTop:2}}>
+                        <Table>
+
+                          <TableRow>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>New/Used</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>:</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              {showViaVIN && <span>{year - vinYear < 3 ? 'New' : 'Used'} </span>}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>Make</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>:</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              {showViaVIN && <span>{vinMake} </span>}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            < TableCell style={{border:"none", width:"auto"}}>
+                              <b>Year</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>:</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              {showViaVIN && <span>{vinYear}</span>}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>Model</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              <b>:</b>
+                            </TableCell>
+                            <TableCell style={{border:"none", width:"auto"}}>
+                              {showViaVIN && <span>{vinModel}</span>}
+                            </TableCell>
+                          </TableRow>
+
+                          <TableRow>
+                            <TableCell style={{border:"none", width:"auto"}} colSpan={3}>
+                              <Autocomplete 
+                                options={mileageOption}
+                                renderInput={(params)=> {
+                                  return <TextField 
+                                            {...params} 
+                                            label='Mileage Range'
+                                            className={classes.textField}
+                                            variant="standard"
+                                            {...register("mileageValue", { required: "Mileage Range is required!" })}
+                                              error={Boolean(errors.mileageValue)}
+                                              helperText={errors.mileageValue?.message}
+                                          />
+                                }}
+                                autoSelect 
+                                value={mileageValue ? mileageValue : null}
+                                onChange={handleMileageRangeStateChange}
+                              />
+                            </TableCell>
+                          </TableRow>
+
+                        </Table>
+                      </TableContainer>
+                    )}   
+                            
+                  </Grid>
+
+                  <Divider orientation="vertical" flexItem style={{color:"#e82512", fontWeight: "bold", fontSize:"1.2rem"}} sx={{"&::before, &::after": { borderColor: "#e82512", fontWeight:"bold"} }}>
+                    OR
+                  </Divider>
+
+                  <Grid  item sm={4} >
+
+                    <TableContainer>
+                          <Table>
+
+                            <TableRow>
+                              <TableCell style={{border:"none", width:"auto"}}>
                                 <Autocomplete 
-                                   options={assetOption}
-                                   renderInput={(params)=> {
-                                     return <TextField 
+                                  className={classes.textField}
+                                  options={assetOption}
+                                  renderInput={(params)=> {
+
+                                    return <TextField 
                                               {...params} 
                                               label='New/Used'
-                                             
+                                              className={classes.textField}
+                                              {...register("assetState", { required: "New/Used is required." })}
+                                              error={Boolean(errors.assetState)}
+                                              helperText={errors.assetState?.message}
                                             />
                                   }}
                                   value={assetState ? assetState : null}
                                   onChange={handleAssetState}
-                                 />
-                              </Stack>
-                
-=======
-                              </Select>
-                            </Form.Item>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                            {showViaVIN && (
-                              <Row style={{ marginTop: 10, marginBottom: 0 }}>
-                                <Col span={24}>
-                                  <b>New/Used</b> : {showViaVIN && <p>{year - vinYear < 3 ? 'New' : 'Used'}</p>}
-                                </Col>
-                              </Row>
-                            )}
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col span={24}>
-<<<<<<< HEAD
-                          
-                              {/* <Form.Item label="Make" name={['leaseCalculatorAttributes', 'assetMake']} rules={[{ required: true, message: 'Make is required!' }]} hidden={showViaVIN}> */}
-                              {/* <Select showSearch placeholder="Make" {...showMakeState} onChange={handleMakes} onSelect={handleMakesStateChange} onBlur={hideBikeSelectOptions}>
-=======
-                            <Form.Item label="Make" name={['leaseCalculatorAttributes', 'assetMake']} rules={[{ required: true, message: 'Make is required!' }]} hidden={showViaVIN}>
-                              <Select showSearch placeholder="Make" {...showMakeState} onChange={handleMakes} onSelect={handleMakesStateChange} onBlur={hideBikeSelectOptions}>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                                {makesOptions &&
-                                  makesOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-<<<<<<< HEAD
-                              </Select> */}
-                              {/* </Form.Item> */}
+                                />
+                              </TableCell>
+                            </TableRow>
 
-                              <Stack spacing={2} width='250px'>
+                            <TableRow>
+                              <TableCell style={{border:"none", width:"auto"}}>
                                 <Autocomplete 
-                                   options={makeOption}
-                                   renderInput={(params)=> {
-                                     return <TextField 
+                                  className={classes.textField}
+                                  options={makeOption}
+                                  renderInput={(params)=> {
+                                    return <TextField 
                                               {...params} 
                                               label='Make'
-                                             
+                                              {...register("makeValue", { required: "Make is required!" })}
+                                              error={Boolean(errors.makeValue)}
+                                              helperText={errors.makeValue?.message}
                                             />
                                   }}
                                   value={makeValue ? makeValue : null}
                                   onChange={handleMakes}
-                                 />
-                              </Stack>
-                           
-                              {showViaVIN && (
-=======
-                              </Select>
-                            </Form.Item>
-                            {showViaVIN && (
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                              <Row style={{ marginTop: 10, marginBottom: 0 }}>
-                                <Col span={24}>
-                                  <b>Make</b> : {showViaVIN && <p>{vinMake}</p>}
-                                </Col>
-                              </Row>
-                            )}
-<<<<<<< HEAD
-                        </Col>
-                        </Row>
-                        <Row>
-                          <Col span={24}>
-                          {/* <FormControl variant="standard" fullWidth>   */}
-                            {/* <Form.Item label="Year" name={['leaseCalculatorAttributes', 'assetYear']} rules={[{ required: true, message: 'Year is required!' }]} hidden={showViaVIN}> */}
-                              {/* <Select showSearch placeholder="Year" {...showYearState} onChange={handleYear} onSelect={handleYearStateChange} onBlur={hideBikeSelectOptions}>
-=======
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col span={24}>
-                            <Form.Item label="Year" name={['leaseCalculatorAttributes', 'assetYear']} rules={[{ required: true, message: 'Year is required!' }]} hidden={showViaVIN}>
-                              <Select showSearch placeholder="Year" {...showYearState} onChange={handleYear} onSelect={handleYearStateChange} onBlur={hideBikeSelectOptions}>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                                {yearsOptions &&
-                                  yearsOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-<<<<<<< HEAD
-                              </Select> */}
-                              
-                                {/* <Select {...showYearState} onChange={handleYear}>
-                                  {yearsOptions &&
-                                    yearsOptions.map(({ value, label }, index) => {
-                                     return (
-                                      <MenuItem value={`${value}`}  key={index}>
-                                        <span className="select-option">{label}</span>
-                                      </MenuItem>
-                                    )
-                                  })}
-                                </Select> */}
-                              
-                            {/* </Form.Item> */}
-                          {/* </FormControl>       */}
+                                />
+                              </TableCell>
+                            </TableRow>
 
-                              <Stack spacing={2} width='250px'>
+                            <TableRow>
+                            < TableCell style={{border:"none", width:"auto"}}>
+                              <Autocomplete 
+                                className={classes.textField}
+                                options={yearOption}
+                                renderInput={(params)=> {
+                                  return <TextField 
+                                            {...params} 
+                                            label='Year'
+                                            {...register("yearValue", { required: "Year is required!" })}
+                                              error={Boolean(errors.yearValue)}
+                                              helperText={errors.yearValue?.message}
+                                          />
+                                }}
+                                autoSelect 
+                                value={yearValue ? yearValue : null}
+                                onChange={handleYear}
+                              />
+                            </TableCell>
+                            </TableRow>
+
+                            <TableRow>
+                              <TableCell style={{border:"none", width:"auto"}}>
                                 <Autocomplete 
-                                   options={yearOption}
-                                   renderInput={(params)=> {
-                                     return <TextField 
-                                              {...params} 
-                                              label='Year'
-                                             
-                                            />
-                                  }}
-                                  autoSelect 
-                                  value={yearValue ? yearValue : null}
-                                  onChange={handleYear}
-                                 />
-                              </Stack>
-=======
-                              </Select>
-                            </Form.Item>
-                                
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                            {showViaVIN && (
-                              <Row style={{ marginTop: 10, marginBottom: 0 }}>
-                                <Col span={24}>
-                                  <b>Year</b> : {showViaVIN && <p>{vinYear}</p>}
-                                </Col>
-                              </Row>
-                            )}
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col span={24}>
-<<<<<<< HEAD
-                          {/* <FormControl variant="standard" fullWidth> */}
-                            {/* <Form.Item label="Model" name={['leaseCalculatorAttributes', 'assetModel']} rules={[{ required: true, message: 'Model is required!' }]} hidden={showViaVIN}> */}
-                              {/* <Select showSearch placeholder="Model" {...showModelState} onSelect={handleModelStateChange} onBlur={hideBikeSelectOptions}>
-=======
-                            <Form.Item label="Model" name={['leaseCalculatorAttributes', 'assetModel']} rules={[{ required: true, message: 'Model is required!' }]} hidden={showViaVIN}>
-                              <Select showSearch placeholder="Model" {...showModelState} onSelect={handleModelStateChange} onBlur={hideBikeSelectOptions}>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                                {modelsOptions &&
-                                  modelsOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-<<<<<<< HEAD
-                              </Select> */}
-                              
-                                {/* <Select {...showModelState}  onSelect={handleModelStateChange} >
-                                  {modelsOptions &&
-                                  modelsOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <MenuItem value={`${value}`}  key={index}>
-                                        <span className="select-option">{label}</span>
-                                      </MenuItem>
-                                    )
-                                  })}
-                                </Select>
-                               */}
-                            {/* </Form.Item> */}
-                          {/* </FormControl>       */}
-=======
-                              </Select>
-                            </Form.Item>
-                                
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                            {showViaVIN && (
-                              <Row style={{ marginTop: 10, marginBottom: 10 }}>
-                                <Col span={24}>
-                                  <b>Model</b> : {showViaVIN && <p>{vinModel}</p>}
-                                </Col>
-                              </Row>
-                            )}
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col span={24}>
-<<<<<<< HEAD
-                          {/* <FormControl variant="standard" fullWidth> */}
-                            {/* <Form.Item
-=======
-                            <Form.Item
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                              label="Mileage Range"
-                              name={['leaseCalculatorAttributes', 'mileageTier']}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Mileage Range is required!',
-                                },
-                              ]}
-<<<<<<< HEAD
-                            > */}
-                              {/* <Select showSearch placeholder="Mileage Range" {...showMileageRangeState} onSelect={handleMileageRangeStateChange} onBlur={hideBikeSelectOptions}>
-=======
-                            >
-                              <Select showSearch placeholder="Mileage Range" {...showMileageRangeState} onSelect={handleMileageRangeStateChange} onBlur={hideBikeSelectOptions}>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                                {mileageRangeOptions &&
-                                  mileageRangeOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <Option key={index} value={`${value}`}>
-                                        {label}
-                                      </Option>
-                                    )
-                                  })}
-<<<<<<< HEAD
-                              </Select> */}
-                              
-                                {/* <Select {...showMileageRangeState} onSelect={handleMileageRangeStateChange} >
-                                  {mileageRangeOptions &&
-                                    mileageRangeOptions.map(({ value, label }, index) => {
-                                    return (
-                                      <MenuItem value={`${value}`}  key={index}>
-                                        <span className="select-option">{label}</span>
-                                      </MenuItem>
-                                    )
-                                  })}
-                                </Select> */}
-                            {/* </Form.Item> */}
-                          {/* </FormControl> */}
-                              <Stack spacing={2} width='250px'>
-                                <Autocomplete 
-                                   options={mileageOption}
-                                   renderInput={(params)=> {
-                                     return <TextField 
+                                  className={classes.textField}
+                                  options={mileageOption}
+                                  renderInput={(params)=> {
+                                    return <TextField 
                                               {...params} 
                                               label='Mileage Range'
-                                             
+                                              {...register("mileageValue", { required: "Mileage Range is required!" })}
+                                              error={Boolean(errors.mileageValue)}
+                                              helperText={errors.mileageValue?.message}
                                             />
                                   }}
                                   autoSelect 
                                   value={mileageValue ? mileageValue : null}
                                   onChange={handleMileageRangeStateChange}
-                                 />
-                              </Stack>
-=======
-                              </Select>
-                            </Form.Item>
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                          </Col>
-                        </Row>
-                      </div>
-                    )}
-                </CardContent>
-              </Card>
+                                />
+                              </TableCell>
+                            </TableRow>
 
-              <div style={{ marginTop: 20, textAlign: `right` }}>
-                <Button style={{ marginRight: 10 }} type="primary" htmlType="submit" disabled={saveBtnAttribute}>
-<<<<<<< HEAD
-                  {' '}
-                  Save
-=======
->>>>>>> 83e033e687bd1b7fbbf85f046f6e4947631fb547
-                  {' '}
-                </Button>
-                <Button style={{ marginRight: 10 }} type="primary" disabled={btnAttribute}>
-                  <Link to={`/applications/${leaseApplicationId}/applicant`}> Next </Link>
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </Content>
+                          </Table>
+                        </TableContainer>
+                        
+                </Grid>
+            
+                <div style={{ marginTop: 50, width:"198%", textAlign: "center" }}>
+                  <Button variant="contained" style={{backgroundColor: "#e93b1b"}} type="submit" size="large">
+                      {/* <Link  style={{color: "white"}} to={`/applications/${leaseApplicationId}/co-applicant`}> Go to Applicant Page </Link> */}
+                      Go to Applicant Page
+                  </Button>
+                </div>
+
+              </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs></Grid>
+          </Grid>
+        </Box>
       </Form>
-    </Spin>
+</Spin>
   )
 }
 
